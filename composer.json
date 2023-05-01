@@ -1,0 +1,16 @@
+{
+    "name": "group3/cuddly-chainsaw",
+    "license": "MIT LICENSE",
+    "autoload": {
+        "psr-4": {
+            "Group3\\CuddlyChainsaw\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "mtaku3",
+            "email": "m.taku3.1222@gmail.com"
+        }
+    ],
+    "require": {}
+}
