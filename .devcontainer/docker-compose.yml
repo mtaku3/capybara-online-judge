@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  apache:
+    network_mode: service:postgres
+
+  redis:
+    network_mode: service:postgres

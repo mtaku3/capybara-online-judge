@@ -1,0 +1,14 @@
+{
+    "name": "cuddly-chainsaw",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "./docker-compose.yml"
+    ],
+    "service": "apache",
+    "workspaceFolder": "/workspace",
+    "forwardPorts": [
+        80,
+        5432,
+        6379
+    ]
+}

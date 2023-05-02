@@ -1,0 +1,20 @@
+version: "3.8"
+
+networks:
+  net:
+    driver: bridge
+
+services:
+  apache:
+    networks:
+      - net
+    ports:
+      - 80:80
+
+  postgres:
+    networks:
+      - net
+
+  redis:
+    networks:
+      - net
