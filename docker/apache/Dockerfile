@@ -55,5 +55,6 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
 COPY ./entrypoint.sh /
 
 WORKDIR /workspace
+USER vscode
 
 ENTRYPOINT /entrypoint.sh
