@@ -3,7 +3,7 @@
     "license": "MIT LICENSE",
     "autoload": {
         "psr-4": {
-            "Group3\\CuddlyChainsaw\\": "src/"
+            "App\\": "src/App/"
         }
     },
     "authors": [
