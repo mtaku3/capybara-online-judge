@@ -20,6 +20,10 @@ $router->get("/demo/texme", function (Request $req, Response $res) {
     echo $GLOBALS["twig"]->render("demo/texme.twig");
 });
 
+$router->get("/demo/codemirror", function (Request $req, Response $res) {
+    echo $GLOBALS["twig"]->render("demo/codemirror.twig");
+});
+
 if (\App\Libs\Router::GetHasRouted() === false) {
     echo $twig->render("404.twig");
 }
