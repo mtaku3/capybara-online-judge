@@ -1,14 +1,19 @@
 <?php require __DIR__ . '/../vendor/autoload.php';
 
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
+$dotenv->load();
+
 use App\Libs\Request;
 use App\Libs\Response;
 
 $router = new \App\Libs\Router();
 
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . "/../src/App/Pages");
-$twig = new \Twig\Environment($loader, [
-    // "cache" => __DIR__ . "/../.cache",
-]);
+$options = [];
+if (isset($_ENV["ENV"]) && $_ENV["ENV"] === "production") {
+    $options["cache"] = __DIR__ . "/../.cache";
+}
+$twig = new \Twig\Environment($loader, $options);
 $GLOBALS["twig"] = $twig;
 
 
