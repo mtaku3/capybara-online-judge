@@ -1,23 +1,114 @@
 {
-    "name": "cuddly-chainsaw",
-    "dockerComposeFile": [
-        "../docker-compose.yml",
-        "./docker-compose.yml"
-    ],
-    "service": "apache",
-    "workspaceFolder": "/workspace",
-    "forwardPorts": [
-        80,
-        5432,
-        6379
-    ],
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "esbenp.prettier-vscode",
-                "ecmel.vscode-html-css",
-                "bradlc.vscode-tailwindcss"
-            ]
-        }
+  "name": "cuddly-chainsaw",
+  "dockerComposeFile": ["../docker-compose.yml", "./docker-compose.yml"],
+  "service": "apache",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [80, 5432, 6379],
+  "remoteEnv": {
+    "PHP_CS_FIXER_IGNORE_ENV": "1"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "whatwedo.twig",
+        "bmewburn.vscode-intelephense-client",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "junstyle.php-cs-fixer",
+        "monosans.djlint"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "[twig]": {
+          "editor.defaultFormatter": "monosans.djlint"
+        },
+        "[php]": {
+          "editor.defaultFormatter": "junstyle.php-cs-fixer"
+        },
+        "djlint.formatJs": true,
+        "djlint.formatCss": true,
+        "php-cs-fixer.executablePath": "${extensionPath}/php-cs-fixer.phar",
+        "intelephense.stubs": [
+          "apache",
+          "bcmath",
+          "bz2",
+          "calendar",
+          "com_dotnet",
+          "Core",
+          "ctype",
+          "curl",
+          "date",
+          "dba",
+          "dom",
+          "enchant",
+          "exif",
+          "FFI",
+          "fileinfo",
+          "filter",
+          "fpm",
+          "ftp",
+          "gd",
+          "gettext",
+          "gmp",
+          "hash",
+          "iconv",
+          "imap",
+          "intl",
+          "json",
+          "ldap",
+          "libxml",
+          "mbstring",
+          "meta",
+          "mysqli",
+          "oci8",
+          "odbc",
+          "openssl",
+          "pcntl",
+          "pcre",
+          "PDO",
+          "pdo_ibm",
+          "pdo_mysql",
+          "pdo_pgsql",
+          "pdo_sqlite",
+          "pgsql",
+          "Phar",
+          "posix",
+          "pspell",
+          "random",
+          "readline",
+          "Reflection",
+          "session",
+          "shmop",
+          "SimpleXML",
+          "snmp",
+          "soap",
+          "sockets",
+          "sodium",
+          "SPL",
+          "sqlite3",
+          "standard",
+          "superglobals",
+          "sysvmsg",
+          "sysvsem",
+          "sysvshm",
+          "tidy",
+          "tokenizer",
+          "xml",
+          "xmlreader",
+          "xmlrpc",
+          "xmlwriter",
+          "xsl",
+          "Zend OPcache",
+          "zip",
+          "zlib",
+          "redis"
+        ]
+      }
     }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {}
+  },
+  "postCreateCommand": "pip install -r requirements.txt"
 }
