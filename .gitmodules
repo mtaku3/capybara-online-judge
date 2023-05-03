@@ -1,0 +1,9 @@
+[submodule "dist/texme"]
+	path = dist/texme
+	url = https://github.com/susam/texme.git
+[submodule "dist/marked"]
+	path = dist/marked
+	url = https://github.com/markedjs/marked.git
+[submodule "dist/mathjax"]
+	path = dist/mathjax
+	url = https://github.com/mathjax/mathjax.git

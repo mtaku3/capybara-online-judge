@@ -7,13 +7,17 @@ $router = new \App\Libs\Router();
 
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . "/../src/App/Pages");
 $twig = new \Twig\Environment($loader, [
-    "cache" => __DIR__ . "/../.cache",
+    // "cache" => __DIR__ . "/../.cache",
 ]);
 $GLOBALS["twig"] = $twig;
 
 
 $router->get("/", function (Request $req, Response $res) {
     echo $GLOBALS["twig"]->render("index.twig");
+});
+
+$router->get("/demo/texme", function (Request $req, Response $res) {
+    echo $GLOBALS["twig"]->render("demo/texme.twig");
 });
 
 if (\App\Libs\Router::GetHasRouted() === false) {
