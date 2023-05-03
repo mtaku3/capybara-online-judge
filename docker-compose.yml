@@ -2,7 +2,11 @@ version: "3.8"
 
 services:
   apache:
-    build: ./docker/apache
+    build:
+      context: .
+      dockerfile: ./docker/apache/Dockerfile
+      args:
+        - ENV=${ENV:-development}
     depends_on:
       - postgres
       - redis

@@ -3,10 +3,25 @@ FROM mcr.microsoft.com/devcontainers/php:8
 
 # Configure apache2
 
-COPY ./apache2.conf /etc/apache2/
-COPY ./000-default.conf /etc/apache2/sites-available/
+COPY ./docker/apache/apache2.conf /etc/apache2/
+COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/
 
 RUN ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
+
+
+# Install PhpRedis
+
+RUN pecl install redis
+
+
+# Configure php
+
+ARG ENV
+
+COPY ./docker/apache/php/php.development.ini /
+COPY ./docker/apache/php/php.production.ini /
+RUN if [ "$ENV" = "production" ]; then cp /php.production.ini /usr/local/etc/php/php.ini; else cp /php.development.ini /usr/local/etc/php/php.ini; fi
+COPY ./docker/apache/php/redis.ini /usr/local/etc/php/conf.d
 
 
 # Install node and npm
@@ -52,7 +67,7 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && npm --version
 
 
-COPY ./entrypoint.sh /
+COPY ./docker/apache/entrypoint.sh /
 
 WORKDIR /workspace
 USER vscode

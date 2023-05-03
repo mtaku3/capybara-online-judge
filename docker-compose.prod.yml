@@ -6,6 +6,9 @@ networks:
 
 services:
   apache:
+    build:
+      args:
+        - ENV=production
     networks:
       - net
     ports:

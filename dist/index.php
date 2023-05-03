@@ -17,6 +17,11 @@ $twig = new \Twig\Environment($loader, $options);
 $GLOBALS["twig"] = $twig;
 
 
+$redis = new Redis();
+$redis->connect($_ENV["REDIS_HOST"], $_ENV["REDIS_PORT"]);
+$GLOBALS["redis"] = $redis;
+
+
 $router->get("/", function (Request $req, Response $res) {
     echo $GLOBALS["twig"]->render("index.twig");
 });
@@ -28,6 +33,7 @@ $router->get("/demo/texme", function (Request $req, Response $res) {
 $router->get("/demo/codemirror", function (Request $req, Response $res) {
     echo $GLOBALS["twig"]->render("demo/codemirror.twig");
 });
+
 
 if (\App\Libs\Router::GetHasRouted() === false) {
     echo $twig->render("404.twig");
