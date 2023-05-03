@@ -10,5 +10,14 @@
         80,
         5432,
         6379
-    ]
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "esbenp.prettier-vscode",
+                "ecmel.vscode-html-css",
+                "bradlc.vscode-tailwindcss"
+            ]
+        }
+    }
 }

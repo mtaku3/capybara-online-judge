@@ -5,12 +5,17 @@ use App\Libs\Response;
 
 $router = new \App\Libs\Router();
 
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . "/../src/App/Pages");
+$twig = new \Twig\Environment($loader, [
+    "cache" => __DIR__ . "/../.cache",
+]);
+$GLOBALS["twig"] = $twig;
+
+
 $router->get("/", function (Request $req, Response $res) {
-    echo "Hello World!";
+    echo $GLOBALS["twig"]->render("index.twig");
 });
 
 if (\App\Libs\Router::GetHasRouted() === false) {
-    $res = new Response();
-    $res->status(404);
-    $res->send("Not Found");
+    echo $twig->render("404.twig");
 }
