@@ -4,7 +4,7 @@
 {% include "texme.twig" %}
 <script>
 window.onload = function() {
-  var renderEl = document.getElementById("render");
+  var renderEl = $("#render")[0];
   var output = texme.render(renderEl.innerHTML);
   renderEl.innerHTML = output;
   window.MathJax.texReset();

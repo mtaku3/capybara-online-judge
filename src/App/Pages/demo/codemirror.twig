@@ -4,7 +4,7 @@
 {% include "codemirror.twig" %}
 <script>
 window.onload = function() {
-  var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+  var editor = CodeMirror.fromTextArea($("#code")[0], {
     mode: "text/x-csrc",
     lineNumbers: true,
     extraKeys: {"Ctrl-Space": "autocomplete"}
