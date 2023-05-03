@@ -1,22 +1,22 @@
 {% extends "template.twig" %}
-
 {% block body %}
-<div class="w-screen h-screen flex flex-col justify-center items-center">
-  <div class="flex flex-col">
-    <h5 class="mb-3 text-base font-semibold text-gray-900 md:text-xl dark:text-white">
-      Demonstrations
-    </h5>
-    <ul class="my-4 space-y-3">
-      <li>
-        <a href="/demo/texme" class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-          <span class="flex-1 ml-3 whitespace-nowrap">texme</span>
-        </a>
-      </li>
-      <li>
-        <a href="/demo/codemirror" class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-          <span class="flex-1 ml-3 whitespace-nowrap">codemirror</span>
-        </a>
-      </li>
+  <div class="w-screen h-screen flex flex-col justify-center items-center">
+    <div class="flex flex-col">
+      <h5 class="mb-3 text-base font-semibold text-gray-900 md:text-xl dark:text-white">Demonstrations</h5>
+      <ul class="my-4 space-y-3">
+        <li>
+          <a href="/demo/texme"
+             class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+            <span class="flex-1 ml-3 whitespace-nowrap">texme</span>
+          </a>
+        </li>
+        <li>
+          <a href="/demo/codemirror"
+             class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+            <span class="flex-1 ml-3 whitespace-nowrap">codemirror</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
-{% endblock %}
+{% endblock body %}

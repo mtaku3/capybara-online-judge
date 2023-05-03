@@ -25,7 +25,9 @@ class Router
 
     public function get(string $route, callable $callback): void
     {
-        if (self::$HasRouted) return;
+        if (self::$HasRouted) {
+            return;
+        }
 
         if (strcasecmp($_SERVER['REQUEST_METHOD'], 'GET') !== 0) {
             return;
@@ -36,7 +38,9 @@ class Router
 
     public function post(string $route, callable $callback): void
     {
-        if (self::$HasRouted) return;
+        if (self::$HasRouted) {
+            return;
+        }
 
         if (strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') !== 0) {
             return;
