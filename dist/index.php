@@ -22,6 +22,9 @@ $redis->connect($_ENV["REDIS_HOST"], $_ENV["REDIS_PORT"]);
 $GLOBALS["redis"] = $redis;
 
 
+$dbconn = pg_connect("host=$_ENV[POSTGRES_HOST] port=$_ENV[POSTGRES_PORT] dbname=$_ENV[POSTGRES_DB] user=$_ENV[POSTGRES_USER] password=$_ENV[POSTGRES_PASSWORD]");
+
+
 $router->get("/", function (Request $req, Response $res) {
     echo $GLOBALS["twig"]->render("index.twig");
 });

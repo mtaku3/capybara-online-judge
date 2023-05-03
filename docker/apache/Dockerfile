@@ -11,7 +11,7 @@ RUN ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
 
 # Install PhpRedis
 
-RUN pecl install redis
+RUN pecl install redis && docker-php-ext-enable redis
 
 
 # Configure php
@@ -21,7 +21,10 @@ ARG ENV
 COPY ./docker/apache/php/php.development.ini /
 COPY ./docker/apache/php/php.production.ini /
 RUN if [ "$ENV" = "production" ]; then cp /php.production.ini /usr/local/etc/php/php.ini; else cp /php.development.ini /usr/local/etc/php/php.ini; fi
-COPY ./docker/apache/php/redis.ini /usr/local/etc/php/conf.d
+
+RUN apt-get update \
+  && apt-get install -y libpq-dev \
+  && docker-php-ext-install pgsql pdo pdo_pgsql
 
 
 # Install node and npm
