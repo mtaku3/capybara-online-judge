@@ -1,9 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 require __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
 $dotenv->load();
+$dotenv->required("POSTGRES_HOST")->notEmpty();
+$dotenv->required("POSTGRES_PORT")->isInteger();
+$dotenv->required("POSTGRES_USER")->notEmpty();
+$dotenv->required("POSTGRES_PASSWORD")->notEmpty();
+$dotenv->required("POSTGRES_DB")->notEmpty();
+$dotenv->required("REDIS_HOST")->notEmpty();
+$dotenv->required("REDIS_PORT")->isInteger();
 
 use App\Libs\Request;
 use App\Libs\Response;
@@ -20,7 +29,7 @@ $GLOBALS["twig"] = $twig;
 
 
 $redis = new Redis();
-$redis->connect($_ENV["REDIS_HOST"], $_ENV["REDIS_PORT"]);
+$redis->connect($_ENV["REDIS_HOST"], intval($_ENV["REDIS_PORT"]));
 $GLOBALS["redis"] = $redis;
 
 
