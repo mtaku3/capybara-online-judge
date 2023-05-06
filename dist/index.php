@@ -33,7 +33,34 @@ $redis->connect($_ENV["REDIS_HOST"], intval($_ENV["REDIS_PORT"]));
 $GLOBALS["redis"] = $redis;
 
 
-$dbconn = pg_connect("host=$_ENV[POSTGRES_HOST] port=$_ENV[POSTGRES_PORT] dbname=$_ENV[POSTGRES_DB] user=$_ENV[POSTGRES_USER] password=$_ENV[POSTGRES_PASSWORD]");
+use Cycle\Database;
+use Cycle\Database\Config;
+use Cycle\ORM;
+use Cycle\ORM\Schema;
+use Cycle\ORM\Mapper\Mapper;
+
+$dbal = new Database\DatabaseManager(
+    new Config\DatabaseConfig([
+        "default" => "default",
+        "databases" => [
+            "default" => ["connection" => "postgres"]
+        ],
+        "connections" => [
+            'postgres' => new Config\PostgresDriverConfig(
+                connection: new Config\Postgres\TcpConnectionConfig(
+                    database: $_ENV["POSTGRES_DB"],
+                    host: $_ENV["POSTGRES_HOST"],
+                    port: intval($_ENV["POSTGRES_PORT"]),
+                    user: $_ENV["POSTGRES_USER"],
+                    password: $_ENV["POSTGRES_PASSWORD"]
+                ),
+                schema: 'public',
+                queryCache: true,
+            )
+        ]
+    ])
+);
+$orm = new ORM\ORM(new ORM\Factory($dbal), new Schema([]));
 
 
 $router->get("/", function (Request $req, Response $res) {
