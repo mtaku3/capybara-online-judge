@@ -122,9 +122,6 @@ out
 # TernJS port file
 .tern-port
 
-# VSCode settings
-.vscode
-
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 

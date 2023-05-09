@@ -1,0 +1,14 @@
+{
+  "PHP Template": {
+    "prefix": "<?",
+    "body": [
+      "<?php",
+      "",
+      "declare(strict_types=1);",
+      "",
+      "namespace $1;",
+      "",
+      ""
+    ]
+  }
+}
