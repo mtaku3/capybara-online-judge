@@ -1,5 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/php:8
-
+FROM mcr.microsoft.com/devcontainers/php:8 AS base
 
 # Configure apache2
 
@@ -71,8 +70,19 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
 
 
 COPY ./docker/apache/entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+
+FROM base as development
+
+RUN apt-get install -y openjdk-11-jre-headless graphviz
 
 WORKDIR /workspace
 USER vscode
+
+ENTRYPOINT /entrypoint.sh
+
+FROM base as production
+
+WORKDIR /workspace
 
 ENTRYPOINT /entrypoint.sh
