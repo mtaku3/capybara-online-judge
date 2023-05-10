@@ -42,7 +42,7 @@ class Submission
      * @param JudgeResult $judgeResult
      * @param null|int $executionTime
      * @param null|int $consumedMemory
-     * @param array $testResults
+     * @param array<TestResultFactoryDTO> $testResults
      * @return void
      */
     public function __construct(SubmissionId $id, UserId $userId, ProblemId $problemId, DateTimeImmutable $submittedAt, Language $language, int $codeLength, JudgeResult $judgeResult, ?int $executionTime, ?int $consumedMemory, array $testResults)

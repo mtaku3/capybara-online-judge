@@ -7,7 +7,7 @@ namespace App\Domain\Problem\Factory;
 use App\Domain\Common\ValueObject\Language;
 use App\Domain\Problem\ValueObject\TestCaseId;
 
-class ExecutionRuleDTOWithTestCaseId
+class ExecutionRuleFactoryDTOWithTestCaseId
 {
     public readonly TestCaseId $TestCaseId;
     public readonly Language $Language;
@@ -17,13 +17,13 @@ class ExecutionRuleDTOWithTestCaseId
     public readonly string $FileCompareCommand;
 
     /**
-     * @param TestCaseId $testCaseId 
-     * @param Language $language 
-     * @param string $sourceCodeExecutionCommand 
-     * @param string $sourceCodeCompareCommand 
-     * @param string $fileExecutionCommand 
-     * @param string $fileCompareCommand 
-     * @return void 
+     * @param TestCaseId $testCaseId
+     * @param Language $language
+     * @param string $sourceCodeExecutionCommand
+     * @param string $sourceCodeCompareCommand
+     * @param string $fileExecutionCommand
+     * @param string $fileCompareCommand
+     * @return void
      */
     public function __construct(TestCaseId $testCaseId, Language $language, string $sourceCodeExecutionCommand, string $sourceCodeCompareCommand, string $fileExecutionCommand, string $fileCompareCommand)
     {

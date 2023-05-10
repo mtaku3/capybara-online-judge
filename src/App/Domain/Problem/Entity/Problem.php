@@ -62,8 +62,8 @@ class Problem
      * @param string $body
      * @param int $timeConstraint
      * @param int $memoryConstraint
-     * @param array $compileRuleDTOs
-     * @param array $testCaseDTOs
+     * @param array<CompileRuleFactoryDTO> $compileRuleDTOs
+     * @param array<TestCaseFactoryDTO> $testCaseDTOs
      * @return Problem
      * @throws InvalidTimeConstraintException
      * @throws InvalidMemoryConstraintException

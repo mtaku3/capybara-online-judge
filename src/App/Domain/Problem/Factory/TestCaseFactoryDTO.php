@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Domain\Problem\Factory;
 
-class TestCaseDTO
+class TestCaseFactoryDTO
 {
     public readonly string $Title;
     /**
-     * @var array<ExecutionRuleDTO>
+     * @var array<ExecutionRuleFactoryDTO>
      */
     public readonly array $ExecutionRuleDTOs;
 
     /**
      * @param string $title
      * @param bool $isDisabled
-     * @param array<ExecutionRuleDTO> $executionRuleDTOs
+     * @param array<ExecutionRuleFactoryDTO> $executionRuleDTOs
      * @return void
      */
     public function __construct(string $title, array $executionRuleDTOs)

@@ -6,7 +6,7 @@ namespace App\Domain\Problem\Factory;
 
 use App\Domain\Common\ValueObject\Language;
 
-class ExecutionRuleDTO
+class ExecutionRuleFactoryDTO
 {
     public readonly Language $Language;
     public readonly string $SourceCodeExecutionCommand;

@@ -20,7 +20,7 @@ class TestCase
      * @param TestCaseId $id
      * @param string $title
      * @param bool $isDisabled
-     * @param array $executionRules
+     * @param array<ExecutionRuleFactoryDTO> $executionRules
      * @return void
      */
     public function __construct(TestCaseId $id, string $title, bool $isDisabled, array $executionRules)
