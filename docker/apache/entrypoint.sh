@@ -4,7 +4,7 @@ composer install
 
 npm install -D
 
-./build.sh
+npx tailwindcss -i ./src/App/input.css -o ./dist/tailwind.css
 
 ln ./node_modules/flowbite/dist/flowbite.min.js ./dist/
 
