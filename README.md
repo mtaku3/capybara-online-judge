@@ -1,4 +1,4 @@
-# cuddly-chainsaw
+# capybara-online-judge
 
 システム設計学の授業で開発したオンラインジャッジメントシステムです。
 [AtCoder](https://atcoder.jp/) を参考に開発しました。

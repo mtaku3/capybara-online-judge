@@ -52,7 +52,7 @@ PR を作成する前に下記のことを確認してください。
 2. フォークしたリポジトリをローカルにクローンする
 
 ```bash
-$ git clone https://github.com/<your-name>/cuddly-chainsaw.git
+$ git clone https://github.com/<your-name>/capybara-online-judge.git
 ```
 
 3. サブモジュールを更新する
@@ -65,7 +65,7 @@ $ git submodule update
 4. .env.example ファイルを参考に .env ファイルを作成する
 
 ```
-COMPOSE_PROJECT_NAME=cuddly-chainsaw-<your-name>
+COMPOSE_PROJECT_NAME=capybara-online-judge-<your-name>
 
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432

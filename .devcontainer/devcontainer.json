@@ -1,5 +1,5 @@
 {
-  "name": "cuddly-chainsaw",
+  "name": "capybara-online-judge",
   "dockerComposeFile": ["../docker-compose.yml", "./docker-compose.yml"],
   "service": "apache",
   "workspaceFolder": "/workspace",
