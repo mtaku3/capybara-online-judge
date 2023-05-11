@@ -18,6 +18,8 @@ git submodule update
 3. .env.example ファイルを参考に.env を作成する
 
 ```
+COMPOSE_PROJECT_NAME=cuddly-chainsaw-b00000 # アカウント名は適宜変更
+
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres
