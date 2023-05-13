@@ -78,7 +78,7 @@ class User
      */
     private static function ValidateUsername(string $username): bool
     {
-        return boolval(preg_match("^[a-zA-Z0-9]{4,20}$", $username));
+        return boolval(preg_match("/^[a-zA-Z0-9]{4,20}$/", $username));
     }
 
     /**
@@ -87,7 +87,7 @@ class User
      */
     private static function ValidatePassword(string $password): bool
     {
-        return boolval(preg_match("^[a-zA-Z0-9!@#$%^&*]{8,30}$", $password));
+        return boolval(preg_match("/^[a-zA-Z0-9!@#$%^&*]{8,30}$/", $password));
     }
 
     /** @return UserId  */
