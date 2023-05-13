@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Application\Authorize;
 
-use App\Domain\User\ValueObject\UserId;
-
 class AuthorizeRequest
 {
-    public readonly UserId $UserId;
+    public readonly string $Username;
+    public readonly string $Password;
 
     /**
-     * @param UserId $userId
+     * @param string $username
+     * @param string $password
      * @return void
      */
-    public function __construct(UserId $userId)
+    public function __construct(string $username, string $password)
     {
-        $this->UserId = $userId;
+        $this->Username = $username;
+        $this->Password = $password;
     }
 }
