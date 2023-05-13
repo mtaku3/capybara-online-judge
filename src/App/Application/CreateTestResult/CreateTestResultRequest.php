@@ -6,7 +6,6 @@ namespace App\Application\CreateTestResult;
 
 use App\Domain\Problem\ValueObject\TestCaseId;
 use App\Domain\Submission\ValueObject\SubmissionId;
-use App\Domain\Submission\ValueObject\TestResultJudgeResult;
 
 class CreateTestResultRequest
 {
@@ -19,9 +18,9 @@ class CreateTestResultRequest
      */
     public readonly TestCaseId $TestCaseId;
     /**
-     * @var TestResultJudgeResult
+     * @var bool
      */
-    public readonly TestResultJudgeResult $JudgeResult;
+    public readonly bool $HasRuntimeErrorOccurred;
     /**
      * @var int
      */
@@ -34,16 +33,16 @@ class CreateTestResultRequest
     /**
      * @param SubmissionId $submissionId
      * @param TestCaseId $testCaseId
-     * @param TestResultJudgeResult $judgeResult
+     * @param bool $hasRuntimeErrorOccurred
      * @param int $executionTime
      * @param int $consumedMemory
      * @return void
      */
-    public function __construct(SubmissionId $submissionId, TestCaseId $testCaseId, TestResultJudgeResult $judgeResult, int $executionTime, int $consumedMemory)
+    public function __construct(SubmissionId $submissionId, TestCaseId $testCaseId, bool $hasRuntimeErrorOccurred, int $executionTime, int $consumedMemory)
     {
         $this->SubmissionId = $submissionId;
         $this->TestCaseId = $testCaseId;
-        $this->JudgeResult = $judgeResult;
+        $this->HasRuntimeErrorOccurred = $hasRuntimeErrorOccurred;
         $this->ExecutionTime = $executionTime;
         $this->ConsumedMemory = $consumedMemory;
     }
