@@ -4,25 +4,48 @@ declare(strict_types=1);
 
 namespace App\Application\Session\ValueObject;
 
+use App\Application\Session\Exception\InvalidAccessTokenException;
 use App\Domain\User\Entity\User;
+use App\Domain\User\ValueObject\UserId;
 use DateInterval;
 use DateTimeImmutable;
 use DomainException;
+use Exception;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class AccessToken
 {
     public const ExpiresIn = "1 day";
+    public const Algorithm = "HS256";
 
     private string $Value;
+    private UserId $UserId;
+    private DateTimeImmutable $ExpiresAt;
+    private DateTimeImmutable $IssuedAt;
 
     /**
      * @param string $value
      * @return void
+     * @throws InvalidAccessTokenException
      */
     public function __construct(string $value)
     {
         $this->Value = $value;
+
+        try {
+            $decoded = (array)JWT::decode($this->Value, new Key($_ENV["JWT_SECRET"], self::Algorithm));
+        } catch (Exception $e) {
+            throw new InvalidAccessTokenException();
+        }
+
+        if (!isset($decoded["UserId"]) || !isset($decoded["exp"]) || !isset($decoded["iat"])) {
+            throw new InvalidAccessTokenException();
+        }
+
+        $this->UserId = new UserId($decoded["UserId"]);
+        $this->ExpiresAt = (new DateTimeImmutable())->setTimestamp(intval($decoded["exp"]));
+        $this->IssuedAt = (new DateTimeImmutable())->setTimestamp(intval($decoded["iat"]));
     }
 
     /**
@@ -36,13 +59,31 @@ class AccessToken
             "UserId" => (string)$user->getId(),
             "exp" => (new DateTimeImmutable())->add(new DateInterval(self::ExpiresIn))->getTimestamp(),
             "iat" => (new DateTimeImmutable())->getTimestamp()
-        ], $_ENV["JWT_SECRET"], "HS256");
+        ], $_ENV["JWT_SECRET"], self::Algorithm);
     }
 
     /** @return string  */
     public function getValue(): string
     {
         return $this->Value;
+    }
+
+    /** @return UserId  */
+    public function getUserId(): UserId
+    {
+        return $this->UserId;
+    }
+
+    /** @return DateTimeImmutable  */
+    public function getExpiresAt(): DateTimeImmutable
+    {
+        return $this->ExpiresAt;
+    }
+
+    /** @return DateTimeImmutable  */
+    public function getIssuedAt(): DateTimeImmutable
+    {
+        return $this->IssuedAt;
     }
 
     /**
