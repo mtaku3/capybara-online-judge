@@ -61,7 +61,7 @@ class TestResult
      * @param TestResultJudgeResult $judgeResult
      * @param int $executionTime
      * @param int $consumedMemory
-     * @return void
+     * @return TestResult
      */
     public static function _create(SubmissionId $submissionId, TestCaseId $testCaseId, TestResultJudgeResult $judgeResult, int $executionTime, int $consumedMemory): TestResult
     {
