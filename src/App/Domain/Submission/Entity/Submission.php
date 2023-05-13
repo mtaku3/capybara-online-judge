@@ -33,6 +33,7 @@ class Submission
      * @var array<TestResult>
      */
     private array $TestResults;
+    private SourceFile $SourceFile;
 
     /**
      * @param SubmissionId $id
@@ -45,9 +46,10 @@ class Submission
      * @param null|int $executionTime
      * @param null|int $consumedMemory
      * @param array<TestResultFactoryDTO> $testResults
+     * @param SourceFile $sourceFile
      * @return void
      */
-    public function __construct(SubmissionId $id, UserId $userId, ProblemId $problemId, DateTimeImmutable $submittedAt, Language $language, int $codeLength, SubmissionJudgeResult $judgeResult, ?int $executionTime, ?int $consumedMemory, array $testResults)
+    public function __construct(SubmissionId $id, UserId $userId, ProblemId $problemId, DateTimeImmutable $submittedAt, Language $language, int $codeLength, SubmissionJudgeResult $judgeResult, ?int $executionTime, ?int $consumedMemory, array $testResults, SourceFile $sourceFile)
     {
         $this->Id = $id;
         $this->UserId = $userId;
@@ -59,18 +61,20 @@ class Submission
         $this->ExecutionTime = $executionTime;
         $this->ConsumedMemory = $consumedMemory;
         $this->TestResults = $testResults;
+        $this->SourceFile = $sourceFile;
     }
 
     /**
-     * @param User $user 
-     * @param Problem $problem 
-     * @param Language $language 
-     * @param int $codeLength 
-     * @return Submission 
+     * @param User $user
+     * @param Problem $problem
+     * @param Language $language
+     * @param int $codeLength
+     * @return Submission
      */
     public static function Create(User $user, Problem $problem, Language  $language, int $codeLength): Submission
     {
-        return new Submission(SubmissionId::nextIdentity(), $user->getId(), $problem->getId(), new DateTimeImmutable(), $language, $codeLength, SubmissionJudgeResult::WJ, null, null, []);
+        $id = SubmissionId::nextIdentity();
+        return new Submission($id, $user->getId(), $problem->getId(), new DateTimeImmutable(), $language, $codeLength, SubmissionJudgeResult::WJ, null, null, [], SourceFile::_create($id));
     }
 
     /** @return SubmissionId  */
@@ -200,5 +204,11 @@ class Submission
 
         $testResult = TestResult::_create($this->Id, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
         $this->TestResults[] = $testResult;
+    }
+
+    /** @return SourceFile  */
+    public function getSourceFile(): SourceFile
+    {
+        return $this->SourceFile;
     }
 }

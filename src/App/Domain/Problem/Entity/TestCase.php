@@ -15,20 +15,26 @@ class TestCase
      * @var array<ExecutionRule>
      */
     private array $ExecutionRules;
+    private InputFile $InputFile;
+    private OutputFile $OutputFile;
 
     /**
      * @param TestCaseId $id
      * @param string $title
      * @param bool $isDisabled
      * @param array<ExecutionRuleFactoryDTO> $executionRules
+     * @param InputFile $inputFile
+     * @param OutputFile $outputFile
      * @return void
      */
-    public function __construct(TestCaseId $id, string $title, bool $isDisabled, array $executionRules)
+    public function __construct(TestCaseId $id, string $title, bool $isDisabled, array $executionRules, InputFile $inputFile, OutputFile $outputFile)
     {
         $this->Id = $id;
         $this->Title = $title;
         $this->IsDisabled = $isDisabled;
         $this->ExecutionRules = $executionRules;
+        $this->InputFile = $inputFile;
+        $this->OutputFile = $outputFile;
     }
 
     /**
@@ -39,7 +45,8 @@ class TestCase
      */
     public static function _create(string $title, bool $isDisabled, array $executionRules): TestCase
     {
-        return new TestCase(TestCaseId::nextIdentity(), $title, $isDisabled, $executionRules);
+        $id = TestCaseId::nextIdentity();
+        return new TestCase($id, $title, $isDisabled, $executionRules, InputFile::_create($id), OutputFile::_create($id));
     }
 
     /** @return TestCaseId  */
@@ -94,5 +101,17 @@ class TestCase
     public function _setExecutionRules(array $executionRules): void
     {
         $this->ExecutionRules = $executionRules;
+    }
+
+    /** @return InputFile  */
+    public function getInputFile(): InputFile
+    {
+        return $this->InputFile;
+    }
+
+    /** @return OutputFile  */
+    public function getOutputFile(): OutputFile
+    {
+        return $this->OutputFile;
     }
 }
