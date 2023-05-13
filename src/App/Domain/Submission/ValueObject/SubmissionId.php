@@ -36,7 +36,7 @@ class SubmissionId
     }
 
     /** @return string  */
-    public function __tostring(): string
+    public function __toString(): string
     {
         return $this->Value;
     }
