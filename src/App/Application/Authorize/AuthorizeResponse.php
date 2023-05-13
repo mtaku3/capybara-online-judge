@@ -9,7 +9,13 @@ use App\Application\Session\ValueObject\AccessToken;
 
 class AuthorizeResponse
 {
+    /**
+     * @var AccessToken
+     */
     public readonly AccessToken $AccessToken;
+    /**
+     * @var Session
+     */
     public readonly Session $Session;
 
     /**

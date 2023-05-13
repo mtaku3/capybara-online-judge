@@ -6,6 +6,10 @@ namespace App\Application\CreateTestCase;
 
 class CreateTestCaseUseCase
 {
+    /**
+     * @param CreateTestCaseRequest $request
+     * @return CreateTestCaseResponse
+     */
     public function handle(CreateTestCaseRequest $request): CreateTestCaseResponse
     {
         // TODO

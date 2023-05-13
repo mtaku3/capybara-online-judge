@@ -6,6 +6,10 @@ namespace App\Application\AddProblemLanguages;
 
 class AddProblemLanguagesUseCase
 {
+    /**
+     * @param AddProblemLanguagesRequest $request
+     * @return AddProblemLanguagesResponse
+     */
     public function handle(AddProblemLanguagesRequest $request): AddProblemLanguagesResponse
     {
         // TODO

@@ -8,10 +8,25 @@ use App\Domain\Common\ValueObject\Language;
 
 class ExecutionRuleFactoryDTO
 {
+    /**
+     * @var Language
+     */
     public readonly Language $Language;
+    /**
+     * @var string
+     */
     public readonly string $SourceCodeExecutionCommand;
+    /**
+     * @var string
+     */
     public readonly string $SourceCodeCompareCommand;
+    /**
+     * @var string
+     */
     public readonly string $FileExecutionCommand;
+    /**
+     * @var string
+     */
     public readonly string $FileCompareCommand;
 
     /**

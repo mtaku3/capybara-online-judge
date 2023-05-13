@@ -8,7 +8,13 @@ use App\Domain\Common\ValueObject\Language;
 
 class SubmitRequest
 {
+    /**
+     * @var Language
+     */
     public readonly Language $Language;
+    /**
+     * @var int
+     */
     public readonly int $CodeLength;
 
     /**

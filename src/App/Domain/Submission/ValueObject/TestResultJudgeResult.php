@@ -11,12 +11,17 @@ enum TestResultJudgeResult: string
     case TLE = "TLE";
     case MLE = "MLE";
 
+    /**
+     * @param TestResultJudgeResult $judgeResult
+     * @return int
+     */
     public function compares(TestResultJudgeResult $judgeResult): int
     {
-        return $this->_toInt() - $judgeResult->_toInt();
+        return $this->toInt() - $judgeResult->toInt();
     }
 
-    private function _toInt(): int
+    /** @return int  */
+    private function toInt(): int
     {
         switch ($this) {
             case TestResultJudgeResult::AC:

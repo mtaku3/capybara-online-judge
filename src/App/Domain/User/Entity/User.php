@@ -10,9 +10,21 @@ use App\Domain\User\ValueObject\UserId;
 
 class User
 {
+    /**
+     * @var UserId
+     */
     private UserId $Id;
+    /**
+     * @var string
+     */
     private string $Username;
+    /**
+     * @var string
+     */
     private string $Password;
+    /**
+     * @var bool
+     */
     private bool $IsAdmin;
 
     /**
@@ -78,21 +90,32 @@ class User
         return boolval(preg_match("^[a-zA-Z0-9!@#$%^&*]{8,30}$", $password));
     }
 
+    /** @return UserId  */
     public function getId(): UserId
     {
         return $this->Id;
     }
 
+    /** @return string  */
     public function getUsername(): string
     {
         return $this->Username;
     }
 
+    /**
+     * @param string $password
+     * @return bool
+     */
     public function comparePassword(string $password): bool
     {
         return password_verify($password, $this->Password);
     }
 
+    /**
+     * @param string $password
+     * @return void
+     * @throws InvalidPasswordException
+     */
     public function hashAndSetPassword(string $password): void
     {
         if (!self::ValidatePassword($password)) {
@@ -102,11 +125,16 @@ class User
         $this->Password = self::HashPassword($password);
     }
 
+    /** @return bool  */
     public function getIsAdmin(): bool
     {
         return $this->IsAdmin;
     }
 
+    /**
+     * @param bool $value
+     * @return void
+     */
     public function setIsAdmin(bool $value)
     {
         $this->IsAdmin = $value;

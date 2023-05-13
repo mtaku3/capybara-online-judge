@@ -19,13 +19,13 @@ interface ISubmissionRepository
 
     /**
      * @param UserId $userId
-     * @return array<User>
+     * @return User[]
      */
     public function findByUserId(UserId $userId): array;
 
     /**
      * @param ProblemId $problemId
-     * @return array<User>
+     * @return User[]
      */
     public function findByProblemId(ProblemId $problemId): array;
 

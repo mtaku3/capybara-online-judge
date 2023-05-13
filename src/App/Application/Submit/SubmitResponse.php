@@ -8,6 +8,9 @@ use App\Domain\Submission\Entity\Submission;
 
 class SubmitResponse
 {
+    /**
+     * @var Submission
+     */
     public readonly Submission $Submission;
 
     /**

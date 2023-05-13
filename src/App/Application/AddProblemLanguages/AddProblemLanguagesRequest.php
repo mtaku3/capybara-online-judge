@@ -8,20 +8,23 @@ use App\Domain\Problem\ValueObject\ProblemId;
 
 class AddProblemLanguagesRequest
 {
+    /**
+     * @var ProblemId
+     */
     public readonly ProblemId $ProblemId;
     /**
-     * @var array<CompileRuleFactoryDTO>
+     * @var CompileRuleFactoryDTO[]
      */
     public readonly array $CompileRuleDTOs;
     /**
-     * @var array<ExecutionRuleFactoryDTO>
+     * @var ExecutionRuleFactoryDTO[]
      */
     public readonly array $ExecutionRuleDTOs;
 
     /**
      * @param ProblemId $problemId
-     * @param array<CompileRuleFactoryDTO> $compileRuleDTOs
-     * @param array<ExecutionRuleFactoryDTO> $executionRuleDTOs
+     * @param CompileRuleFactoryDTO[] $compileRuleDTOs
+     * @param ExecutionRuleFactoryDTO[] $executionRuleDTOs
      * @return void
      */
     public function __construct(ProblemId $problemId, array $compileRuleDTOs, array $executionRuleDTOs)

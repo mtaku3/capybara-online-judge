@@ -16,9 +16,21 @@ class Session
 {
     public const ExpiresIn = "30 day";
 
+    /**
+     * @var SessionId
+     */
     private SessionId $Id;
+    /**
+     * @var UserId
+     */
     private UserId $UserId;
+    /**
+     * @var RefreshToken
+     */
     private RefreshToken $RefreshToken;
+    /**
+     * @var DateTimeImmutable
+     */
     private DateTimeImmutable $ExpiresAt;
 
     /**

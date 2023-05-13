@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Common\ValueObject;
 
-enum Language
+enum Language: string
 {
-    case C;
-    case CPP;
+    case C = "C";
+    case CPP = "CPP";
 }

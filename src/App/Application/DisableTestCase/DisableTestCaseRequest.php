@@ -9,7 +9,13 @@ use App\Domain\Problem\ValueObject\TestCaseId;
 
 class DisableTestCaseRequest
 {
+    /**
+     * @var ProblemId
+     */
     public readonly ProblemId $ProblemId;
+    /**
+     * @var TestCaseId
+     */
     public readonly TestCaseId $TestCaseId;
 
     /**

@@ -8,15 +8,18 @@ use App\Domain\Problem\ValueObject\ProblemId;
 
 class RemoveProblemLanguagesRequest
 {
+    /**
+     * @var ProblemId
+     */
     public readonly ProblemId $ProblemId;
     /**
-     * @var array<Language>
+     * @var Language[]
      */
     public readonly array $Languages;
 
     /**
      * @param ProblemId $problemId
-     * @param array<Language> $languages
+     * @param Language[] $languages
      * @return void
      */
     public function __construct(ProblemId $problemId, array $languages)

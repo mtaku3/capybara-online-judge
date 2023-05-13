@@ -9,7 +9,7 @@ use App\Domain\Problem\ValueObject\ProblemId;
 
 interface IProblemRepository
 {
-    /** @return array<Problem>  */
+    /** @return Problem[]  */
     public function getAll(): array;
 
     /**

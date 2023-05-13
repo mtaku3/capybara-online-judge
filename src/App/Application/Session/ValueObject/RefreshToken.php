@@ -8,6 +8,9 @@ class RefreshToken
 {
     public const Length = 64;
 
+    /**
+     * @var string
+     */
     private string $Value;
 
     /**
@@ -27,7 +30,7 @@ class RefreshToken
     private static function RandomBytes(int $length = 64): string
     {
         $length = ($length < 4) ? 4 : $length;
-        return bin2hex(random_bytes(($length-($length%2))/2));
+        return bin2hex(random_bytes(($length - ($length % 2)) / 2));
     }
 
     /** @return string  */

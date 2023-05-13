@@ -8,6 +8,9 @@ use App\Domain\User\Entity\User;
 
 class CreateUserResponse
 {
+    /**
+     * @var User
+     */
     public readonly User $User;
 
     /**

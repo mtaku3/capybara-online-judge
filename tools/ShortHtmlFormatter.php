@@ -136,7 +136,7 @@ final class ShortHtmlFormatter extends AbstractFormatter implements FormatterInt
 
             $type = $this->getDocBlockVar($property);
             if ($type !== null) {
-                $label .= ' : ' . $this->escape($type);
+                $label .= ' : ' . $type;
             }
 
             // only show non-NULL values
@@ -210,13 +210,14 @@ final class ShortHtmlFormatter extends AbstractFormatter implements FormatterInt
 
                 $type = $this->getParameterType($parameter);
                 if ($type !== null) {
-                    try {
-                        $type = (new ReflectionClass($type))->getShortName();
-                    } catch (Exception $e) {
-                        // ignored
-                    } finally {
-                        $label .= ' : ' . $this->escape($type);
-                    }
+                    // try {
+                    //     $type = (new ReflectionClass($type))->getShortName();
+                    // } catch (Exception $e) {
+                    //     // ignored
+                    // } finally {
+                    //     $label .= ' : ' . $this->escape($type);
+                    // }
+                    $label .= ' : ' . $type;
                 }
 
                 if ($parameter->isOptional()) {
@@ -253,5 +254,56 @@ final class ShortHtmlFormatter extends AbstractFormatter implements FormatterInt
         $operations .= '</table>';
 
         return $operations;
+    }
+
+    protected function getType(?string $ret): ?string
+    {
+        // if ($ret === null) {
+        //     return $ret;
+        // }
+        // if (preg_match('/^array\[(\w+)\]$/i', $ret, $match)) {
+        //     return $this->getType($match[1]) . '[]';
+        // }
+        // if (!preg_match('/^\w+$/', $ret)) {
+        //     return 'mixed';
+        // }
+        // $low = strtolower($ret);
+        // if ($low === 'integer') {
+        //     $ret = 'int';
+        // } elseif ($low === 'double') {
+        //     $ret = 'float';
+        // } elseif ($low === 'boolean') {
+        //     return 'bool';
+        // } elseif (in_array($low, ['int', 'float', 'bool', 'string', 'null', 'resource', 'array', 'void', 'mixed'])) {
+        //     return $low;
+        // }
+
+        return $ret;
+    }
+
+    protected function getParameterType(ReflectionParameter $parameter): ?string
+    {
+        $pos = $parameter->getPosition();
+        $refFn = $parameter->getDeclaringFunction();
+        $params = $this->getDocBlockMulti($refFn, 'param');
+        if (count($params) === $refFn->getNumberOfParameters()) {
+            return $this->getType($params[$pos]);
+        }
+
+        $class = null;
+        try {
+            // get class hint for parameter
+            /** @var null|ReflectionType $class */
+            $class = $parameter->getType();
+            // will fail if specified class does not exist
+        } catch (Exception $ignore) {
+            return '«invalidClass»';
+        }
+
+        if ($class instanceof ReflectionNamedType) {
+            return $class->getName();
+        }
+
+        return null;
     }
 }

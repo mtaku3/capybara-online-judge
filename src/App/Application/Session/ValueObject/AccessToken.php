@@ -19,9 +19,21 @@ class AccessToken
     public const ExpiresIn = "1 day";
     public const Algorithm = "HS256";
 
+    /**
+     * @var string
+     */
     private string $Value;
+    /**
+     * @var UserId
+     */
     private UserId $UserId;
+    /**
+     * @var DateTimeImmutable
+     */
     private DateTimeImmutable $ExpiresAt;
+    /**
+     * @var DateTimeImmutable
+     */
     private DateTimeImmutable $IssuedAt;
 
     /**

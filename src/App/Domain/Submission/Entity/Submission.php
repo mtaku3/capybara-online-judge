@@ -20,19 +20,49 @@ use InvalidArgumentException;
 
 class Submission
 {
+    /**
+     * @var SubmissionId
+     */
     private SubmissionId $Id;
+    /**
+     * @var UserId
+     */
     private UserId $UserId;
+    /**
+     * @var ProblemId
+     */
     private ProblemId $ProblemId;
+    /**
+     * @var DateTimeImmutable
+     */
     private DateTimeImmutable $SubmittedAt;
+    /**
+     * @var Language
+     */
     private Language $Language;
+    /**
+     * @var int
+     */
     private int $CodeLength;
+    /**
+     * @var SubmissionJudgeResult
+     */
     private SubmissionJudgeResult $JudgeResult;
+    /**
+     * @var null|int
+     */
     private ?int $ExecutionTime;
+    /**
+     * @var null|int
+     */
     private ?int $ConsumedMemory;
     /**
-     * @var array<TestResult>
+     * @var TestResult[]
      */
     private array $TestResults;
+    /**
+     * @var SourceFile
+     */
     private SourceFile $SourceFile;
 
     /**
@@ -45,7 +75,7 @@ class Submission
      * @param SubmissionJudgeResult $judgeResult
      * @param null|int $executionTime
      * @param null|int $consumedMemory
-     * @param array<TestResultFactoryDTO> $testResults
+     * @param TestResultFactoryDTO[] $testResults
      * @param SourceFile $sourceFile
      * @return void
      */
@@ -161,7 +191,7 @@ class Submission
         return $this->ConsumedMemory;
     }
 
-    /** @return array<TestResult>  */
+    /** @return TestResult[]  */
     public function getTestResults(): array
     {
         return $this->TestResults;

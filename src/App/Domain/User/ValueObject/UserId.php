@@ -8,6 +8,9 @@ use Ramsey\Uuid\Uuid as RamseyUuid;
 
 class UserId
 {
+    /**
+     * @var string
+     */
     private string $Value;
 
     /**
@@ -19,6 +22,7 @@ class UserId
         $this->Value = $value;
     }
 
+    /** @return UserId  */
     public static function NextIdentity(): self
     {
         return new self((string)RamseyUuid::uuid4());
@@ -30,6 +34,10 @@ class UserId
         return $this->Value;
     }
 
+    /**
+     * @param UserId $uuid
+     * @return bool
+     */
     public function equals(self $uuid): bool
     {
         return $this->Value === $uuid->getValue();

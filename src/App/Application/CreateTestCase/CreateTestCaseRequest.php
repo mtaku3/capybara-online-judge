@@ -8,7 +8,13 @@ use App\Domain\Problem\ValueObject\ProblemId;
 
 class CreateTestCaseRequest
 {
+    /**
+     * @var ProblemId
+     */
     public readonly ProblemId $ProblemId;
+    /**
+     * @var string
+     */
     public readonly string $Title;
 
     /**

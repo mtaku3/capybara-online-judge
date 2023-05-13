@@ -6,8 +6,17 @@ namespace App\Application\CreateUser;
 
 class CreateUserRequest
 {
+    /**
+     * @var string
+     */
     public readonly string $Username;
+    /**
+     * @var string
+     */
     public readonly string $Password;
+    /**
+     * @var bool
+     */
     public readonly bool $IsAdmin;
 
     /**

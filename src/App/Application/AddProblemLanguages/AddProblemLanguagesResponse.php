@@ -8,6 +8,9 @@ use App\Domain\Problem\Entity\Problem;
 
 class AddProblemLanguagesResponse
 {
+    /**
+     * @var Problem
+     */
     public readonly Problem $Problem;
 
     /**

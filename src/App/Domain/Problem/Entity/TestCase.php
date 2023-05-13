@@ -8,21 +8,36 @@ use App\Domain\Problem\ValueObject\TestCaseId;
 
 class TestCase
 {
+    /**
+     * @var TestCaseId
+     */
     private TestCaseId $Id;
+    /**
+     * @var string
+     */
     private string $Title;
+    /**
+     * @var bool
+     */
     private bool $IsDisabled;
     /**
-     * @var array<ExecutionRule>
+     * @var ExecutionRule[]
      */
     private array $ExecutionRules;
+    /**
+     * @var InputFile
+     */
     private InputFile $InputFile;
+    /**
+     * @var OutputFile
+     */
     private OutputFile $OutputFile;
 
     /**
      * @param TestCaseId $id
      * @param string $title
      * @param bool $isDisabled
-     * @param array<ExecutionRuleFactoryDTO> $executionRules
+     * @param ExecutionRuleFactoryDTO[] $executionRules
      * @param InputFile $inputFile
      * @param OutputFile $outputFile
      * @return void
@@ -40,7 +55,7 @@ class TestCase
     /**
      * @param string $title
      * @param bool $isDisabled
-     * @param array<ExecutionRuleFactoryDTO> $executionRules
+     * @param ExecutionRuleFactoryDTO[] $executionRules
      * @return TestCase
      */
     public static function _create(string $title, bool $isDisabled, array $executionRules): TestCase
@@ -88,14 +103,14 @@ class TestCase
         $this->IsDisabled = true;
     }
 
-    /** @return array<ExecutionRule>  */
+    /** @return ExecutionRule[]  */
     public function getExecutionRules(): array
     {
         return $this->ExecutionRules;
     }
 
     /**
-     * @param array<ExecutionRule> $executionRules
+     * @param ExecutionRule[] $executionRules
      * @return void
      */
     public function _setExecutionRules(array $executionRules): void

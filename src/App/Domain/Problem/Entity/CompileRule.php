@@ -9,9 +9,21 @@ use App\Domain\Problem\ValueObject\CompileRuleId;
 
 class CompileRule
 {
+    /**
+     * @var CompileRuleId
+     */
     private CompileRuleId $Id;
+    /**
+     * @var Language
+     */
     private Language $Language;
+    /**
+     * @var string
+     */
     private string $SourceCodeCompileCommand;
+    /**
+     * @var string
+     */
     private string $FileCompileCommand;
 
     /**

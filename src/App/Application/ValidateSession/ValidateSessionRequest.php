@@ -8,8 +8,17 @@ use App\Domain\User\ValueObject\UserId;
 
 class ValidateSessionRequest
 {
+    /**
+     * @var UserId
+     */
     public readonly UserId $UserId;
+    /**
+     * @var string
+     */
     public readonly string $AccessToken;
+    /**
+     * @var string
+     */
     public readonly string $RefreshToken;
 
     /**

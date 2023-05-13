@@ -22,17 +22,32 @@ class Problem
     public const MaxTimeConstraint = 10000;
     public const MaxMemoryConstraint = 2 * 1024 * 1024; // 2 GB in KB
 
+    /**
+     * @var ProblemId
+     */
     private ProblemId $Id;
+    /**
+     * @var string
+     */
     private string $Title;
+    /**
+     * @var string
+     */
     private string $Body;
+    /**
+     * @var int
+     */
     private int $TimeConstraint;
+    /**
+     * @var int
+     */
     private int $MemoryConstraint;
     /**
-     * @var array<CompileRule>
+     * @var CompileRule[]
      */
     private array $CompileRules;
     /**
-     * @var array<TestCase>
+     * @var TestCase[]
      */
     private array $TestCases;
 
@@ -42,8 +57,8 @@ class Problem
      * @param string $body
      * @param int $timeConstraint
      * @param int $memoryConstraint
-     * @param array<CompileRule> $compileRules
-     * @param array<TestCase> $testCases
+     * @param CompileRule[] $compileRules
+     * @param TestCase[] $testCases
      * @return void
      */
     public function __construct(ProblemId $id, string $title, string $body, int $timeConstraint, int $memoryConstraint, array $compileRules, array $testCases)
@@ -62,8 +77,8 @@ class Problem
      * @param string $body
      * @param int $timeConstraint
      * @param int $memoryConstraint
-     * @param array<CompileRuleFactoryDTO> $compileRuleDTOs
-     * @param array<TestCaseFactoryDTO> $testCaseDTOs
+     * @param CompileRuleFactoryDTO[] $compileRuleDTOs
+     * @param TestCaseFactoryDTO[] $testCaseDTOs
      * @return Problem
      * @throws InvalidTimeConstraintException
      * @throws InvalidMemoryConstraintException
@@ -186,7 +201,7 @@ class Problem
     }
 
 
-    /** @return array<CompileRule>  */
+    /** @return CompileRule[]  */
     public function getCompileRules(): array
     {
         return $this->CompileRules;
@@ -194,8 +209,8 @@ class Problem
 
 
     /**
-     * @param array<CompileRuleFactoryDTO> $compileRuleDTOs
-     * @param array<ExecutionRuleDTOWithTestCaseId> $executionRuleDTOs
+     * @param CompileRuleFactoryDTO[] $compileRuleDTOs
+     * @param ExecutionRuleDTOWithTestCaseId[] $executionRuleDTOs
      * @return void
      * @throws InvalidDTOException
      */
@@ -318,7 +333,7 @@ class Problem
     }
 
 
-    /** @return array<TestCase>  */
+    /** @return TestCase[]  */
     public function getTestCases(): array
     {
         return $this->TestCases;
@@ -326,7 +341,7 @@ class Problem
 
     /**
      * @param string $title
-     * @param array<ExecutionRuleFactoryDTO> $executionRuleDTOs
+     * @param ExecutionRuleFactoryDTO[] $executionRuleDTOs
      * @return void
      * @throws InvalidDTOException
      */

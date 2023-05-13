@@ -8,14 +8,14 @@ class TestCaseFactoryDTO
 {
     public readonly string $Title;
     /**
-     * @var array<ExecutionRuleFactoryDTO>
+     * @var ExecutionRuleFactoryDTO[]
      */
     public readonly array $ExecutionRuleDTOs;
 
     /**
      * @param string $title
      * @param bool $isDisabled
-     * @param array<ExecutionRuleFactoryDTO> $executionRuleDTOs
+     * @param ExecutionRuleFactoryDTO[] $executionRuleDTOs
      * @return void
      */
     public function __construct(string $title, array $executionRuleDTOs)

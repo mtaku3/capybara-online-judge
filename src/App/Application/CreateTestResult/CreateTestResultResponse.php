@@ -8,6 +8,9 @@ use App\Domain\Submission\Entity\Submission;
 
 class CreateTestResultResponse
 {
+    /**
+     * @var Submission
+     */
     public readonly Submission $Submission;
 
     /**

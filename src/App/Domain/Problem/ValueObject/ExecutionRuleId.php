@@ -8,6 +8,9 @@ use Ramsey\Uuid\Uuid as RamseyUuid;
 
 class ExecutionRuleId
 {
+    /**
+     * @var string
+     */
     private string $Value;
 
     /**
@@ -19,6 +22,7 @@ class ExecutionRuleId
         $this->Value = $value;
     }
 
+    /** @return ExecutionRuleId  */
     public static function NextIdentity(): self
     {
         return new self((string)RamseyUuid::uuid4());
@@ -30,6 +34,10 @@ class ExecutionRuleId
         return $this->Value;
     }
 
+    /**
+     * @param ExecutionRuleId $uuid 
+     * @return bool 
+     */
     public function equals(self $uuid): bool
     {
         return $this->Value === $uuid->getValue();

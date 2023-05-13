@@ -13,6 +13,10 @@ enum SubmissionJudgeResult: string
     case CE = "CE";
     case WJ = "WJ";
 
+    /**
+     * @param TestResultJudgeResult $testResultJudgeResult 
+     * @return SubmissionJudgeResult 
+     */
     public static function Cast(TestResultJudgeResult $testResultJudgeResult): SubmissionJudgeResult
     {
         return self::from((string)$testResultJudgeResult);

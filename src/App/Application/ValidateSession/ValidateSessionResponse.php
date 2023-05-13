@@ -9,7 +9,13 @@ use App\Application\Session\ValueObject\AccessToken;
 
 class ValidateSessionResponse
 {
+    /**
+     * @var AccessToken
+     */
     public readonly AccessToken $AccessToken;
+    /**
+     * @var null|Session
+     */
     public readonly ?Session $Session;
 
     /**

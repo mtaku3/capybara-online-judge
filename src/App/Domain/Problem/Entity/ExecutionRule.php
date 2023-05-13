@@ -9,11 +9,29 @@ use App\Domain\Problem\ValueObject\ExecutionRuleId;
 
 class ExecutionRule
 {
+    /**
+     * @var ExecutionRuleId
+     */
     private ExecutionRuleId $Id;
+    /**
+     * @var Language
+     */
     private Language $Language;
+    /**
+     * @var string
+     */
     private string $SourceCodeExecutionCommand;
+    /**
+     * @var string
+     */
     private string $SourceCodeCompareCommand;
+    /**
+     * @var string
+     */
     private string $FileExecutionCommand;
+    /**
+     * @var string
+     */
     private string $FileCompareCommand;
 
     /**

@@ -10,10 +10,25 @@ use App\Domain\Submission\ValueObject\TestResultJudgeResult;
 
 class CreateTestResultRequest
 {
+    /**
+     * @var SubmissionId
+     */
     public readonly SubmissionId $SubmissionId;
+    /**
+     * @var TestCaseId
+     */
     public readonly TestCaseId $TestCaseId;
+    /**
+     * @var TestResultJudgeResult
+     */
     public readonly TestResultJudgeResult $JudgeResult;
+    /**
+     * @var int
+     */
     public readonly int $ExecutionTime;
+    /**
+     * @var int
+     */
     public readonly int $ConsumedMemory;
 
     /**

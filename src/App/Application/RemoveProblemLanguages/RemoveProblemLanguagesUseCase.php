@@ -6,6 +6,10 @@ namespace App\Application\RemoveProblemLanguages;
 
 class RemoveProblemLanguagesUseCase
 {
+    /**
+     * @param RemoveProblemLanguagesRequest $request
+     * @return RemoveProblemLanguagesResponse
+     */
     public function handle(RemoveProblemLanguagesRequest $request): RemoveProblemLanguagesResponse
     {
         // TODO

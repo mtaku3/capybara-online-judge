@@ -6,6 +6,10 @@ namespace App\Application\CreateTestResult;
 
 class CreateTestResultUseCase
 {
+    /**
+     * @param CreateTestResultRequest $request
+     * @return CreateTestResultResponse
+     */
     public function handle(CreateTestResultRequest $request): CreateTestResultResponse
     {
         // TODO

@@ -6,7 +6,13 @@ namespace App\Application\Authorize;
 
 class AuthorizeRequest
 {
+    /**
+     * @var string
+     */
     public readonly string $Username;
+    /**
+     * @var string
+     */
     public readonly string $Password;
 
     /**

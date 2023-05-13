@@ -11,11 +11,29 @@ use App\Domain\Submission\ValueObject\TestResultJudgeResult;
 
 class TestResult
 {
+    /**
+     * @var TestResultId
+     */
     private TestResultId $Id;
+    /**
+     * @var SubmissionId
+     */
     private SubmissionId $SubmissionId;
+    /**
+     * @var TestCaseId
+     */
     private TestCaseId $TestCaseId;
+    /**
+     * @var TestResultJudgeResult
+     */
     private TestResultJudgeResult $JudgeResult;
+    /**
+     * @var int
+     */
     private int $ExecutionTime;
+    /**
+     * @var int
+     */
     private int $ConsumedMemory;
 
     /**

@@ -9,7 +9,13 @@ use App\Domain\Submission\ValueObject\SubmissionId;
 
 class SourceFile
 {
+    /**
+     * @var SourceFileId
+     */
     private SourceFileId $Id;
+    /**
+     * @var string
+     */
     private string $Path;
 
     /**

@@ -6,8 +6,15 @@ namespace App\Libs;
 
 class Response
 {
+    /**
+     * @var int
+     */
     private int $status = 200;
 
+    /**
+     * @param int $code
+     * @return Response
+     */
     public function status(int $code): self
     {
         $this->status = $code;
@@ -15,12 +22,20 @@ class Response
         return $this;
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function toJSON(array $data = []): void
     {
         header('Content-Type: application/json');
         echo json_encode($data);
     }
 
+    /**
+     * @param string $body
+     * @return void
+     */
     public function send(string $body = ""): void
     {
         echo $body;

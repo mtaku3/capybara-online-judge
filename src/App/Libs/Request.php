@@ -6,10 +6,23 @@ namespace App\Libs;
 
 class Request
 {
+    /**
+     * @var array
+     */
     public array $params;
+    /**
+     * @var string
+     */
     public string $reqMethod;
+    /**
+     * @var string
+     */
     public string $contentType;
 
+    /**
+     * @param array $params
+     * @return void
+     */
     public function __construct(array $params = [])
     {
         $this->params = $params;
@@ -17,6 +30,7 @@ class Request
         $this->contentType = !empty($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
     }
 
+    /** @return array  */
     public function getBody(): array
     {
         if ($this->reqMethod !== 'POST') {
@@ -31,6 +45,7 @@ class Request
         return $body;
     }
 
+    /** @return mixed  */
     public function getJSON(): mixed
     {
         if ($this->reqMethod !== 'POST') {

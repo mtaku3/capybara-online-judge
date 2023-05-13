@@ -8,6 +8,9 @@ use App\Domain\Problem\Entity\Problem;
 
 class DisableTestCaseResponse
 {
+    /**
+     * @var Problem
+     */
     public readonly Problem $Problem;
 
     /**

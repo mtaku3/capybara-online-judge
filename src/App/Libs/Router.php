@@ -6,25 +6,45 @@ namespace App\Libs;
 
 class Router
 {
+    /**
+     * @var bool
+     */
     private static bool $HasRouted = false;
 
+    /**
+     * @var array
+     */
     private array $middlewares;
 
+    /** @return bool  */
     public static function GetHasRouted(): bool
     {
         return self::$HasRouted;
     }
 
+    /**
+     * @param array $middlewares
+     * @return void
+     */
     public function __construct(array $middlewares = [])
     {
         $this->middlewares = $middlewares;
     }
 
+    /**
+     * @param callable $func
+     * @return Router
+     */
     public function use(callable $func): self
     {
         return new Router($this->middlewares + [$func]);
     }
 
+    /**
+     * @param string $route
+     * @param callable $callback
+     * @return void
+     */
     public function get(string $route, callable $callback): void
     {
         if (self::$HasRouted) {
@@ -38,6 +58,11 @@ class Router
         self::on($route, $callback);
     }
 
+    /**
+     * @param string $route
+     * @param callable $callback
+     * @return void
+     */
     public function post(string $route, callable $callback): void
     {
         if (self::$HasRouted) {
@@ -51,6 +76,11 @@ class Router
         self::on($route, $callback);
     }
 
+    /**
+     * @param string $regex
+     * @param callable $cb
+     * @return void
+     */
     public function on(string $regex, callable $cb): void
     {
         $params = $_SERVER['REQUEST_URI'];

@@ -6,6 +6,10 @@ namespace App\Application\ValidateSession;
 
 class ValidateSessionUseCase
 {
+    /**
+     * @param ValidateSessionRequest $request
+     * @return ValidateSessionResponse
+     */
     public function handle(ValidateSessionRequest $request): ValidateSessionResponse
     {
         // TODO

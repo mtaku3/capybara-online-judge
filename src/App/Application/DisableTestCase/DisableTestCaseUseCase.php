@@ -6,6 +6,10 @@ namespace App\Application\DisableTestCase;
 
 class DisableTestCaseUseCase
 {
+    /**
+     * @param DisableTestCaseRequest $request
+     * @return DisableTestCaseResponse
+     */
     public function handle(DisableTestCaseRequest $request): DisableTestCaseResponse
     {
         // TODO

@@ -8,8 +8,17 @@ use App\Domain\Common\ValueObject\Language;
 
 class CompileRuleFactoryDTO
 {
+    /**
+     * @var Language
+     */
     public readonly Language $Language;
+    /**
+     * @var string
+     */
     public readonly string $SourceCodeCompileCommand;
+    /**
+     * @var string
+     */
     public readonly string $FileCompileCommand;
 
     /**

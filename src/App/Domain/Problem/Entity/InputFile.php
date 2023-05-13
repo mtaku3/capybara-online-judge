@@ -9,7 +9,13 @@ use App\Domain\Problem\ValueObject\TestCaseId;
 
 class InputFile
 {
+    /**
+     * @var InputFileId
+     */
     private InputFileId $Id;
+    /**
+     * @var string
+     */
     private string $Path;
 
     /**
