@@ -45,7 +45,7 @@ class ExecutionRule
      */
     public static function _create(Language $language, string $sourceCodeExecutionCommand, string $sourceCodeCompareCommand, string $fileExecutionCommand, string $fileCompareCommand): ExecutionRule
     {
-        return new ExecutionRule(ExecutionRuleId::nextIdentity(), $language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
+        return new ExecutionRule(ExecutionRuleId::NextIdentity(), $language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
     }
 
     /** @return ExecutionRuleId  */

@@ -73,7 +73,7 @@ class Submission
      */
     public static function Create(User $user, Problem $problem, Language  $language, int $codeLength): Submission
     {
-        $id = SubmissionId::nextIdentity();
+        $id = SubmissionId::NextIdentity();
         return new Submission($id, $user->getId(), $problem->getId(), new DateTimeImmutable(), $language, $codeLength, SubmissionJudgeResult::WJ, null, null, [], SourceFile::_create($id));
     }
 
@@ -143,7 +143,7 @@ class Submission
                 $maxConsumedMemory = max([$maxConsumedMemory, $this->TestResults[$i]->getConsumedMemory()]);
             }
 
-            $this->JudgeResult = SubmissionJudgeResult::cast($maxJudgeResult);
+            $this->JudgeResult = SubmissionJudgeResult::Cast($maxJudgeResult);
             $this->ExecutionTime = $maxExecutionTime;
             $this->ConsumedMemory = $maxConsumedMemory;
         }

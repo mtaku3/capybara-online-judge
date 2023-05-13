@@ -37,7 +37,7 @@ class CompileRule
      */
     public static function _create(Language $language, string $sourceCodeCompileCommand, string $fileCompileCommand): CompileRule
     {
-        return new CompileRule(CompileRuleId::nextIdentity(), $language, $sourceCodeCompileCommand, $fileCompileCommand);
+        return new CompileRule(CompileRuleId::NextIdentity(), $language, $sourceCodeCompileCommand, $fileCompileCommand);
     }
 
     /** @return CompileRuleId  */

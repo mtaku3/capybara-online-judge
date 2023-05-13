@@ -13,7 +13,7 @@ enum SubmissionJudgeResult: string
     case CE = "CE";
     case WJ = "WJ";
 
-    public static function cast(TestResultJudgeResult $testResultJudgeResult): SubmissionJudgeResult
+    public static function Cast(TestResultJudgeResult $testResultJudgeResult): SubmissionJudgeResult
     {
         return self::from((string)$testResultJudgeResult);
     }

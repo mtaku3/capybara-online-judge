@@ -19,7 +19,7 @@ class OutputFileId
         $this->Value = $value;
     }
 
-    public static function nextIdentity(): self
+    public static function NextIdentity(): self
     {
         return new self((string)RamseyUuid::uuid4());
     }

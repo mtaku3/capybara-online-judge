@@ -48,7 +48,7 @@ class User
             throw new InvalidPasswordException();
         }
 
-        return new User(UserId::nextIdentity(), $username, self::HashPassword($password), $isAdmin);
+        return new User(UserId::NextIdentity(), $username, self::HashPassword($password), $isAdmin);
     }
 
     /**

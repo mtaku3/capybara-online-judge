@@ -47,7 +47,7 @@ class TestResult
      */
     public static function _create(SubmissionId $submissionId, TestCaseId $testCaseId, TestResultJudgeResult $judgeResult, int $executionTime, int $consumedMemory)
     {
-        return new TestResult(TestResultId::nextIdentity(), $submissionId, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
+        return new TestResult(TestResultId::NextIdentity(), $submissionId, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
     }
 
     /** @return TestResultId  */

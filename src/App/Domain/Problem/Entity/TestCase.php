@@ -45,7 +45,7 @@ class TestCase
      */
     public static function _create(string $title, bool $isDisabled, array $executionRules): TestCase
     {
-        $id = TestCaseId::nextIdentity();
+        $id = TestCaseId::NextIdentity();
         return new TestCase($id, $title, $isDisabled, $executionRules, InputFile::_create($id), OutputFile::_create($id));
     }
 

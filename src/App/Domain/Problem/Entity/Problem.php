@@ -134,7 +134,7 @@ class Problem
             );
         }
 
-        return new Problem(ProblemId::nextIdentity(), $title, $body, $timeConstraint, $memoryConstraint, $compileRules, $testCases);
+        return new Problem(ProblemId::NextIdentity(), $title, $body, $timeConstraint, $memoryConstraint, $compileRules, $testCases);
     }
 
     /** @return ProblemId  */

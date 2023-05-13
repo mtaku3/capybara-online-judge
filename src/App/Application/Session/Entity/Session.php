@@ -43,7 +43,7 @@ class Session
      */
     public static function Create(User $user)
     {
-        return new Session(SessionId::nextIdentity(), $user->getId(), RefreshToken::Create(), (new DateTimeImmutable())->add(new DateInterval(self::ExpiresIn)));
+        return new Session(SessionId::NextIdentity(), $user->getId(), RefreshToken::Create(), (new DateTimeImmutable())->add(new DateInterval(self::ExpiresIn)));
     }
 
     /** @return SessionId  */
