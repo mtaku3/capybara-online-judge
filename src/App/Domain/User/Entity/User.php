@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Entity;
 
+use App\Domain\User\Exception\InvalidPasswordException;
+use App\Domain\User\Exception\InvalidUsernameException;
 use App\Domain\User\ValueObject\UserId;
 
 class User
@@ -13,6 +15,13 @@ class User
     private string $Password;
     private bool $IsAdmin;
 
+    /**
+     * @param UserId $id
+     * @param string $username
+     * @param string $password
+     * @param bool $isAdmin
+     * @return void
+     */
     public function __construct(UserId $id, string $username, string $password, bool $isAdmin)
     {
         $this->Id = $id;
@@ -21,14 +30,52 @@ class User
         $this->IsAdmin = $isAdmin;
     }
 
-    public static function _create(string $username, string $password, bool $isAdmin): User
+    /**
+     * @param string $username
+     * @param string $password
+     * @param bool $isAdmin
+     * @return User
+     * @throws InvalidUsernameException
+     * @throws InvalidPasswordException
+     */
+    public static function Create(string $username, string $password, bool $isAdmin): User
     {
-        return new User(UserId::nextIdentity(), $username, self::hashPassword($password), $isAdmin);
+        if (!self::ValidateUsername($username)) {
+            throw new InvalidUsernameException();
+        }
+
+        if (!self::ValidatePassword($password)) {
+            throw new InvalidPasswordException();
+        }
+
+        return new User(UserId::nextIdentity(), $username, self::HashPassword($password), $isAdmin);
     }
 
-    private static function hashPassword(string $password): string
+    /**
+     * @param string $password
+     * @return string
+     */
+    private static function HashPassword(string $password): string
     {
         return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    /**
+     * @param string $username
+     * @return bool
+     */
+    private static function ValidateUsername(string $username): bool
+    {
+        return boolval(preg_match("^[a-zA-Z0-9]{4,20}$", $username));
+    }
+
+    /**
+     * @param string $password
+     * @return bool
+     */
+    private static function ValidatePassword(string $password): bool
+    {
+        return boolval(preg_match("^[a-zA-Z0-9!@#$%^&*]{8,30}$", $password));
     }
 
     public function getId(): UserId
@@ -48,7 +95,11 @@ class User
 
     public function hashAndSetPassword(string $password): void
     {
-        $this->Password = self::hashPassword($password);
+        if (!self::ValidatePassword($password)) {
+            throw new InvalidPasswordException();
+        }
+
+        $this->Password = self::HashPassword($password);
     }
 
     public function getIsAdmin(): bool

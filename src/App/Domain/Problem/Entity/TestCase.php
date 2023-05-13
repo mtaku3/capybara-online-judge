@@ -31,6 +31,17 @@ class TestCase
         $this->ExecutionRules = $executionRules;
     }
 
+    /**
+     * @param string $title
+     * @param bool $isDisabled
+     * @param array<ExecutionRuleFactoryDTO> $executionRules
+     * @return TestCase
+     */
+    public static function _create(string $title, bool $isDisabled, array $executionRules): TestCase
+    {
+        return new TestCase(TestCaseId::nextIdentity(), $title, $isDisabled, $executionRules);
+    }
+
     /** @return TestCaseId  */
     public function getId(): TestCaseId
     {

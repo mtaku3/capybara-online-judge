@@ -71,7 +71,7 @@ class Problem
      * @throws AtLeastOneEnabledTestCaseRequiredException
      * @throws InvalidDTOException
      */
-    public static function _create(string $title, string $body, int $timeConstraint, int $memoryConstraint, array $compileRuleDTOs, array $testCaseDTOs): Problem
+    public static function Create(string $title, string $body, int $timeConstraint, int $memoryConstraint, array $compileRuleDTOs, array $testCaseDTOs): Problem
     {
         if ($timeConstraint <= 0 && self::MaxTimeConstraint < $timeConstraint) {
             throw new InvalidTimeConstraintException();
@@ -97,8 +97,7 @@ class Problem
             }
 
             $availableLanguages[] = $compileRuleDTO->Language;
-            $compileRules[] = new CompileRule(
-                CompileRuleId::nextIdentity(),
+            $compileRules[] = CompileRule::_create(
                 $compileRuleDTO->Language,
                 $compileRuleDTO->SourceCodeCompileCommand,
                 $compileRuleDTO->FileCompileCommand
@@ -119,8 +118,7 @@ class Problem
                 }
 
                 $requiredLanguages = array_filter($requiredLanguages, fn ($e) => $e !== $executionRuleDTO->Language);
-                $executionRules[] = new ExecutionRule(
-                    ExecutionRuleId::nextIdentity(),
+                $executionRules[] = ExecutionRule::_create(
                     $executionRuleDTO->Language,
                     $executionRuleDTO->SourceCodeExecutionCommand,
                     $executionRuleDTO->SourceCodeCompareCommand,
@@ -129,8 +127,7 @@ class Problem
                 );
             }
 
-            $testCases[] = new TestCase(
-                TestCaseId::nextIdentity(),
+            $testCases[] = TestCase::_create(
                 $testCaseDTO->Title,
                 false,
                 $executionRules
@@ -197,7 +194,7 @@ class Problem
 
 
     /**
-     * @param array<CompileRuleDTO> $compileRuleDTOs
+     * @param array<CompileRuleFactoryDTO> $compileRuleDTOs
      * @param array<ExecutionRuleDTOWithTestCaseId> $executionRuleDTOs
      * @return void
      * @throws InvalidDTOException
@@ -215,8 +212,7 @@ class Problem
 
             $availableLanguages[] = $compileRuleDTO->Language;
             $newlyAddedLanguages[] = $compileRuleDTO->Language;
-            $newCompileRules[] = new CompileRule(
-                CompileRuleId::nextIdentity(),
+            $newCompileRules[] = CompileRule::_create(
                 $compileRuleDTO->Language,
                 $compileRuleDTO->SourceCodeCompileCommand,
                 $compileRuleDTO->FileCompileCommand
@@ -238,8 +234,7 @@ class Problem
                 }
 
                 $requiredLanguages = array_filter($requiredLanguages, fn ($e) => $e !== $executionRuleDTO->Language);
-                $executionRules[] = new ExecutionRule(
-                    ExecutionRuleId::nextIdentity(),
+                $executionRules[] = ExecutionRule::_create(
                     $executionRuleDTO->Language,
                     $executionRuleDTO->SourceCodeExecutionCommand,
                     $executionRuleDTO->SourceCodeCompareCommand,
@@ -331,7 +326,7 @@ class Problem
 
     /**
      * @param string $title
-     * @param array<ExecutionRuleDTO> $executionRuleDTOs
+     * @param array<ExecutionRuleFactoryDTO> $executionRuleDTOs
      * @return void
      * @throws InvalidDTOException
      */
@@ -349,8 +344,7 @@ class Problem
             }
 
             $requiredLanguages = array_filter($requiredLanguages, fn ($e) => $e !== $executionRuleDTO->Language);
-            $executionRules[] = new ExecutionRule(
-                ExecutionRuleId::nextIdentity(),
+            $executionRules[] = ExecutionRule::_create(
                 $executionRuleDTO->Language,
                 $executionRuleDTO->SourceCodeExecutionCommand,
                 $executionRuleDTO->SourceCodeCompareCommand,
@@ -359,7 +353,7 @@ class Problem
             );
         }
 
-        $this->TestCases[] = new TestCase(TestCaseId::nextIdentity(), $title, false, $executionRules);
+        $this->TestCases[] = TestCase::_create($title, false, $executionRules);
     }
 
     /**

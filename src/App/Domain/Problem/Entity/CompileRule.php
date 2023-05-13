@@ -29,6 +29,17 @@ class CompileRule
         $this->FileCompileCommand = $fileCompileCommand;
     }
 
+    /**
+     * @param Language $language
+     * @param string $sourceCodeCompileCommand
+     * @param string $fileCompileCommand
+     * @return CompileRule
+     */
+    public static function _create(Language $language, string $sourceCodeCompileCommand, string $fileCompileCommand): CompileRule
+    {
+        return new CompileRule(CompileRuleId::nextIdentity(), $language, $sourceCodeCompileCommand, $fileCompileCommand);
+    }
+
     /** @return CompileRuleId  */
     public function getId(): CompileRuleId
     {

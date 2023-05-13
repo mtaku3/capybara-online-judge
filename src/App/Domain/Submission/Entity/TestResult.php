@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Domain\Submission\Entity;
 
-use App\Domain\Common\ValueObject\JudgeResult;
 use App\Domain\Submission\ValueObject\SubmissionId;
 use App\Domain\Problem\ValueObject\TestCaseId;
 use App\Domain\Submission\ValueObject\TestResultId;
+use App\Domain\Submission\ValueObject\TestResultJudgeResult;
 
 class TestResult
 {
     private TestResultId $Id;
     private SubmissionId $SubmissionId;
     private TestCaseId $TestCaseId;
-    private JudgeResult $JudgeResult;
+    private TestResultJudgeResult $JudgeResult;
     private int $ExecutionTime;
     private int $ConsumedMemory;
 
@@ -22,12 +22,12 @@ class TestResult
      * @param TestResultId $id
      * @param SubmissionId $submissionId
      * @param TestCaseId $testCaseId
-     * @param JudgeResult $judgeResult
+     * @param TestResultJudgeResult $judgeResult
      * @param int $executionTime
      * @param int $consumedMemory
      * @return void
      */
-    public function __construct(TestResultId $id, SubmissionId $submissionId, TestCaseId $testCaseId, JudgeResult $judgeResult, int $executionTime, int $consumedMemory)
+    public function __construct(TestResultId $id, SubmissionId $submissionId, TestCaseId $testCaseId, TestResultJudgeResult $judgeResult, int $executionTime, int $consumedMemory)
     {
         $this->Id = $id;
         $this->SubmissionId = $submissionId;
@@ -35,6 +35,19 @@ class TestResult
         $this->JudgeResult = $judgeResult;
         $this->ExecutionTime = $executionTime;
         $this->ConsumedMemory = $consumedMemory;
+    }
+
+    /**
+     * @param SubmissionId $submissionId
+     * @param TestCaseId $testCaseId
+     * @param TestResultJudgeResult $judgeResult
+     * @param int $executionTime
+     * @param int $consumedMemory
+     * @return void
+     */
+    public static function _create(SubmissionId $submissionId, TestCaseId $testCaseId, TestResultJudgeResult $judgeResult, int $executionTime, int $consumedMemory)
+    {
+        return new TestResult(TestResultId::nextIdentity(), $submissionId, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
     }
 
     /** @return TestResultId  */
@@ -55,8 +68,8 @@ class TestResult
         return $this->TestCaseId;
     }
 
-    /** @return JudgeResult  */
-    public function getJudgeResult(): JudgeResult
+    /** @return TestResultJudgeResult  */
+    public function getJudgeResult(): TestResultJudgeResult
     {
         return $this->JudgeResult;
     }

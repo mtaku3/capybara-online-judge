@@ -35,6 +35,19 @@ class ExecutionRule
         $this->FileCompareCommand = $fileCompareCommand;
     }
 
+    /**
+     * @param Language $language
+     * @param string $sourceCodeExecutionCommand
+     * @param string $sourceCodeCompareCommand
+     * @param string $fileExecutionCommand
+     * @param string $fileCompareCommand
+     * @return ExecutionRule
+     */
+    public static function _create(Language $language, string $sourceCodeExecutionCommand, string $sourceCodeCompareCommand, string $fileExecutionCommand, string $fileCompareCommand): ExecutionRule
+    {
+        return new ExecutionRule(ExecutionRuleId::nextIdentity(), $language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
+    }
+
     /** @return ExecutionRuleId  */
     public function getId(): ExecutionRuleId
     {

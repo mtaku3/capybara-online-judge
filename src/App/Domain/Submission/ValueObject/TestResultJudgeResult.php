@@ -2,18 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\ValueObject;
+namespace App\Domain\Submission\ValueObject;
 
-enum JudgeResult: string
+enum TestResultJudgeResult: string
 {
     case AC = "AC";
     case RE = "RE";
     case TLE = "TLE";
     case MLE = "MLE";
-    case CE = "CE";
-    case WJ = "WJ";
 
-    public function compares(JudgeResult $judgeResult): int
+    public function compares(TestResultJudgeResult $judgeResult): int
     {
         return $this->_toInt() - $judgeResult->_toInt();
     }
@@ -21,23 +19,17 @@ enum JudgeResult: string
     private function _toInt(): int
     {
         switch ($this) {
-            case JudgeResult::AC:
+            case TestResultJudgeResult::AC:
                 return 0;
                 break;
-            case JudgeResult::RE:
+            case TestResultJudgeResult::RE:
                 return 1;
                 break;
-            case JudgeResult::TLE:
+            case TestResultJudgeResult::TLE:
                 return 2;
                 break;
-            case JudgeResult::MLE:
+            case TestResultJudgeResult::MLE:
                 return 3;
-                break;
-            case JudgeResult::CE:
-                return 4;
-                break;
-            case JudgeResult::WJ:
-                return 5;
                 break;
         }
     }

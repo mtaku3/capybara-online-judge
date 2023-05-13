@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Domain\Submission\Entity;
 
-use App\Domain\Common\ValueObject\JudgeResult;
 use App\Domain\Common\ValueObject\Language;
+use App\Domain\Problem\Entity\Problem;
 use App\Domain\Problem\ValueObject\ProblemId;
 use App\Domain\Submission\ValueObject\SubmissionId;
 use App\Domain\Problem\ValueObject\TestCaseId;
 use App\Domain\Submission\Exception\AlreadyJudgedException;
 use App\Domain\Submission\Exception\TestResultForGivenTestCaseAlreadyExistsException;
-use App\Domain\Submission\ValueObject\TestResultId;
+use App\Domain\Submission\ValueObject\SubmissionJudgeResult;
+use App\Domain\Submission\ValueObject\TestResultJudgeResult;
+use App\Domain\User\Entity\User;
 use App\Domain\User\ValueObject\UserId;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -24,7 +26,7 @@ class Submission
     private DateTimeImmutable $SubmittedAt;
     private Language $Language;
     private int $CodeLength;
-    private JudgeResult $JudgeResult;
+    private SubmissionJudgeResult $JudgeResult;
     private ?int $ExecutionTime;
     private ?int $ConsumedMemory;
     /**
@@ -39,13 +41,13 @@ class Submission
      * @param DateTimeImmutable $submittedAt
      * @param Language $language
      * @param int $codeLength
-     * @param JudgeResult $judgeResult
+     * @param SubmissionJudgeResult $judgeResult
      * @param null|int $executionTime
      * @param null|int $consumedMemory
      * @param array<TestResultFactoryDTO> $testResults
      * @return void
      */
-    public function __construct(SubmissionId $id, UserId $userId, ProblemId $problemId, DateTimeImmutable $submittedAt, Language $language, int $codeLength, JudgeResult $judgeResult, ?int $executionTime, ?int $consumedMemory, array $testResults)
+    public function __construct(SubmissionId $id, UserId $userId, ProblemId $problemId, DateTimeImmutable $submittedAt, Language $language, int $codeLength, SubmissionJudgeResult $judgeResult, ?int $executionTime, ?int $consumedMemory, array $testResults)
     {
         $this->Id = $id;
         $this->UserId = $userId;
@@ -60,15 +62,15 @@ class Submission
     }
 
     /**
-     * @param UserId $userId
-     * @param ProblemId $problemId
-     * @param Language $language
-     * @param int $codeLength
-     * @return Submission
+     * @param User $user 
+     * @param Problem $problem 
+     * @param Language $language 
+     * @param int $codeLength 
+     * @return Submission 
      */
-    public static function _create(UserId $userId, ProblemId $problemId, Language  $language, int $codeLength): Submission
+    public static function Create(User $user, Problem $problem, Language  $language, int $codeLength): Submission
     {
-        return new Submission(SubmissionId::nextIdentity(), $userId, $problemId, new DateTimeImmutable(), $language, $codeLength, JudgeResult::WJ, null, null, []);
+        return new Submission(SubmissionId::nextIdentity(), $user->getId(), $problem->getId(), new DateTimeImmutable(), $language, $codeLength, SubmissionJudgeResult::WJ, null, null, []);
     }
 
     /** @return SubmissionId  */
@@ -108,7 +110,7 @@ class Submission
     }
 
     /** @return JudgeResult  */
-    public function getJudgeResult(): JudgeResult
+    public function getJudgeResult(): SubmissionJudgeResult
     {
         return $this->JudgeResult;
     }
@@ -119,12 +121,12 @@ class Submission
      */
     public function completeJudge(): void
     {
-        if ($this->JudgeResult !== JudgeResult::WJ) {
+        if ($this->JudgeResult !== SubmissionJudgeResult::WJ) {
             throw new AlreadyJudgedException();
         }
 
         if (empty($this->TestResults)) {
-            $this->JudgeResult = JudgeResult::CE;
+            $this->JudgeResult = SubmissionJudgeResult::CE;
         } else {
             $maxJudgeResult = $this->TestResults[0]->getJudgeResult();
             $maxExecutionTime = $this->TestResults[0]->getExecutionTime();
@@ -137,7 +139,7 @@ class Submission
                 $maxConsumedMemory = max([$maxConsumedMemory, $this->TestResults[$i]->getConsumedMemory()]);
             }
 
-            $this->JudgeResult = $maxJudgeResult;
+            $this->JudgeResult = SubmissionJudgeResult::cast($maxJudgeResult);
             $this->ExecutionTime = $maxExecutionTime;
             $this->ConsumedMemory = $maxConsumedMemory;
         }
@@ -162,26 +164,41 @@ class Submission
     }
 
     /**
+     * @param Problem $problem
      * @param TestCaseId $testCaseId
-     * @param JudgeResult $judgeResult
+     * @param bool $hasRuntimeErrorOccurred
      * @param int $executionTime
      * @param int $consumedMemory
      * @return void
+     * @throws InvalidArgumentException
      * @throws TestResultForGivenTestCaseAlreadyExistsException
      */
-    public function createTestResult(TestCaseId $testCaseId, JudgeResult $judgeResult, int $executionTime, int $consumedMemory): void
+    public function createTestResult(Problem $problem, TestCaseId $testCaseId, bool $hasRuntimeErrorOccurred, int $executionTime, int $consumedMemory): void
     {
-        if ($judgeResult === JudgeResult::WJ || $judgeResult === JudgeResult::CE) {
+        if (!$problem->getId()->equals($this->ProblemId)) {
             throw new InvalidArgumentException();
         }
 
-        foreach ($this->TestResults as $testResult) {
-            if ($testResult->getTestCaseId()->equals($testCaseId)) {
-                throw new TestResultForGivenTestCaseAlreadyExistsException();
-            }
+        if (current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($testCaseId))) === false) {
+            throw new InvalidArgumentException();
         }
 
-        $testResult = new TestResult(TestResultId::nextIdentity(), $this->Id, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
+        if (current(array_filter($this->TestResults, fn ($e) => $e->getTestCaseId()->equals($testCaseId))) !== false) {
+            throw new TestResultForGivenTestCaseAlreadyExistsException();
+        }
+
+        if ($hasRuntimeErrorOccurred) {
+            $judgeResult = TestResultJudgeResult::RE;
+        } elseif ($problem->getTimeConstraint() < $executionTime) {
+            $judgeResult = TestResultJudgeResult::TLE;
+        } elseif ($problem->getMemoryConstraint() < $consumedMemory) {
+            $judgeResult = TestResultJudgeResult::MLE;
+        } else {
+            $judgeResult = TestResultJudgeResult::AC;
+        }
+
+
+        $testResult = TestResult::_create($this->Id, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
         $this->TestResults[] = $testResult;
     }
 }
