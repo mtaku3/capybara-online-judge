@@ -16,7 +16,7 @@ use Firebase\JWT\Key;
 
 class AccessToken
 {
-    public const ExpiresIn = "1 day";
+    public const ExpiresIn = "P1D";
     public const Algorithm = "HS256";
 
     /**

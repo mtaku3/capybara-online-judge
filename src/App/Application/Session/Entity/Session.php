@@ -14,7 +14,7 @@ use Exception;
 
 class Session
 {
-    public const ExpiresIn = "30 day";
+    public const ExpiresIn = "P30D";
 
     /**
      * @var SessionId
