@@ -63,7 +63,7 @@ class TestResult
      * @param int $consumedMemory
      * @return void
      */
-    public static function _create(SubmissionId $submissionId, TestCaseId $testCaseId, TestResultJudgeResult $judgeResult, int $executionTime, int $consumedMemory)
+    public static function _create(SubmissionId $submissionId, TestCaseId $testCaseId, TestResultJudgeResult $judgeResult, int $executionTime, int $consumedMemory): TestResult
     {
         return new TestResult(TestResultId::NextIdentity(), $submissionId, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
     }
