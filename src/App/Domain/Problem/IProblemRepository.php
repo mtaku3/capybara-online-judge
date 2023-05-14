@@ -13,10 +13,10 @@ interface IProblemRepository
     public function getAll(): array;
 
     /**
-     * @param ProblemId $problemId
+     * @param ProblemId $id
      * @return Problem
      */
-    public function findByProblemId(ProblemId $problemId): Problem;
+    public function findById(ProblemId $id): Problem;
 
     /**
      * @param Problem $problem
