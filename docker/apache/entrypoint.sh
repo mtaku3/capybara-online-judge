@@ -6,6 +6,6 @@ npm install -D
 
 npx tailwindcss -i ./src/App/input.css -o ./dist/tailwind.css
 
-ln ./node_modules/flowbite/dist/flowbite.min.js ./dist/
+ln -f ./node_modules/flowbite/dist/flowbite.min.js ./dist/
 
 apache2ctl -D FOREGROUND
