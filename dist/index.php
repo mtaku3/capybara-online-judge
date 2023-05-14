@@ -37,7 +37,6 @@ use Cycle\Database;
 use Cycle\Database\Config;
 use Cycle\ORM;
 use Cycle\ORM\Schema;
-use Cycle\ORM\Mapper\Mapper;
 
 $dbal = new Database\DatabaseManager(
     new Config\DatabaseConfig([
@@ -60,7 +59,10 @@ $dbal = new Database\DatabaseManager(
         ]
     ])
 );
-$orm = new ORM\ORM(new ORM\Factory($dbal), new Schema([]));
+
+require __DIR__ . "/../src/App/Infrastructure/CycleORM/Schema.php";
+
+$orm = new ORM\ORM(new ORM\Factory($dbal), $Schema);
 
 
 $router->get("/", function (Request $req, Response $res) {
