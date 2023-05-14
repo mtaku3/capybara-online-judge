@@ -61,5 +61,6 @@ class SessionRepository implements ISessionRepository
     public function save(Session $session): void
     {
         $this->EntityManager->persist($session);
+        $this->EntityManager->run();
     }
 }

@@ -74,5 +74,6 @@ class UserRepository implements IUserRepository
     public function save(User $user): void
     {
         $this->EntityManager->persist($user);
+        $this->EntityManager->run();
     }
 }

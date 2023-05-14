@@ -80,5 +80,6 @@ class SubmissionRepository implements ISubmissionRepository
     public function save(Submission $submission): void
     {
         $this->EntityManager->persist($submission);
+        $this->EntityManager->run();
     }
 }

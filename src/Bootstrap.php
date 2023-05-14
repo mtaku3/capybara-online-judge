@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Application\Session\Entity\Session;
+use App\Domain\Problem\Entity\Problem;
+use App\Domain\Submission\Entity\Submission;
+use App\Domain\User\Entity\User;
+use App\Infrastructure\Repository\Problem\ProblemRepository;
+use App\Infrastructure\Repository\Session\SessionRepository;
+use App\Infrastructure\Repository\Submission\SubmissionRepository;
+use App\Infrastructure\Repository\User\UserRepository;
 use Cycle\Database;
 use Cycle\Database\Config;
 use Cycle\ORM;
@@ -66,7 +74,19 @@ $containerBuilder->addDefinitions([
     },
     "EntityManager" => function (ContainerInterface $c) {
         return new EntityManager($c->get("ORM"));
-    }
+    },
+    "ProblemRepository" => function (ContainerInterface $c) {
+        return new ProblemRepository($c->get("EntityManager"), $c->get("ORM")->getRepository(Problem::class));
+    },
+    "SessionRepository" => function (ContainerInterface $c) {
+        return new SessionRepository($c->get("EntityManager"), $c->get("ORM")->getRepository(Session::class));
+    },
+    "SubmissionRepository" => function (ContainerInterface $c) {
+        return new SubmissionRepository($c->get("EntityManager"), $c->get("ORM")->getRepository(Submission::class));
+    },
+    "UserRepository" => function (ContainerInterface $c) {
+        return new UserRepository($c->get("EntityManager"), $c->get("ORM")->getRepository(User::class));
+    },
 ]);
 
 $GLOBALS["container"] = $containerBuilder->build();

@@ -62,5 +62,6 @@ class ProblemRepository implements IProblemRepository
     public function save(Problem $problem): void
     {
         $this->EntityManager->persist($problem);
+        $this->EntityManager->run();
     }
 }
