@@ -44,7 +44,7 @@ class ServerDataCollection extends DataCollection
      * The prefix of HTTP headers normally
      * stored in the Server data
      *
-     * @type string
+     * @var string
      */
     protected static $http_header_prefix = 'HTTP_';
 
@@ -52,7 +52,7 @@ class ServerDataCollection extends DataCollection
      * The list of HTTP headers that for some
      * reason aren't prefixed in PHP...
      *
-     * @type array
+     * @var array
      */
     protected static $http_nonprefixed_headers = array(
         'CONTENT_LENGTH',

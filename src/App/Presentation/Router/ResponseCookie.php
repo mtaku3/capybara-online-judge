@@ -38,14 +38,14 @@ class ResponseCookie
     /**
      * The name of the cookie
      *
-     * @type string
+     * @var string
      */
     protected $name;
 
     /**
      * The string "value" of the cookie
      *
-     * @type string
+     * @var string
      */
     protected $value;
 
@@ -54,7 +54,7 @@ class ResponseCookie
      *
      * Represented by a Unix "Timestamp"
      *
-     * @type int
+     * @var int
      */
     protected $expire;
 
@@ -62,14 +62,14 @@ class ResponseCookie
      * The path on the server that the cookie will
      * be available on
      *
-     * @type string
+     * @var string
      */
     protected $path;
 
     /**
      * The domain that the cookie is available to
      *
-     * @type string
+     * @var string
      */
     protected $domain;
 
@@ -77,7 +77,7 @@ class ResponseCookie
      * Whether the cookie should only be transferred
      * over an HTTPS connection or not
      *
-     * @type boolean
+     * @var boolean
      */
     protected $secure;
 
@@ -86,7 +86,7 @@ class ResponseCookie
      * only (not available to be accessed through
      * client-side scripting languages like JavaScript)
      *
-     * @type boolean
+     * @var boolean
      */
     protected $http_only;
 

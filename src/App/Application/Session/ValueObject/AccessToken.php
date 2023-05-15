@@ -62,16 +62,16 @@ class AccessToken
 
     /**
      * @param User $user
-     * @return string
+     * @return AccessToken
      * @throws DomainException
      */
-    public static function Create(User $user)
+    public static function Create(User $user): AccessToken
     {
-        return JWT::encode([
+        return new AccessToken(JWT::encode([
             "UserId" => (string)$user->getId(),
             "exp" => (new DateTimeImmutable())->add(new DateInterval(self::ExpiresIn))->getTimestamp(),
             "iat" => (new DateTimeImmutable())->getTimestamp()
-        ], $_ENV["JWT_SECRET"], self::Algorithm);
+        ], $_ENV["JWT_SECRET"], self::Algorithm));
     }
 
     /** @return string  */

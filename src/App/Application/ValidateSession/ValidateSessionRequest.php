@@ -13,9 +13,9 @@ class ValidateSessionRequest
      */
     public readonly UserId $UserId;
     /**
-     * @var string
+     * @var null|string
      */
-    public readonly string $AccessToken;
+    public readonly ?string $AccessToken;
     /**
      * @var string
      */
@@ -23,11 +23,11 @@ class ValidateSessionRequest
 
     /**
      * @param UserId $userId
-     * @param string $accessToken
+     * @param null|string $accessToken
      * @param string $refreshToken
      * @return void
      */
-    public function __construct(UserId $userId, string $accessToken, string $refreshToken)
+    public function __construct(UserId $userId, ?string $accessToken, string $refreshToken)
     {
         $this->UserId = $userId;
         $this->AccessToken = $accessToken;

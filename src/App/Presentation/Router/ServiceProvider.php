@@ -41,42 +41,42 @@ class ServiceProvider
     /**
      * The Request instance containing HTTP request data and behaviors
      *
-     * @type Request
+     * @var Request
      */
     protected $request;
 
     /**
      * The Response instance containing HTTP response data and behaviors
      *
-     * @type AbstractResponse
+     * @var AbstractResponse
      */
     protected $response;
 
     /**
      * The id of the current PHP session
      *
-     * @type string|boolean
+     * @var string|boolean
      */
     protected $session_id;
 
     /**
      * The view layout
      *
-     * @type string
+     * @var string
      */
     protected $layout;
 
     /**
      * The view to render
      *
-     * @type string
+     * @var string
      */
     protected $view;
 
     /**
      * Shared data collection
      *
-     * @type DataCollection
+     * @var DataCollection
      */
     protected $shared_data;
 

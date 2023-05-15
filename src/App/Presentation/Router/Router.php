@@ -52,14 +52,14 @@ class Router
     /**
      * The regular expression used to compile and match URL's
      *
-     * @type string
+     * @var string
      */
     public const ROUTE_COMPILE_REGEX = '`(\\\?(?:/|\.|))(?:\[([^:\]]*)(?::([^:\]]*))?\])(\?|)`';
 
     /**
      * The regular expression used to escape the non-named param section of a route URL
      *
-     * @type string
+     * @var string
      */
     public const ROUTE_ESCAPE_REGEX = '`(?<=^|\])[^\]\[\?]+?(?=\[|$)`';
 
@@ -68,7 +68,7 @@ class Router
      *
      * Don't capture anything. Behave as normal.
      *
-     * @type int
+     * @var int
      */
     public const DISPATCH_NO_CAPTURE = 0;
 
@@ -77,7 +77,7 @@ class Router
      *
      * Capture all output and return it from dispatch
      *
-     * @type int
+     * @var int
      */
     public const DISPATCH_CAPTURE_AND_RETURN = 1;
 
@@ -86,7 +86,7 @@ class Router
      *
      * Capture all output and replace the response body with it
      *
-     * @type int
+     * @var int
      */
     public const DISPATCH_CAPTURE_AND_REPLACE = 2;
 
@@ -95,7 +95,7 @@ class Router
      *
      * Capture all output and prepend it to the response body
      *
-     * @type int
+     * @var int
      */
     public const DISPATCH_CAPTURE_AND_PREPEND = 3;
 
@@ -104,7 +104,7 @@ class Router
      *
      * Capture all output and append it to the response body
      *
-     * @type int
+     * @var int
      */
     public const DISPATCH_CAPTURE_AND_APPEND = 4;
 
@@ -123,7 +123,7 @@ class Router
      * - hexadecimal:   '[h:color]'
      * - slug:          '[s:article]'
      *
-     * @type array
+     * @var array
      */
     protected $match_types = array(
         'i'  => '[0-9]++',
@@ -138,28 +138,28 @@ class Router
     /**
      * Collection of the routes to match on dispatch
      *
-     * @type RouteCollection
+     * @var RouteCollection
      */
     protected $routes;
 
     /**
      * The Route factory object responsible for creating Route instances
      *
-     * @type AbstractRouteFactory
+     * @var AbstractRouteFactory
      */
     protected $route_factory;
 
     /**
      * A stack of error callback callables
      *
-     * @type SplStack
+     * @var SplStack
      */
     protected $error_callbacks;
 
     /**
      * A stack of HTTP error callback callables
      *
-     * @type SplStack
+     * @var SplStack
      */
     protected $http_error_callbacks;
 
@@ -167,14 +167,14 @@ class Router
      * A queue of callbacks to call after processing the dispatch loop
      * and before the response is sent
      *
-     * @type SplQueue
+     * @var SplQueue
      */
     protected $after_filter_callbacks;
 
     /**
      * The output buffer level used by the dispatch process
      *
-     * @type int
+     * @var int
      */
     private $output_buffer_level;
 
@@ -186,28 +186,28 @@ class Router
     /**
      * The Request object passed to each matched route
      *
-     * @type Request
+     * @var Request
      */
     protected $request;
 
     /**
      * The Response object passed to each matched route
      *
-     * @type AbstractResponse
+     * @var AbstractResponse
      */
     protected $response;
 
     /**
      * The service provider object passed to each matched route
      *
-     * @type ServiceProvider
+     * @var ServiceProvider
      */
     protected $service;
 
     /**
      * A generic variable passed to each matched route
      *
-     * @type mixed
+     * @var mixed
      */
     protected $app;
 

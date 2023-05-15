@@ -40,21 +40,21 @@ class DispatchHaltedException extends RuntimeException implements RouterExceptio
     /**
      * Skip this current match/callback
      *
-     * @type int
+     * @var int
      */
     public const SKIP_THIS = 1;
 
     /**
      * Skip the next match/callback
      *
-     * @type int
+     * @var int
      */
     public const SKIP_NEXT = 2;
 
     /**
      * Skip the rest of the matches
      *
-     * @type int
+     * @var int
      */
     public const SKIP_REMAINING = 0;
 
@@ -66,7 +66,7 @@ class DispatchHaltedException extends RuntimeException implements RouterExceptio
     /**
      * The number of next matches to skip on a "next" skip
      *
-     * @type int
+     * @var int
      */
     protected $number_of_skips = 1;
 

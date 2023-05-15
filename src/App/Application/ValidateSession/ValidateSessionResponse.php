@@ -6,9 +6,14 @@ namespace App\Application\ValidateSession;
 
 use App\Application\Session\Entity\Session;
 use App\Application\Session\ValueObject\AccessToken;
+use App\Domain\User\Entity\User;
 
 class ValidateSessionResponse
 {
+    /**
+     * @var User
+     */
+    public readonly User $User;
     /**
      * @var AccessToken
      */
@@ -19,12 +24,14 @@ class ValidateSessionResponse
     public readonly ?Session $Session;
 
     /**
+     * @param User $user
      * @param AccessToken $accessToken
      * @param null|Session $session
      * @return void
      */
-    public function __construct(AccessToken $accessToken, ?Session $session)
+    public function __construct(User $user, AccessToken $accessToken, ?Session $session)
     {
+        $this->User = $user;
         $this->AccessToken = $accessToken;
         $this->Session = $session;
     }

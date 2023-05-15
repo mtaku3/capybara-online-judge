@@ -43,14 +43,14 @@ class RoutePathCompilationException extends RuntimeException implements RouterEx
     /**
      * The exception message format
      *
-     * @type string
+     * @var string
      */
     public const MESSAGE_FORMAT = 'Route failed to compile with path "%s".';
 
     /**
      * The extra failure message format
      *
-     * @type string
+     * @var string
      */
     public const FAILURE_MESSAGE_TITLE_FORMAT = 'Failed with message: "%s"';
 
@@ -62,7 +62,7 @@ class RoutePathCompilationException extends RuntimeException implements RouterEx
     /**
      * The route that failed to compile
      *
-     * @type Route
+     * @var Route
      */
     protected $route;
 

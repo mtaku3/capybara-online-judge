@@ -40,63 +40,63 @@ class Request
     /**
      * Unique identifier for the request
      *
-     * @type string
+     * @var string
      */
     protected $id;
 
     /**
      * GET (query) parameters
      *
-     * @type DataCollection
+     * @var DataCollection
      */
     protected $params_get;
 
     /**
      * POST parameters
      *
-     * @type DataCollection
+     * @var DataCollection
      */
     protected $params_post;
 
     /**
      * Named parameters
      *
-     * @type DataCollection
+     * @var DataCollection
      */
     protected $params_named;
 
     /**
      * Client cookie data
      *
-     * @type DataCollection
+     * @var DataCollection
      */
     protected $cookies;
 
     /**
      * Server created attributes
      *
-     * @type ServerDataCollection
+     * @var ServerDataCollection
      */
     protected $server;
 
     /**
      * HTTP request headers
      *
-     * @type HeaderDataCollection
+     * @var HeaderDataCollection
      */
     protected $headers;
 
     /**
      * Uploaded temporary files
      *
-     * @type DataCollection
+     * @var DataCollection
      */
     protected $files;
 
     /**
      * The request body
      *
-     * @type string
+     * @var string
      */
     protected $body;
 

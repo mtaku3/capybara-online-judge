@@ -34,14 +34,14 @@ class HttpStatus
     /**
      * The HTTP status code
      *
-     * @type int
+     * @var int
      */
     protected $code;
 
     /**
      * The HTTP status message
      *
-     * @type string
+     * @var string
      */
     protected $message;
 
@@ -49,7 +49,7 @@ class HttpStatus
      * HTTP 1.1 status messages based on code
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-     * @type array
+     * @var array
      */
     protected static $http_messages = array(
         // Informational 1xx

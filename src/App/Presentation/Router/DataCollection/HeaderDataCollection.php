@@ -40,7 +40,7 @@ class HeaderDataCollection extends DataCollection
      *
      * Don't normalize
      *
-     * @type int
+     * @var int
      */
     public const NORMALIZE_NONE = 0;
 
@@ -49,7 +49,7 @@ class HeaderDataCollection extends DataCollection
      *
      * Normalize the outer whitespace of the header
      *
-     * @type int
+     * @var int
      */
     public const NORMALIZE_TRIM = 1;
 
@@ -58,7 +58,7 @@ class HeaderDataCollection extends DataCollection
      *
      * Normalize the delimiters of the header
      *
-     * @type int
+     * @var int
      */
     public const NORMALIZE_DELIMITERS = 2;
 
@@ -67,7 +67,7 @@ class HeaderDataCollection extends DataCollection
      *
      * Normalize the case of the header
      *
-     * @type int
+     * @var int
      */
     public const NORMALIZE_CASE = 4;
 
@@ -76,7 +76,7 @@ class HeaderDataCollection extends DataCollection
      *
      * Normalize the header into canonical format
      *
-     * @type int
+     * @var int
      */
     public const NORMALIZE_CANONICAL = 8;
 
@@ -85,7 +85,7 @@ class HeaderDataCollection extends DataCollection
      *
      * Normalize using all normalization techniques
      *
-     * @type int
+     * @var int
      */
     public const NORMALIZE_ALL = -1;
 
@@ -98,7 +98,7 @@ class HeaderDataCollection extends DataCollection
      * The header key normalization technique/style to
      * use when accessing headers in the collection
      *
-     * @type int
+     * @var int
      */
     protected $normalization = self::NORMALIZE_ALL;
 

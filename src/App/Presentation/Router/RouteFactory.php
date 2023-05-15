@@ -38,7 +38,7 @@ class RouteFactory extends AbstractRouteFactory
     /**
      * The value given to path's when they are entered as null values
      *
-     * @type string
+     * @var string
      */
     public const NULL_PATH_VALUE = '*';
 
