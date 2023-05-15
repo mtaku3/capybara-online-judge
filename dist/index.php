@@ -2,28 +2,34 @@
 
 declare(strict_types=1);
 
+use App\Presentation\Router\Request;
+use App\Presentation\Router\Router;
+
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../src/Bootstrap.php';
 
-use App\Libs\Request;
-use App\Libs\Response;
+$router = new Router();
 
-$router = new \App\Libs\Router();
-
-
-$router->get("/", function (Request $req, Response $res) {
-    echo $GLOBALS["container"]->get("Twig")->render("index.twig");
+$router->onHttpError(function (int $code, Router $router) {
+    switch ($code) {
+        case 404:
+            $router->response()->body(
+                "Page not found"
+            );
+            break;
+        default:
+            $router->response()->body(
+                "Something went wrong " . $code
+            );
+    }
 });
 
-$router->get("/demo/texme", function (Request $req, Response $res) {
-    echo $GLOBALS["container"]->get("Twig")->render("demo/texme.twig");
+$router->respond("/", function () {
+    return "Hello World";
 });
 
-$router->get("/demo/codemirror", function (Request $req, Response $res) {
-    echo $GLOBALS["container"]->get("Twig")->render("demo/codemirror.twig");
+$router->respond("/[a:name]", function (Request $request) {
+    return "Hello " . $request->name;
 });
 
-
-if (\App\Libs\Router::GetHasRouted() === false) {
-    echo $GLOBALS["container"]->get("Twig")->render("404.twig");
-}
+$router->dispatch();
