@@ -26,8 +26,8 @@ class ProblemListController
 
     public function get(Request $req, AbstractResponse $res)
     {
-        $res->body($this->Twig->render("ProblemList.twig"), [
+        $res->body($this->Twig->render("ProblemList.twig", [
             "user" => $req->user
-        ])->send();
+        ]))->send();
     }
 }

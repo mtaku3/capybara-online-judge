@@ -87,11 +87,21 @@ $containerBuilder->addDefinitions([
     /** Presentation Layer */
     "Twig" => function () {
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . "/../src/App/Presentation/Template");
-        $options = [];
+        $options = [
+            "debug" => !isset($_ENV["ENV"]) || $_ENV["ENV"] !== "production"
+        ];
+
         if (isset($_ENV["ENV"]) && $_ENV["ENV"] === "production") {
             $options["cache"] = __DIR__ . "/../.cache";
         }
-        return new \Twig\Environment($loader, $options);
+
+        $twig = new \Twig\Environment($loader, $options);
+
+        if (!isset($_ENV["ENV"]) || $_ENV["ENV"] !== "production") {
+            $twig->addExtension(new \Twig\Extension\DebugExtension());
+        }
+
+        return $twig;
     },
     "ProblemListController" => function (ContainerInterface $c) {
         return new ProblemListController($c->get("Twig"));

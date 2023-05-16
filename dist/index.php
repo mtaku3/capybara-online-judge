@@ -6,7 +6,6 @@ use App\Application\ValidateSession\ValidateSessionRequest;
 use App\Presentation\Router\AbstractResponse;
 use App\Presentation\Router\Request;
 use App\Presentation\Router\Router;
-use App\Presentation\Router\ServiceProvider;
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../src/Bootstrap.php';
@@ -14,11 +13,11 @@ require __DIR__ . '/../src/Bootstrap.php';
 $router = new Router();
 $container = $GLOBALS["container"];
 
-$router->onHttpError(function (int $code, Router $router) {
+$router->onHttpError(function (int $code, Router $router) use ($container) {
     switch ($code) {
         case 404:
             $router->response()->body(
-                "Page not found"
+                $container->get("Twig")->render("404.twig")
             );
             break;
         default:
