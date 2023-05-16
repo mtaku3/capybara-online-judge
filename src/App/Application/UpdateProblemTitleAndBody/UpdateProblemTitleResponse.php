@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UpdateProblemTitle;
+namespace App\Application\UpdateProblemTitleAndBody;
 
 use App\Domain\Problem\Entity\Problem;
 
