@@ -18,6 +18,9 @@ module.exports = {
           900: "#1e3a8a",
         },
       },
+      fontFamily: {
+        gothic: ["Silkscreen"],
+      },
     },
   },
   plugins: [require("@tailwindcss/typography"), require("flowbite/plugin")],
