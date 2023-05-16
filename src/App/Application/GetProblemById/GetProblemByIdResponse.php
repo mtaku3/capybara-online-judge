@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace App\Application\GetProblemById;
 
+use App\Domain\Problem\Entity\Problem;
+
 class GetProblemByIdResponse
 {
     /**
-     * @var \App\Domain\Problem\Entity\Problem[]
+     * @var Problem
      */
-    public readonly array $Problems;
+    public readonly Problem $Problem;
 
     /**
-     * @param \App\Domain\Problem\Entity\Problem[] $problems
+     * @param Problem $problem
      * @return void
      */
-    public function __construct(array $problems)
+    public function __construct(Problem $problem)
     {
-        $this->Problems = $problems;
+        $this->Problem = $problem;
     }
 }

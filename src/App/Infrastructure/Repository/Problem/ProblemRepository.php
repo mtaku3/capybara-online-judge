@@ -64,4 +64,14 @@ class ProblemRepository implements IProblemRepository
         $this->EntityManager->persist($problem);
         $this->EntityManager->run();
     }
+
+    /**
+     * @param Problem $problem
+     * @return void
+     */
+    public function delete(Problem $problem): void
+    {
+        $this->EntityManager->delete($problem);
+        $this->EntityManager->run();
+    }
 }

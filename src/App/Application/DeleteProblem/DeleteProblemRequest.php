@@ -11,14 +11,14 @@ class DeleteProblemRequest
     /**
      * @var ProblemId
      */
-    public readonly ProblemId $ProblemId;
+    public readonly ProblemId $Id;
 
     /**
-     * @param ProblemId $problemId
+     * @param ProblemId $id
      * @return void
      */
-    public function __construct(ProblemId $problemId)
+    public function __construct(ProblemId $id)
     {
-        $this->ProblemId = $problemId;
+        $this->Id = $id;
     }
 }

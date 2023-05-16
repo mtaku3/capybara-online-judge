@@ -23,4 +23,10 @@ interface IProblemRepository
      * @return void
      */
     public function save(Problem $problem): void;
+
+    /**
+     * @param Problem $problem
+     * @return void
+     */
+    public function delete(Problem $problem): void;
 }

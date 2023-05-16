@@ -53,7 +53,7 @@ class SubmissionRepository implements ISubmissionRepository
 
     /**
      * @param UserId $userId
-     * @return App\Domain\Submission\User[]
+     * @return Submission[]
      */
     public function findByUserId(UserId $userId): array
     {
@@ -64,12 +64,25 @@ class SubmissionRepository implements ISubmissionRepository
 
     /**
      * @param ProblemId $problemId
-     * @return App\Domain\Submission\User[]
+     * @return Submission[]
      */
     public function findByProblemId(ProblemId $problemId): array
     {
         return (array)$this->SubmissionRepository->findAll([
             "ProblemId" => $problemId
+        ]);
+    }
+
+    /**
+     * @param ProblemId $problemId
+     * @param UserId $userId
+     * @return Submission[]
+     */
+    public function findByProblemIdAndUserId(ProblemId $problemId, UserId $userId): array
+    {
+        return (array)$this->SubmissionRepository->findAll([
+            "ProblemId" => $problemId,
+            "UserId" => $userId
         ]);
     }
 
@@ -80,6 +93,16 @@ class SubmissionRepository implements ISubmissionRepository
     public function save(Submission $submission): void
     {
         $this->EntityManager->persist($submission);
+        $this->EntityManager->run();
+    }
+
+    /**
+     * @param Submission $submission 
+     * @return void 
+     */
+    public function delete(Submission $submission): void
+    {
+        $this->EntityManager->delete($submission);
         $this->EntityManager->run();
     }
 }

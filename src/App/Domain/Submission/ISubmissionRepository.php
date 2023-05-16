@@ -19,19 +19,32 @@ interface ISubmissionRepository
 
     /**
      * @param UserId $userId
-     * @return User[]
+     * @return Submission[]
      */
     public function findByUserId(UserId $userId): array;
 
     /**
      * @param ProblemId $problemId
-     * @return User[]
+     * @return Submission[]
      */
     public function findByProblemId(ProblemId $problemId): array;
+
+    /**
+     * @param ProblemId $problemId
+     * @param UserId $userId
+     * @return Submission[]
+     */
+    public function findByProblemIdAndUserId(ProblemId $problemId, UserId $userId): array;
 
     /**
      * @param Submission $submission
      * @return void
      */
     public function save(Submission $submission): void;
+
+    /**
+     * @param Submission $submission
+     * @return void
+     */
+    public function delete(Submission $submission): void;
 }
