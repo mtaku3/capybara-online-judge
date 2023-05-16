@@ -53,7 +53,7 @@ class ValidateSessionUseCase
                 // ignored
             }
 
-            if ($accessToken->getUserId() !== $request->UserId) {
+            if (!$accessToken->getUserId()->equals($request->UserId)) {
                 throw new WrongAccessTokenOwner();
             }
         }

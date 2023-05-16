@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Application\ValidateSession\ValidateSessionRequest;
+use App\Domain\User\ValueObject\UserId;
 use App\Presentation\Router\AbstractResponse;
 use App\Presentation\Router\Request;
 use App\Presentation\Router\Router;
@@ -33,7 +34,7 @@ $router->respond(function (Request $req) use ($container) {
     if (isset($cookies["x-user-id"]) && isset($cookies["x-refresh-token"])) {
         try {
             $validateSessionResponse = $container->get("ValidateSessionUseCase")->handle(
-                new ValidateSessionRequest($cookies["x-user-id"], $cookies["x-access-token"], $cookies["x-refresh-token"])
+                new ValidateSessionRequest(new UserId($cookies["x-user-id"]), $cookies["x-access-token"], $cookies["x-refresh-token"])
             );
             $req->user = $validateSessionResponse->User;
         } catch (Exception $e) {
