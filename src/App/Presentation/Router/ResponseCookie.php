@@ -90,6 +90,18 @@ class ResponseCookie
      */
     protected $http_only;
 
+    /**
+     * The SameSite attribute lets servers specify whether/when
+     * cookies are sent with cross-site requests
+     * (where Site is defined by the registrable domain
+     * and the scheme: http or https). This provides some protection
+     * against cross-site request forgery attacks (CSRF).
+     * It takes three possible values: Strict, Lax, and None.
+     *
+     * @var string
+     */
+    protected $same_site;
+
 
     /**
      * Methods
@@ -105,6 +117,7 @@ class ResponseCookie
      * @param string  $domain       The domain of which to restrict the cookie
      * @param boolean $secure       Flag of whether the cookie should only be sent over a HTTPS connection
      * @param boolean $http_only    Flag of whether the cookie should only be accessible over the HTTP protocol
+     * @param string $same_site     Flag of whether the cookie should be sent with cross-site requests
      */
     public function __construct(
         $name,
@@ -113,7 +126,8 @@ class ResponseCookie
         $path = null,
         $domain = null,
         $secure = false,
-        $http_only = false
+        $http_only = false,
+        $same_site = "lax"
     ) {
         // Initialize our properties
         $this->setName($name);
@@ -123,6 +137,7 @@ class ResponseCookie
         $this->setDomain($domain);
         $this->setSecure($secure);
         $this->setHttpOnly($http_only);
+        $this->setSameSite($same_site);
     }
 
     /**
@@ -301,6 +316,28 @@ class ResponseCookie
     public function setHttpOnly($http_only)
     {
         $this->http_only = (bool) $http_only;
+
+        return $this;
+    }
+
+    /**
+     * Gets the cookie's SameSite attribute
+     *
+     *  @return string  */
+    public function getSameSite()
+    {
+        return $this->same_site;
+    }
+
+    /**
+     * Gets the cookie's SameSite attribute
+     *
+     * @param mixed $same_site
+     * @return ResponseCookie
+     */
+    public function setSameSite($same_site)
+    {
+        $this->same_site = (string) $same_site;
 
         return $this;
     }

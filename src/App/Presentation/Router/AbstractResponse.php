@@ -373,11 +373,14 @@ abstract class AbstractResponse
             setcookie(
                 $cookie->getName(),
                 $cookie->getValue(),
-                $cookie->getExpire(),
-                $cookie->getPath(),
-                $cookie->getDomain(),
-                $cookie->getSecure(),
-                $cookie->getHttpOnly()
+                [
+                    "expires" => $cookie->getExpire(),
+                    "path" => $cookie->getPath(),
+                    "domain" => $cookie->getDomain(),
+                    "secure" => $cookie->getSecure(),
+                    "httponly" => $cookie->getHttpOnly(),
+                    "samesite" => $cookie->getSameSite()
+                ]
             );
         }
 
@@ -487,6 +490,7 @@ abstract class AbstractResponse
      * @param string $domain        The domain of which to restrict the cookie
      * @param boolean $secure       Flag of whether the cookie should only be sent over a HTTPS connection
      * @param boolean $httponly     Flag of whether the cookie should only be accessible over the HTTP protocol
+     * @param string $samesite      Flag of whether the cookie should be sent with cross-site requests
      * @return AbstractResponse
      */
     public function cookie(
@@ -496,7 +500,8 @@ abstract class AbstractResponse
         $path = '/',
         $domain = '',
         $secure = false,
-        $httponly = false
+        $httponly = false,
+        $samesite = "lax"
     ) {
         if (null === $expiry) {
             $expiry = time() + (3600 * 24 * 30);
@@ -504,7 +509,7 @@ abstract class AbstractResponse
 
         $this->cookies->set(
             $key,
-            new ResponseCookie($key, $value, $expiry, $path, $domain, $secure, $httponly)
+            new ResponseCookie($key, $value, $expiry, $path, $domain, $secure, $httponly, $samesite)
         );
 
         return $this;
