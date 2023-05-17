@@ -75,6 +75,8 @@ POSTGRES_DB=dev
 
 REDIS_HOST=localhost
 REDIS_PORT=6379
+
+JWT_SECRET=secret
 ```
 
 5. VS Code で devcontainer を起動する
