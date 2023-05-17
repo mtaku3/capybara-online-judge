@@ -32,6 +32,8 @@ $dotenv->required("REDIS_HOST")->notEmpty();
 $dotenv->required("REDIS_PORT")->isInteger();
 $dotenv->required("JWT_SECRET")->notEmpty();
 
+$_ENV["ISDEV"] = !isset($_ENV["ENV"]) || $_ENV["ENV"] !== "production";
+
 /** Setup Dependency Injection */
 $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions([
@@ -88,16 +90,16 @@ $containerBuilder->addDefinitions([
     "Twig" => function () {
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . "/../src/App/Presentation/Template");
         $options = [
-            "debug" => !isset($_ENV["ENV"]) || $_ENV["ENV"] !== "production"
+            "debug" => $_ENV["ISDEV"]
         ];
 
-        if (isset($_ENV["ENV"]) && $_ENV["ENV"] === "production") {
+        if (!$_ENV["ISDEV"]) {
             $options["cache"] = __DIR__ . "/../.cache";
         }
 
         $twig = new \Twig\Environment($loader, $options);
 
-        if (!isset($_ENV["ENV"]) || $_ENV["ENV"] !== "production") {
+        if ($_ENV["ISDEV"]) {
             $twig->addExtension(new \Twig\Extension\DebugExtension());
         }
 
