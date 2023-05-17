@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Application\Authorize\AuthorizeRequest;
 use App\Application\ValidateSession\ValidateSessionRequest;
 use App\Domain\User\ValueObject\UserId;
 use App\Presentation\Router\AbstractResponse;

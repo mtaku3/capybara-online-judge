@@ -8,6 +8,7 @@ use App\Application\ValidateSession\ValidateSessionUseCase;
 use App\Domain\Problem\Entity\Problem;
 use App\Domain\Submission\Entity\Submission;
 use App\Domain\User\Entity\User;
+use App\Infrastructure\Repository\JudgeQueue\JudgeQueueRepository;
 use App\Infrastructure\Repository\Problem\ProblemRepository;
 use App\Infrastructure\Repository\Session\SessionRepository;
 use App\Infrastructure\Repository\Submission\SubmissionRepository;
@@ -84,6 +85,9 @@ $containerBuilder->addDefinitions([
     },
     "UserRepository" => function (ContainerInterface $c) {
         return new UserRepository($c->get("EntityManager"), $c->get("ORM")->getRepository(User::class));
+    },
+    "JudgeQueueRepository" => function (ContainerInterface $c) {
+        return new JudgeQueueRepository($c->get("Redis"));
     },
 
     /** Presentation Layer */
