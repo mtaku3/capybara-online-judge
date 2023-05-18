@@ -59,8 +59,4 @@ $router->respond("/", function (Request $req, AbstractResponse $res) use ($conta
     $container->get("ProblemListController")->get($req, $res);
 });
 
-$router->respond("/[a:name]", function (Request $request) {
-    return "Hello " . $request->name;
-});
-
 $router->dispatch();
