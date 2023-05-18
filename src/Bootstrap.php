@@ -13,6 +13,7 @@ use App\Infrastructure\Repository\Problem\ProblemRepository;
 use App\Infrastructure\Repository\Session\SessionRepository;
 use App\Infrastructure\Repository\Submission\SubmissionRepository;
 use App\Infrastructure\Repository\User\UserRepository;
+use App\Presentation\Controller\LoginController;
 use App\Presentation\Controller\ProblemListController;
 use Cycle\Database;
 use Cycle\Database\Config;
@@ -111,6 +112,9 @@ $containerBuilder->addDefinitions([
     },
     "ProblemListController" => function (ContainerInterface $c) {
         return new ProblemListController($c->get("Twig"));
+    },
+    "LoginController" => function (ContainerInterface $c) {
+        return new LoginController($c->get("Twig"));
     },
 
     /** Application Layer */
