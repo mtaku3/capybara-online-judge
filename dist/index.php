@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Application\ValidateSession\ValidateSessionRequest;
+use App\Domain\User\Entity\User;
 use App\Domain\User\ValueObject\UserId;
 use App\Presentation\Router\AbstractResponse;
 use App\Presentation\Router\Request;
@@ -57,6 +58,22 @@ $router->respond(function (Request $req, AbstractResponse $res) use ($container)
 
 $router->respond("/", function (Request $req, AbstractResponse $res) use ($container) {
     $container->get("ProblemListController")->get($req, $res);
+});
+
+$router->respond("/navbar/not-logged-in", function (Request $req, AbstractResponse $res) use ($container) {
+    return $container->get("Twig")->render("ProblemList.twig");
+});
+
+$router->respond("/navbar/logged-in", function (Request $req, AbstractResponse $res) use ($container) {
+    return $container->get("Twig")->render("ProblemList.twig", [
+        "user" => User::Create("test", "TEST1234", true)
+    ]);
+});
+
+$router->respond("/navbar/auth-page", function (Request $req, AbstractResponse $res) use ($container) {
+    return $container->get("Twig")->render("ProblemList.twig", [
+        "isAuthPage" => true
+    ]);
 });
 
 $router->dispatch();
