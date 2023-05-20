@@ -69,6 +69,8 @@ CREATE TABLE
     );
 
 CREATE TYPE
+    SubmissionJudgeResult AS ENUM('AC', 'RE', 'TLE', 'MLE', 'CE', 'WA', 'WJ');
+
 CREATE TYPE
     SubmissionType AS ENUM('SourceCode', 'File');
 
@@ -91,7 +93,7 @@ CREATE TABLE
     );
 
 CREATE TYPE
-    TestResultJudgeResult AS ENUM('AC', 'RE', 'TLE', 'MLE');
+    TestResultJudgeResult AS ENUM('AC', 'RE', 'TLE', 'MLE', 'WA');
 
 CREATE TABLE
     "TestResults" (

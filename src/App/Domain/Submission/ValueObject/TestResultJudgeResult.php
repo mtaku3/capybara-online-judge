@@ -10,6 +10,7 @@ enum TestResultJudgeResult: string
     case RE = "RE";
     case TLE = "TLE";
     case MLE = "MLE";
+    case WA = "WA";
 
     /**
      * @param TestResultJudgeResult $judgeResult
@@ -35,6 +36,9 @@ enum TestResultJudgeResult: string
                 break;
             case TestResultJudgeResult::MLE:
                 return 3;
+                break;
+            case TestResultJudgeResult::WA:
+                return 4;
                 break;
         }
     }

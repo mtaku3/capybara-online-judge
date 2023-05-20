@@ -11,11 +11,12 @@ enum SubmissionJudgeResult: string
     case TLE = "TLE";
     case MLE = "MLE";
     case CE = "CE";
+    case WA = "WA";
     case WJ = "WJ";
 
     /**
-     * @param TestResultJudgeResult $testResultJudgeResult 
-     * @return SubmissionJudgeResult 
+     * @param TestResultJudgeResult $testResultJudgeResult
+     * @return SubmissionJudgeResult
      */
     public static function Cast(TestResultJudgeResult $testResultJudgeResult): SubmissionJudgeResult
     {
