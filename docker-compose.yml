@@ -1,6 +1,20 @@
 version: "3.8"
 
 services:
+  judger:
+    build:
+      context: .
+      dockerfile: ./docker/judger/Dockerfile
+      args:
+        - ENV=${ENV:-development}
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/workspace
+      - coj-data:/data
+
   apache:
     build:
       context: .
@@ -12,6 +26,7 @@ services:
       - redis
     volumes:
       - .:/workspace
+      - coj-data:/data
 
   postgres:
     image: postgres:14-bullseye
@@ -20,8 +35,12 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      - ./docker/postgres/data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
       - ./docker/postgres/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
 
   redis:
     image: redis:7-bullseye
+
+volumes:
+  postgres-data:
+  coj-data:

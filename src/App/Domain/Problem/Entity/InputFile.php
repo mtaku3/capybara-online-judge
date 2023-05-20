@@ -35,7 +35,7 @@ class InputFile
      */
     public static function _create(TestCaseId $testCaseId): InputFile
     {
-        return new InputFile(InputFileId::NextIdentity(), __DIR__ . "/data/inputs/" . (string)$testCaseId);
+        return new InputFile(InputFileId::NextIdentity(), "/data/InputFiles" . (string)$testCaseId . ".tar");
     }
 
     /** @return InputFileId  */
