@@ -114,7 +114,7 @@ $containerBuilder->addDefinitions([
         return new ProblemListController($c->get("Twig"));
     },
     "LoginController" => function (ContainerInterface $c) {
-        return new LoginController($c->get("Twig"));
+        return new LoginController($c->get("Twig"), $c->get("AuthorizeUseCase"));
     },
 
     /** Application Layer */
