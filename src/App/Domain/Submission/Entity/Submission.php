@@ -12,6 +12,7 @@ use App\Domain\Problem\ValueObject\TestCaseId;
 use App\Domain\Submission\Exception\AlreadyJudgedException;
 use App\Domain\Submission\Exception\TestResultForGivenTestCaseAlreadyExistsException;
 use App\Domain\Submission\ValueObject\SubmissionJudgeResult;
+use App\Domain\Submission\ValueObject\SubmissionType;
 use App\Domain\Submission\ValueObject\TestResultJudgeResult;
 use App\Domain\User\Entity\User;
 use App\Domain\User\ValueObject\UserId;
@@ -61,6 +62,10 @@ class Submission
      */
     private array $TestResults;
     /**
+     * @var SubmissionType
+     */
+    private SubmissionType $SubmissionType;
+    /**
      * @var SourceFile
      */
     private SourceFile $SourceFile;
@@ -76,10 +81,11 @@ class Submission
      * @param null|int $executionTime
      * @param null|int $consumedMemory
      * @param TestResultFactoryDTO[] $testResults
+     * @param SubmissionType $submissionType
      * @param SourceFile $sourceFile
      * @return void
      */
-    public function __construct(SubmissionId $id, UserId $userId, ProblemId $problemId, DateTimeImmutable $submittedAt, Language $language, int $codeLength, SubmissionJudgeResult $judgeResult, ?int $executionTime, ?int $consumedMemory, array $testResults, SourceFile $sourceFile)
+    public function __construct(SubmissionId $id, UserId $userId, ProblemId $problemId, DateTimeImmutable $submittedAt, Language $language, int $codeLength, SubmissionJudgeResult $judgeResult, ?int $executionTime, ?int $consumedMemory, array $testResults, SubmissionType $submissionType, SourceFile $sourceFile)
     {
         $this->Id = $id;
         $this->UserId = $userId;
@@ -91,6 +97,7 @@ class Submission
         $this->ExecutionTime = $executionTime;
         $this->ConsumedMemory = $consumedMemory;
         $this->TestResults = $testResults;
+        $this->SubmissionType = $submissionType;
         $this->SourceFile = $sourceFile;
     }
 
@@ -99,12 +106,13 @@ class Submission
      * @param Problem $problem
      * @param Language $language
      * @param int $codeLength
+     * @param SubmissionType $submissionType
      * @return Submission
      */
-    public static function Create(User $user, Problem $problem, Language  $language, int $codeLength): Submission
+    public static function Create(User $user, Problem $problem, Language  $language, SubmissionType $submissionType, int $codeLength): Submission
     {
         $id = SubmissionId::NextIdentity();
-        return new Submission($id, $user->getId(), $problem->getId(), new DateTimeImmutable(), $language, $codeLength, SubmissionJudgeResult::WJ, null, null, [], SourceFile::_create($id));
+        return new Submission($id, $user->getId(), $problem->getId(), new DateTimeImmutable(), $language, $codeLength, SubmissionJudgeResult::WJ, null, null, [], $submissionType, SourceFile::_create($id));
     }
 
     /** @return SubmissionId  */
@@ -200,6 +208,7 @@ class Submission
     /**
      * @param Problem $problem
      * @param TestCaseId $testCaseId
+     * @param bool $wrongAnswer
      * @param bool $hasRuntimeErrorOccurred
      * @param int $executionTime
      * @param int $consumedMemory
@@ -207,7 +216,7 @@ class Submission
      * @throws InvalidArgumentException
      * @throws TestResultForGivenTestCaseAlreadyExistsException
      */
-    public function createTestResult(Problem $problem, TestCaseId $testCaseId, bool $hasRuntimeErrorOccurred, int $executionTime, int $consumedMemory): void
+    public function createTestResult(Problem $problem, TestCaseId $testCaseId, bool $wrongAnswer, bool $hasRuntimeErrorOccurred, int $executionTime, int $consumedMemory): void
     {
         if (!$problem->getId()->equals($this->ProblemId)) {
             throw new InvalidArgumentException();
@@ -227,6 +236,8 @@ class Submission
             $judgeResult = TestResultJudgeResult::TLE;
         } elseif ($problem->getMemoryConstraint() < $consumedMemory) {
             $judgeResult = TestResultJudgeResult::MLE;
+        } elseif ($wrongAnswer) {
+            $judgeResult = TestResultJudgeResult::WA;
         } else {
             $judgeResult = TestResultJudgeResult::AC;
         }
@@ -234,6 +245,12 @@ class Submission
 
         $testResult = TestResult::_create($this->Id, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
         $this->TestResults[] = $testResult;
+    }
+
+    /** @return SubmissionType  */
+    public function getSubmissionType(): SubmissionType
+    {
+        return $this->SubmissionType;
     }
 
     /** @return SourceFile  */
