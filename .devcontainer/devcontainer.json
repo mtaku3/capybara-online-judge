@@ -111,7 +111,5 @@
     "ghcr.io/devcontainers/features/python:1": {}
   },
   "postCreateCommand": "pip install -r requirements.txt",
-  "postStartCommand": [
-    "npx tailwindcss -i ./src/App/input.css -o ./dist/tailwind.css --watch"
-  ]
+  "postStartCommand": "npx tailwindcss -i /workspace/src/App/input.css -o /workspace/dist/tailwind.css --watch"
 }
