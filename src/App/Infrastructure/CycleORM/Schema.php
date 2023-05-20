@@ -18,6 +18,7 @@ use App\Domain\User\Entity\User;
 use App\Infrastructure\CycleORM\TypecastHandler\LanguageTypecast;
 use App\Infrastructure\CycleORM\TypecastHandler\RefreshTokenTypecast;
 use App\Infrastructure\CycleORM\TypecastHandler\SubmissionJudgeResultTypecast;
+use App\Infrastructure\CycleORM\TypecastHandler\SubmissionTypeTypeCast;
 use App\Infrastructure\CycleORM\TypecastHandler\TestResultJudgeResultTypecast;
 use App\Infrastructure\CycleORM\TypecastHandler\UUIDTypecast;
 use Cycle\ORM\Parser\Typecast;
@@ -65,7 +66,7 @@ $Schema = new Schema([
             "Path"
         ],
         Schema::TYPECAST => [
-            "Id" => "InputFileId"
+            "Id" => "OutputFileId"
         ],
         Schema::TYPECAST_HANDLER => [
             Typecast::class,
@@ -80,7 +81,7 @@ $Schema = new Schema([
             "Path"
         ],
         Schema::TYPECAST => [
-            "Id" => "InputFileId"
+            "Id" => "SourceFileId"
         ],
         Schema::TYPECAST_HANDLER => [
             Typecast::class,
@@ -254,6 +255,7 @@ $Schema = new Schema([
             "JudgeResult",
             "ExecutionTime",
             "ConsumedMemory",
+            "SubmissionType",
             "SourceFileId"
         ],
         Schema::RELATIONS => [
@@ -283,13 +285,15 @@ $Schema = new Schema([
             "SubmittedAt" => "datetime",
             "Language" => "Language",
             "JudgeResult" => "SubmissionJudgeResult",
+            "SubmissionType" => "SubmissionType",
             "SourceFileId" => "SourceFileId"
         ],
         Schema::TYPECAST_HANDLER => [
             Typecast::class,
             UUIDTypecast::class,
             LanguageTypecast::class,
-            SubmissionJudgeResultTypecast::class
+            SubmissionJudgeResultTypecast::class,
+            SubmissionTypeTypeCast::class
         ]
     ],
     TestResult::class => [
@@ -299,7 +303,7 @@ $Schema = new Schema([
             "Id",
             "SubmissionId",
             "TestCaseId",
-            "TestResultJudgeResult",
+            "JudgeResult",
             "ExecutionTime",
             "ConsumedMemory"
         ],
@@ -307,7 +311,7 @@ $Schema = new Schema([
             "Id" => "TestResultId",
             "SubmissionId" => "SubmissionId",
             "TestCaseId" => "TestCaseId",
-            "TestResultJudgeResult" => "TestResultJudgeResult"
+            "JudgeResult" => "TestResultJudgeResult"
         ],
         Schema::TYPECAST_HANDLER => [
             Typecast::class,

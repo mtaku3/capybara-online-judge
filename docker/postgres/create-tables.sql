@@ -69,7 +69,8 @@ CREATE TABLE
     );
 
 CREATE TYPE
-    SubmissionJudgeResult AS ENUM('AC', 'RE', 'TLE', 'MLE', 'CE', 'WJ');
+CREATE TYPE
+    SubmissionType AS ENUM('SourceCode', 'File');
 
 CREATE TABLE
     "Submissions" (
@@ -82,6 +83,7 @@ CREATE TABLE
         "JudgeResult" SubmissionJudgeResult NOT NULL,
         "ExecutionTime" int,
         "ConsumedMemory" int,
+        "SubmissionType" SubmissionType NOT NULL,
         "SourceFileId" varchar(36) NOT NULL UNIQUE,
         FOREIGN KEY("UserId") REFERENCES "Users"("Id"),
         FOREIGN KEY("ProblemId") REFERENCES "Problems"("Id"),
