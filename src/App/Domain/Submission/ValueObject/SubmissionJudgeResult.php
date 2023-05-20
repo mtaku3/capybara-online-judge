@@ -7,11 +7,11 @@ namespace App\Domain\Submission\ValueObject;
 enum SubmissionJudgeResult: string
 {
     case AC = "AC";
+    case WA = "WA";
     case RE = "RE";
     case TLE = "TLE";
     case MLE = "MLE";
     case CE = "CE";
-    case WA = "WA";
     case WJ = "WJ";
 
     /**
