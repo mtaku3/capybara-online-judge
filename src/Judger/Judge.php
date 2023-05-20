@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Domain\Problem\Entity\Problem;
 use App\Domain\Submission\ValueObject\SubmissionType;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
@@ -37,7 +38,12 @@ while (1) {
             $res = $client->post("containers/create", [
                 RequestOptions::JSON => [
                     "Image" => strtolower("COJ-" . $submission->getLanguage()->name),
-                    "Tty" => true
+                    "Tty" => true,
+                    "HostConfig" => [
+                        "Memory" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
+                        "MemorySwap" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
+                        "NetworkMode" => "none"
+                    ]
                 ]
             ]);
 
