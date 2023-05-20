@@ -10,7 +10,7 @@ use App\Domain\User\Entity\User;
 use App\Application\Session\ValueObject\RefreshToken;
 use App\Infrastructure\Repository\Session\Exception\SessionNotFoundException;
 use Cycle\ORM\EntityManagerInterface;
-use Cycle\ORM\RepositoryInterface;
+use Cycle\ORM\Select\Repository;
 
 class SessionRepository implements ISessionRepository
 {
@@ -19,16 +19,16 @@ class SessionRepository implements ISessionRepository
      */
     private readonly EntityManagerInterface $EntityManager;
     /**
-     * @var RepositoryInterface
+     * @var Repository
      */
-    private readonly RepositoryInterface $SessionRepository;
+    private readonly Repository $SessionRepository;
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param RepositoryInterface $sessionRepository
+     * @param Repository $sessionRepository
      * @return void
      */
-    public function __construct(EntityManagerInterface $entityManager, RepositoryInterface $sessionRepository)
+    public function __construct(EntityManagerInterface $entityManager, Repository $sessionRepository)
     {
         $this->EntityManager = $entityManager;
         $this->SessionRepository = $sessionRepository;

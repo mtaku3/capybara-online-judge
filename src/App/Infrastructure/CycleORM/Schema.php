@@ -26,7 +26,8 @@ use Cycle\ORM\Relation;
 use Cycle\ORM\Schema;
 
 $Schema = new Schema([
-    User::class => [
+    "User" => [
+        Schema::ENTITY => User::class,
         Schema::TABLE => "Users",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -43,7 +44,8 @@ $Schema = new Schema([
             UUIDTypecast::class
         ]
     ],
-    InputFile::class => [
+    "InputFile" => [
+        Schema::ENTITY => InputFile::class,
         Schema::TABLE => "Files",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -58,7 +60,8 @@ $Schema = new Schema([
             UUIDTypecast::class
         ]
     ],
-    OutputFile::class => [
+    "OutputFile" => [
+        Schema::ENTITY => OutputFile::class,
         Schema::TABLE => "Files",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -73,7 +76,8 @@ $Schema = new Schema([
             UUIDTypecast::class
         ]
     ],
-    SourceFile::class => [
+    "SourceFile" => [
+        Schema::ENTITY => SourceFile::class,
         Schema::TABLE => "Files",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -88,7 +92,8 @@ $Schema = new Schema([
             UUIDTypecast::class
         ]
     ],
-    Session::class => [
+    "Session" => [
+        Schema::ENTITY => Session::class,
         Schema::TABLE => "Sessions",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -109,7 +114,8 @@ $Schema = new Schema([
             RefreshTokenTypecast::class
         ]
     ],
-    Problem::class => [
+    "Problem" => [
+        Schema::ENTITY => Problem::class,
         Schema::TABLE => "Problems",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -117,7 +123,8 @@ $Schema = new Schema([
             "Title",
             "Body",
             "TimeConstraint",
-            "MemoryConstraint"
+            "MemoryConstraint",
+            "CreatedAt"
         ],
         Schema::RELATIONS => [
             "CompileRules" => [
@@ -140,14 +147,16 @@ $Schema = new Schema([
             ]
         ],
         Schema::TYPECAST => [
-            "Id" => "ProblemId"
+            "Id" => "ProblemId",
+            "CreatedAt" => "datetime"
         ],
         Schema::TYPECAST_HANDLER => [
             Typecast::class,
             UUIDTypecast::class
         ]
     ],
-    CompileRule::class => [
+    "CompileRule" => [
+        Schema::ENTITY => CompileRule::class,
         Schema::TABLE => "CompileRules",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -168,7 +177,8 @@ $Schema = new Schema([
             LanguageTypecast::class
         ]
     ],
-    TestCase::class => [
+    "TestCase" => [
+        Schema::ENTITY => TestCase::class,
         Schema::TABLE => "TestCases",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -219,7 +229,8 @@ $Schema = new Schema([
             UUIDTypecast::class
         ]
     ],
-    ExecutionRule::class => [
+    "ExecutionRule" => [
+        Schema::ENTITY => ExecutionRule::class,
         Schema::TABLE => "ExecutionRules",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -242,7 +253,8 @@ $Schema = new Schema([
             LanguageTypecast::class
         ]
     ],
-    Submission::class => [
+    "Submission" => [
+        Schema::ENTITY => Submission::class,
         Schema::TABLE => "Submissions",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [
@@ -296,7 +308,8 @@ $Schema = new Schema([
             SubmissionTypeTypeCast::class
         ]
     ],
-    TestResult::class => [
+    "TestResult" => [
+        Schema::ENTITY => TestResult::class,
         Schema::TABLE => "TestResults",
         Schema::PRIMARY_KEY => "Id",
         Schema::COLUMNS => [

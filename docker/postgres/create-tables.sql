@@ -18,7 +18,7 @@ CREATE TABLE
         "UserId" varchar(36) NOT NULL,
         "RefreshToken" text NOT NULL,
         "ExpiresAt" timestamp NOT NULL,
-        FOREIGN KEY("UserId") REFERENCES "Users"("Id")
+        FOREIGN KEY("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -27,7 +27,8 @@ CREATE TABLE
         "Title" text NOT NULL,
         "Body" text NOT NULL,
         "TimeConstraint" int NOT NULL,
-        "MemoryConstraint" int NOT NULL
+        "MemoryConstraint" int NOT NULL,
+        "CreatedAt" timestamp NOT NULL
     );
 
 CREATE TYPE
@@ -40,7 +41,7 @@ CREATE TABLE
         "Language" Language NOT NULL,
         "SourceCodeCompileCommand" text NOT NULL,
         "FileCompileCommand" text NOT NULL,
-        FOREIGN KEY("ProblemId") REFERENCES "Problems"("Id")
+        FOREIGN KEY("ProblemId") REFERENCES "Problems"("Id") ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -51,7 +52,7 @@ CREATE TABLE
         "IsDisabled" bool NOT NULL,
         "InputFileId" varchar(36) NOT NULL UNIQUE,
         "OutputFileId" varchar(36) NOT NULL UNIQUE,
-        FOREIGN KEY("ProblemId") REFERENCES "Problems"("Id"),
+        FOREIGN KEY("ProblemId") REFERENCES "Problems"("Id") ON DELETE CASCADE,
         FOREIGN KEY("InputFileId") REFERENCES "Files"("Id"),
         FOREIGN KEY("OutputFileId") REFERENCES "Files"("Id")
     );
@@ -65,7 +66,7 @@ CREATE TABLE
         "SourceCodeCompareCommand" text NOT NULL,
         "FileExecutionCommand" text NOT NULL,
         "FileCompareCommand" text NOT NULL,
-        FOREIGN KEY("TestCaseId") REFERENCES "TestCases"("Id")
+        FOREIGN KEY("TestCaseId") REFERENCES "TestCases"("Id") ON DELETE CASCADE
     );
 
 CREATE TYPE
@@ -87,8 +88,8 @@ CREATE TABLE
         "ConsumedMemory" int,
         "SubmissionType" SubmissionType NOT NULL,
         "SourceFileId" varchar(36) NOT NULL UNIQUE,
-        FOREIGN KEY("UserId") REFERENCES "Users"("Id"),
-        FOREIGN KEY("ProblemId") REFERENCES "Problems"("Id"),
+        FOREIGN KEY("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE,
+        FOREIGN KEY("ProblemId") REFERENCES "Problems"("Id") ON DELETE CASCADE,
         FOREIGN KEY("SourceFileId") REFERENCES "Files"("Id")
     );
 
@@ -103,6 +104,6 @@ CREATE TABLE
         "JudgeResult" TestResultJudgeResult NOT NULL,
         "ExecutionTime" int NOT NULL,
         "ConsumedMemory" int NOT NULL,
-        FOREIGN KEY("SubmissionId") REFERENCES "Submissions"("Id"),
-        FOREIGN KEY("TestCaseId") REFERENCES "TestCases"("Id")
+        FOREIGN KEY("SubmissionId") REFERENCES "Submissions"("Id") ON DELETE CASCADE,
+        FOREIGN KEY("TestCaseId") REFERENCES "TestCases"("Id") ON DELETE CASCADE
     );
