@@ -9,6 +9,8 @@ use App\Application\Session\Entity\Session;
 use App\Application\Session\ISessionRepository;
 use App\Application\Session\ValueObject\AccessToken;
 use App\Domain\User\IUserRepository;
+use Exception;
+use DomainException;
 
 class AuthorizeUseCase
 {
@@ -35,6 +37,9 @@ class AuthorizeUseCase
     /**
      * @param AuthorizeRequest $request
      * @return AuthorizeResponse
+     * @throws WrongPasswordException
+     * @throws Exception
+     * @throws DomainException
      */
     public function handle(AuthorizeRequest $request): AuthorizeResponse
     {

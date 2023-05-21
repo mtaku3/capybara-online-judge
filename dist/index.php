@@ -60,6 +60,10 @@ $router->respond("/", function (Request $req, AbstractResponse $res) use ($conta
     $container->get("ProblemListController")->get($req, $res);
 });
 
+$router->respond("/auth/login", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("LoginController")->get($req, $res);
+});
+
 $router->respond("/navbar/not-logged-in", function (Request $req, AbstractResponse $res) use ($container) {
     return $container->get("Twig")->render("ProblemList.twig");
 });

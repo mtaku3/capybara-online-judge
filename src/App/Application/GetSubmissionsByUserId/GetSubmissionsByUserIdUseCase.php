@@ -28,6 +28,15 @@ class GetSubmissionsByUserIdUseCase
      */
     public function handle(GetSubmissionsByUserIdRequest $request): GetSubmissionsByUserIdResponse
     {
-        return new GetSubmissionsByUserIdResponse($this->SubmissionRepository->findByUserId($request->UserId));
+        return new GetSubmissionsByUserIdResponse(
+            $this->SubmissionRepository->findByUserId(
+                $request->UserId,
+                $request->Page,
+                $request->Limit
+            ),
+            $this->SubmissionRepository->countByUserId(
+                $request->UserId
+            )
+        );
     }
 }

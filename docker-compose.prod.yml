@@ -5,6 +5,13 @@ networks:
     driver: bridge
 
 services:
+  judger:
+    build:
+      args:
+        - ENV=production
+    networks:
+      - net
+
   apache:
     build:
       args:

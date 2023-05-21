@@ -74,7 +74,8 @@ RUN chmod +x /entrypoint.sh
 
 FROM base as development
 
-RUN apt-get install -y openjdk-11-jre-headless graphviz
+RUN apt-get update \
+  && apt-get install -y openjdk-11-jre-headless graphviz
 
 WORKDIR /workspace
 USER vscode
