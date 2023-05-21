@@ -63,4 +63,8 @@ $router->respond("/auth/register", function (Request $req, AbstractResponse $res
     $container->get("RegisterController")->get($req, $res);
 });
 
+$router->respond("/auth/login", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("LoginController")->get($req, $res);
+});
+
 $router->dispatch();

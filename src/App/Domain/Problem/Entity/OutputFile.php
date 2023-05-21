@@ -35,7 +35,7 @@ class OutputFile
      */
     public static function _create(TestCaseId $testCaseId): OutputFile
     {
-        return new OutputFile(OutputFileId::NextIdentity(), __DIR__ . "/data/outputs/" . (string)$testCaseId);
+        return new OutputFile(OutputFileId::NextIdentity(), "/data/OutputFiles/" . (string)$testCaseId . ".tar");
     }
 
     /** @return OutputFileId  */

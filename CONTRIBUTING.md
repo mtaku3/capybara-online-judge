@@ -79,4 +79,10 @@ REDIS_PORT=6379
 JWT_SECRET=secret
 ```
 
-5. VS Code で devcontainer を起動する
+5. プログラム実行用のベースラインをビルドする
+
+```bash
+$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v .:/workspace -w /workspace php:8-bullseye php tools/BuildImage.php
+```
+
+6. VS Code で devcontainer を起動する

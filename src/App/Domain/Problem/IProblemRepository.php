@@ -9,8 +9,15 @@ use App\Domain\Problem\ValueObject\ProblemId;
 
 interface IProblemRepository
 {
-    /** @return Problem[]  */
-    public function getAll(): array;
+    /**
+     * @param int $page
+     * @param int $limit
+     * @return Problem[]
+     */
+    public function fetchAll(int $page = 1, int $limit = 0): array;
+
+    /** @return int  */
+    public function count(): int;
 
     /**
      * @param ProblemId $id

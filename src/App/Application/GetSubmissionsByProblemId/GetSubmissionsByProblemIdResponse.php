@@ -10,13 +10,19 @@ class GetSubmissionsByProblemIdResponse
      * @var \App\Domain\Submission\Entity\Submission[]
      */
     public readonly array $Submissions;
+    /**
+     * @var int
+     */
+    public readonly int $Count;
 
     /**
-     * @param \App\Domain\Submission\Entity\Submission[] $submissions
+     * @param array $submissions
+     * @param int $count
      * @return void
      */
-    public function __construct(array $submissions)
+    public function __construct(array $submissions, int $count)
     {
         $this->Submissions = $submissions;
+        $this->Count = $count;
     }
 }

@@ -10,8 +10,15 @@ use App\Domain\Submission\ISubmissionRepository;
 use App\Domain\Submission\ValueObject\SubmissionId;
 use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Repository\Submission\Exception\SubmissionNotFoundException;
+use Cycle\Database\Exception\StatementException;
+use Cycle\Database\Query\SelectQuery;
 use Cycle\ORM\EntityManagerInterface;
-use Cycle\ORM\RepositoryInterface;
+use Cycle\ORM\Exception\BuilderException;
+use Cycle\ORM\Exception\ParserException;
+use Cycle\ORM\Exception\LoaderException;
+use Cycle\ORM\Exception\SchemaException;
+use Cycle\ORM\Select\Repository;
+use Spiral\Pagination\Paginator;
 
 class SubmissionRepository implements ISubmissionRepository
 {
@@ -20,16 +27,16 @@ class SubmissionRepository implements ISubmissionRepository
      */
     private readonly EntityManagerInterface $EntityManager;
     /**
-     * @var RepositoryInterface
+     * @var Repository
      */
-    private readonly RepositoryInterface $SubmissionRepository;
+    private readonly Repository $SubmissionRepository;
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param RepositoryInterface $submissionRepository
+     * @param Repository $submissionRepository
      * @return void
      */
-    public function __construct(EntityManagerInterface $entityManager, RepositoryInterface $submissionRepository)
+    public function __construct(EntityManagerInterface $entityManager, Repository $submissionRepository)
     {
         $this->EntityManager = $entityManager;
         $this->SubmissionRepository = $submissionRepository;
@@ -53,37 +60,94 @@ class SubmissionRepository implements ISubmissionRepository
 
     /**
      * @param UserId $userId
+     * @param int $page
+     * @param int $limit
      * @return Submission[]
+     * @throws StatementException
+     * @throws ParserException
+     * @throws LoaderException
      */
-    public function findByUserId(UserId $userId): array
+    public function findByUserId(UserId $userId, int $page = 1, int $limit = 10): array
     {
-        return (array)$this->SubmissionRepository->findAll([
-            "UserId" => $userId
-        ]);
+        $select = $this->SubmissionRepository->select()->where("UserId", $userId)->orderBy("SubmittedAt", SelectQuery::SORT_DESC);
+
+        $paginator = new Paginator($limit);
+        $paginator->withPage($page)->paginate($select);
+
+        return $select->fetchAll();
+    }
+
+    /**
+     * @param UserId $userId
+     * @return int
+     * @throws SchemaException
+     * @throws BuilderException
+     */
+    public function countByUserId(UserId $userId): int
+    {
+        return $this->SubmissionRepository->select()->where("UserId", $userId)->count();
     }
 
     /**
      * @param ProblemId $problemId
+     * @param int $page
+     * @param int $limit
      * @return Submission[]
+     * @throws StatementException
+     * @throws ParserException
+     * @throws LoaderException
      */
-    public function findByProblemId(ProblemId $problemId): array
+    public function findByProblemId(ProblemId $problemId, int $page = 1, int $limit = 10): array
     {
-        return (array)$this->SubmissionRepository->findAll([
-            "ProblemId" => $problemId
-        ]);
+        $select = $this->SubmissionRepository->select()->where("ProblemId", $problemId)->orderBy("SubmittedAt", SelectQuery::SORT_DESC);
+
+        $paginator = new Paginator($limit);
+        $paginator->withPage($page)->paginate($select);
+
+        return $select->fetchAll();
+    }
+
+    /**
+     * @param ProblemId $problemId
+     * @return int
+     * @throws SchemaException
+     * @throws BuilderException
+     */
+    public function countByProblemId(ProblemId $problemId): int
+    {
+        return $this->SubmissionRepository->select()->where("ProblemId", $problemId)->count();
     }
 
     /**
      * @param ProblemId $problemId
      * @param UserId $userId
+     * @param int $page
+     * @param int $limit
      * @return Submission[]
+     * @throws StatementException
+     * @throws ParserException
+     * @throws LoaderException
      */
-    public function findByProblemIdAndUserId(ProblemId $problemId, UserId $userId): array
+    public function findByProblemIdAndUserId(ProblemId $problemId, UserId $userId, int $page = 1, int $limit = 10): array
     {
-        return (array)$this->SubmissionRepository->findAll([
-            "ProblemId" => $problemId,
-            "UserId" => $userId
-        ]);
+        $select = $this->SubmissionRepository->select()->where("ProblemId", $problemId)->andWhere("UserId", $userId)->orderBy("SubmittedAt", SelectQuery::SORT_DESC);
+
+        $paginator = new Paginator($limit);
+        $paginator->withPage($page)->paginate($select);
+
+        return $select->fetchAll();
+    }
+
+    /**
+     * @param ProblemId $problemId
+     * @param UserId $userId
+     * @return int
+     * @throws SchemaException
+     * @throws BuilderException
+     */
+    public function countByProblemIdAndUserId(ProblemId $problemId, UserId $userId): int
+    {
+        return $this->SubmissionRepository->select()->where("ProblemId", $problemId)->andWhere("UserId", $userId)->count();
     }
 
     /**
@@ -97,8 +161,8 @@ class SubmissionRepository implements ISubmissionRepository
     }
 
     /**
-     * @param Submission $submission 
-     * @return void 
+     * @param Submission $submission
+     * @return void
      */
     public function delete(Submission $submission): void
     {

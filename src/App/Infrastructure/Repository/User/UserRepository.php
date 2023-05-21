@@ -9,7 +9,7 @@ use App\Domain\User\IUserRepository;
 use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Repository\User\Exception\UserNotFoundException;
 use Cycle\ORM\EntityManagerInterface;
-use Cycle\ORM\RepositoryInterface;
+use Cycle\ORM\Select\Repository;
 
 class UserRepository implements IUserRepository
 {
@@ -18,16 +18,16 @@ class UserRepository implements IUserRepository
      */
     private readonly EntityManagerInterface $EntityManager;
     /**
-     * @var RepositoryInterface
+     * @var Repository
      */
-    private readonly RepositoryInterface $UserRepository;
+    private readonly Repository $UserRepository;
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param RepositoryInterface $userRepository
+     * @param Repository $userRepository
      * @return void
      */
-    public function __construct(EntityManagerInterface $entityManager, RepositoryInterface $userRepository)
+    public function __construct(EntityManagerInterface $entityManager, Repository $userRepository)
     {
         $this->EntityManager = $entityManager;
         $this->UserRepository = $userRepository;

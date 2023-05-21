@@ -28,6 +28,17 @@ class GetSubmissionsByProblemIdAndUserIdUseCase
      */
     public function handle(GetSubmissionsByProblemIdAndUserIdRequest $request): GetSubmissionsByProblemIdAndUserIdResponse
     {
-        return new GetSubmissionsByProblemIdAndUserIdResponse($this->SubmissionRepository->findByProblemIdAndUserId($request->ProblemId, $request->UserId));
+        return new GetSubmissionsByProblemIdAndUserIdResponse(
+            $this->SubmissionRepository->findByProblemIdAndUserId(
+                $request->ProblemId,
+                $request->UserId,
+                $request->Page,
+                $request->Limit
+            ),
+            $this->SubmissionRepository->countByProblemIdAndUserId(
+                $request->ProblemId,
+                $request->UserId
+            )
+        );
     }
 }

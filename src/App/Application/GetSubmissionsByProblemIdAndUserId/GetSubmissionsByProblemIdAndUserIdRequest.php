@@ -17,15 +17,27 @@ class GetSubmissionsByProblemIdAndUserIdRequest
      * @var UserId
      */
     public readonly UserId $UserId;
+    /**
+     * @var int
+     */
+    public readonly int $Page;
+    /**
+     * @var int
+     */
+    public readonly int $Limit;
 
     /**
      * @param ProblemId $problemId
      * @param UserId $userId
+     * @param int $page
+     * @param int $limit
      * @return void
      */
-    public function __construct(ProblemId $problemId, UserId $userId)
+    public function __construct(ProblemId $problemId, UserId $userId, int $page, int $limit)
     {
         $this->ProblemId = $problemId;
         $this->UserId = $userId;
+        $this->Page = $page;
+        $this->Limit = $limit;
     }
 }
