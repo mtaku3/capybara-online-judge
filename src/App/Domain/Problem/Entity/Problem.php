@@ -15,6 +15,7 @@ use App\Domain\Problem\ValueObject\CompileRuleId;
 use App\Domain\Problem\ValueObject\ExecutionRuleId;
 use App\Domain\Problem\ValueObject\ProblemId;
 use App\Domain\Problem\ValueObject\TestCaseId;
+use DateTimeImmutable;
 use InvalidArgumentException;
 
 class Problem
@@ -50,6 +51,10 @@ class Problem
      * @var TestCase[]
      */
     private array $TestCases;
+    /**
+     * @var DateTimeImmutable
+     */
+    private DateTimeImmutable $CreatedAt;
 
     /**
      * @param ProblemId $id
@@ -59,9 +64,10 @@ class Problem
      * @param int $memoryConstraint
      * @param CompileRule[] $compileRules
      * @param TestCase[] $testCases
+     * @param DateTimeImmutable $createdAt
      * @return void
      */
-    public function __construct(ProblemId $id, string $title, string $body, int $timeConstraint, int $memoryConstraint, array $compileRules, array $testCases)
+    public function __construct(ProblemId $id, string $title, string $body, int $timeConstraint, int $memoryConstraint, array $compileRules, array $testCases, DateTimeImmutable $createdAt)
     {
         $this->Id = $id;
         $this->Title = $title;
@@ -70,6 +76,7 @@ class Problem
         $this->MemoryConstraint = $memoryConstraint;
         $this->CompileRules = $compileRules;
         $this->TestCases = $testCases;
+        $this->CreatedAt = $createdAt;
     }
 
     /**
@@ -149,7 +156,7 @@ class Problem
             );
         }
 
-        return new Problem(ProblemId::NextIdentity(), $title, $body, $timeConstraint, $memoryConstraint, $compileRules, $testCases);
+        return new Problem(ProblemId::NextIdentity(), $title, $body, $timeConstraint, $memoryConstraint, $compileRules, $testCases, new DateTimeImmutable());
     }
 
     /** @return ProblemId  */

@@ -7,6 +7,7 @@ namespace App\Domain\Submission\ValueObject;
 enum SubmissionJudgeResult: string
 {
     case AC = "AC";
+    case WA = "WA";
     case RE = "RE";
     case TLE = "TLE";
     case MLE = "MLE";
@@ -14,8 +15,8 @@ enum SubmissionJudgeResult: string
     case WJ = "WJ";
 
     /**
-     * @param TestResultJudgeResult $testResultJudgeResult 
-     * @return SubmissionJudgeResult 
+     * @param TestResultJudgeResult $testResultJudgeResult
+     * @return SubmissionJudgeResult
      */
     public static function Cast(TestResultJudgeResult $testResultJudgeResult): SubmissionJudgeResult
     {

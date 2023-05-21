@@ -28,6 +28,6 @@ class GetProblemsUseCase
      */
     public function handle(GetProblemsRequest $request): GetProblemsResponse
     {
-        return new GetProblemsResponse($this->ProblemRepository->getAll());
+        return new GetProblemsResponse($this->ProblemRepository->fetchAll($request->Page, $request->Limit), $this->ProblemRepository->count());
     }
 }

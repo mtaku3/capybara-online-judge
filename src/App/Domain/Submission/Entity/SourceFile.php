@@ -35,7 +35,7 @@ class SourceFile
      */
     public static function _create(SubmissionId $submissionId): SourceFile
     {
-        return new SourceFile(SourceFileId::NextIdentity(), __DIR__ . "/data/source/" . $submissionId);
+        return new SourceFile(SourceFileId::NextIdentity(), "/data/SourceFiles/" . (string)$submissionId . ".tar");
     }
 
     /** @return SourceFileId  */

@@ -21,7 +21,8 @@
     "guzzlehttp/guzzle": "^7.5",
     "php-di/php-di": "^7.0",
     "ramsey/uuid": "^4.7",
-    "cycle/orm": "^2.3"
+    "cycle/orm": "^2.3",
+    "spiral/pagination": "^3.7"
   },
   "config": {
     "allow-plugins": {

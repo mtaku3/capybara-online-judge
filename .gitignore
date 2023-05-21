@@ -137,6 +137,3 @@ dist/tailwind.css
 
 # Flowbite
 dist/flowbite.min.js
-
-# PGDATA
-docker/postgres/data

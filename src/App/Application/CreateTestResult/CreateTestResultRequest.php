@@ -20,6 +20,10 @@ class CreateTestResultRequest
     /**
      * @var bool
      */
+    public readonly bool $WrongAnswer;
+    /**
+     * @var bool
+     */
     public readonly bool $HasRuntimeErrorOccurred;
     /**
      * @var int
@@ -33,15 +37,17 @@ class CreateTestResultRequest
     /**
      * @param SubmissionId $submissionId
      * @param TestCaseId $testCaseId
+     * @param bool $wrongAnswer
      * @param bool $hasRuntimeErrorOccurred
      * @param int $executionTime
      * @param int $consumedMemory
      * @return void
      */
-    public function __construct(SubmissionId $submissionId, TestCaseId $testCaseId, bool $hasRuntimeErrorOccurred, int $executionTime, int $consumedMemory)
+    public function __construct(SubmissionId $submissionId, TestCaseId $testCaseId, bool $wrongAnswer, bool $hasRuntimeErrorOccurred, int $executionTime, int $consumedMemory)
     {
         $this->SubmissionId = $submissionId;
         $this->TestCaseId = $testCaseId;
+        $this->WrongAnswer = $wrongAnswer;
         $this->HasRuntimeErrorOccurred = $hasRuntimeErrorOccurred;
         $this->ExecutionTime = $executionTime;
         $this->ConsumedMemory = $consumedMemory;

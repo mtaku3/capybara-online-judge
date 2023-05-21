@@ -7,6 +7,7 @@ namespace App\Domain\Submission\ValueObject;
 enum TestResultJudgeResult: string
 {
     case AC = "AC";
+    case WA = "WA";
     case RE = "RE";
     case TLE = "TLE";
     case MLE = "MLE";
@@ -27,14 +28,17 @@ enum TestResultJudgeResult: string
             case TestResultJudgeResult::AC:
                 return 0;
                 break;
-            case TestResultJudgeResult::RE:
+            case TestResultJudgeResult::WA:
                 return 1;
                 break;
-            case TestResultJudgeResult::TLE:
+            case TestResultJudgeResult::RE:
                 return 2;
                 break;
-            case TestResultJudgeResult::MLE:
+            case TestResultJudgeResult::TLE:
                 return 3;
+                break;
+            case TestResultJudgeResult::MLE:
+                return 4;
                 break;
         }
     }

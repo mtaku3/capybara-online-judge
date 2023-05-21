@@ -34,9 +34,17 @@ POSTGRES_DB=<Your postgres's database name goes here>
 
 REDIS_HOST=redis
 REDIS_PORT=6379
+
+JWT_SECRET=secret
 ```
 
-4. Docker でコンテナを起動する
+4. プログラム実行用のベースラインをビルドする
+
+```bash
+$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v .:/workspace -w /workspace php:8-bullseye php tools/BuildImage.php
+```
+
+5. Docker でコンテナを起動する
 
 ```bash
 $ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
