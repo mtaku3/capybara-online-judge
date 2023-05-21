@@ -26,6 +26,12 @@ interface ISubmissionRepository
     public function findByUserId(UserId $userId, int $page = 1, int $limit = 10): array;
 
     /**
+     * @param UserId $userId
+     * @return int
+     */
+    public function countByUserId(UserId $userId): int;
+
+    /**
      * @param ProblemId $problemId
      * @param int $page
      * @param int $limit
@@ -35,12 +41,26 @@ interface ISubmissionRepository
 
     /**
      * @param ProblemId $problemId
+     * @return int
+     */
+    public function countByProblemId(ProblemId $problemId): int;
+
+    /**
+     * @param ProblemId $problemId
      * @param UserId $userId
      * @param int $page
      * @param int $limit
      * @return Submission[]
      */
     public function findByProblemIdAndUserId(ProblemId $problemId, UserId $userId, int $page = 1, int $limit = 10): array;
+
+
+    /**
+     * @param ProblemId $problemId
+     * @param UserId $userId
+     * @return int
+     */
+    public function countByProblemIdAndUserId(ProblemId $problemId, UserId $userId): int;
 
     /**
      * @param Submission $submission

@@ -13,9 +13,10 @@ use App\Infrastructure\Repository\Submission\Exception\SubmissionNotFoundExcepti
 use Cycle\Database\Exception\StatementException;
 use Cycle\Database\Query\SelectQuery;
 use Cycle\ORM\EntityManagerInterface;
+use Cycle\ORM\Exception\BuilderException;
 use Cycle\ORM\Exception\ParserException;
 use Cycle\ORM\Exception\LoaderException;
-use Cycle\ORM\RepositoryInterface;
+use Cycle\ORM\Exception\SchemaException;
 use Cycle\ORM\Select\Repository;
 use Spiral\Pagination\Paginator;
 
@@ -77,6 +78,17 @@ class SubmissionRepository implements ISubmissionRepository
     }
 
     /**
+     * @param UserId $userId
+     * @return int
+     * @throws SchemaException
+     * @throws BuilderException
+     */
+    public function countByUserId(UserId $userId): int
+    {
+        return $this->SubmissionRepository->select()->where("UserId", $userId)->count();
+    }
+
+    /**
      * @param ProblemId $problemId
      * @param int $page
      * @param int $limit
@@ -97,6 +109,17 @@ class SubmissionRepository implements ISubmissionRepository
 
     /**
      * @param ProblemId $problemId
+     * @return int
+     * @throws SchemaException
+     * @throws BuilderException
+     */
+    public function countByProblemId(ProblemId $problemId): int
+    {
+        return $this->SubmissionRepository->select()->where("ProblemId", $problemId)->count();
+    }
+
+    /**
+     * @param ProblemId $problemId
      * @param UserId $userId
      * @param int $page
      * @param int $limit
@@ -113,6 +136,18 @@ class SubmissionRepository implements ISubmissionRepository
         $paginator->withPage($page)->paginate($select);
 
         return $select->fetchAll();
+    }
+
+    /**
+     * @param ProblemId $problemId
+     * @param UserId $userId
+     * @return int
+     * @throws SchemaException
+     * @throws BuilderException
+     */
+    public function countByProblemIdAndUserId(ProblemId $problemId, UserId $userId): int
+    {
+        return $this->SubmissionRepository->select()->where("ProblemId", $problemId)->andWhere("UserId", $userId)->count();
     }
 
     /**

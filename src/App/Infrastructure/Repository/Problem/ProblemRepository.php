@@ -11,8 +11,10 @@ use App\Infrastructure\Repository\Problem\Exception\ProblemNotFoundException;
 use Cycle\Database\Exception\StatementException;
 use Cycle\Database\Query\SelectQuery;
 use Cycle\ORM\EntityManagerInterface;
+use Cycle\ORM\Exception\BuilderException;
 use Cycle\ORM\Exception\ParserException;
 use Cycle\ORM\Exception\LoaderException;
+use Cycle\ORM\Exception\SchemaException;
 use Cycle\ORM\Select\Repository;
 use Spiral\Pagination\Paginator;
 
@@ -54,6 +56,16 @@ class ProblemRepository implements IProblemRepository
         $paginator->withPage($page)->paginate($select);
 
         return $select->fetchAll();
+    }
+
+    /**
+     * @return int
+     * @throws SchemaException
+     * @throws BuilderException
+     */
+    public function count(): int
+    {
+        return $this->ProblemRepository->select()->count();
     }
 
     /**

@@ -16,6 +16,9 @@ interface IProblemRepository
      */
     public function fetchAll(int $page = 1, int $limit = 0): array;
 
+    /** @return int  */
+    public function count(): int;
+
     /**
      * @param ProblemId $id
      * @return Problem
