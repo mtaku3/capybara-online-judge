@@ -8,6 +8,7 @@ use App\Application\ValidateSession\ValidateSessionUseCase;
 use App\Domain\Problem\Entity\Problem;
 use App\Domain\Submission\Entity\Submission;
 use App\Domain\User\Entity\User;
+use App\Infrastructure\Repository\File\FileRepository;
 use App\Infrastructure\Repository\JudgeQueue\JudgeQueueRepository;
 use App\Infrastructure\Repository\Problem\ProblemRepository;
 use App\Infrastructure\Repository\Session\SessionRepository;
@@ -89,6 +90,9 @@ $containerBuilder->addDefinitions([
     },
     "JudgeQueueRepository" => function (ContainerInterface $c) {
         return new JudgeQueueRepository($c->get("Redis"));
+    },
+    "FileRepository" => function () {
+        return new FileRepository();
     },
 
     /** Presentation Layer */

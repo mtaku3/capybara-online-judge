@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\AddProblemLanguages;
 
+use App\Application\AddProblemLanguages\DTO\CompileRuleDTO;
+use App\Application\AddProblemLanguages\DTO\ExecutionRuleDTO;
 use App\Domain\Problem\ValueObject\ProblemId;
 
 class AddProblemLanguagesRequest
@@ -13,18 +15,18 @@ class AddProblemLanguagesRequest
      */
     public readonly ProblemId $ProblemId;
     /**
-     * @var CompileRuleFactoryDTO[]
+     * @var CompileRuleDTO[]
      */
     public readonly array $CompileRuleDTOs;
     /**
-     * @var ExecutionRuleFactoryDTO[]
+     * @var ExecutionRuleDTO[]
      */
     public readonly array $ExecutionRuleDTOs;
 
     /**
      * @param ProblemId $problemId
-     * @param CompileRuleFactoryDTO[] $compileRuleDTOs
-     * @param ExecutionRuleFactoryDTO[] $executionRuleDTOs
+     * @param CompileRuleDTO[] $compileRuleDTOs
+     * @param ExecutionRuleDTO[] $executionRuleDTOs
      * @return void
      */
     public function __construct(ProblemId $problemId, array $compileRuleDTOs, array $executionRuleDTOs)
