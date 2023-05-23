@@ -6,7 +6,7 @@ namespace App\Application\UpdateProblemTitleAndBody;
 
 use App\Domain\Problem\ValueObject\ProblemId;
 
-class UpdateProblemTitleRequest
+class UpdateProblemTitleAndBodyRequest
 {
     /**
      * @var ProblemId
