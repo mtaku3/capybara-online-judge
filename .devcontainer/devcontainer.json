@@ -110,6 +110,13 @@
   "features": {
     "ghcr.io/devcontainers/features/python:1": {}
   },
-  "postCreateCommand": "pip install -r requirements.txt",
+  "onCreateCommand": {
+    "Install Python requirements": "pip install -r requirements.txt",
+    "Install composer packages": "composer install",
+    "Install node packages": "npm install -D"
+  },
+  "updateContentCommand": {
+    "Create link of flowbite.min.js in dist": "ln -f ./node_modules/flowbite/dist/flowbite.min.js ./dist/"
+  },
   "postStartCommand": "npx tailwindcss -i /workspace/src/App/input.css -o /workspace/dist/tailwind.css --watch"
 }
