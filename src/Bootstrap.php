@@ -176,13 +176,13 @@ $containerBuilder->addDefinitions([
         return new GetSubmissionByIdUseCase($c->get("SubmissionRepository"));
     },
     "GetSubmissionsByProblemIdUseCase" => function (ContainerInterface $c) {
-        return new GetSubmissionsByProblemIdUseCase($c->get("SubmissionRepository"));
+        return new GetSubmissionsByProblemIdUseCase($c->get("SubmissionRepository"), $c->get("ProblemRepository"));
     },
     "GetSubmissionsByProblemIdAndUserIdUseCase" => function (ContainerInterface $c) {
-        return new GetSubmissionsByProblemIdAndUserIdUseCase($c->get("SubmissionRepository"));
+        return new GetSubmissionsByProblemIdAndUserIdUseCase($c->get("SubmissionRepository"), $c->get("ProblemRepository"), $c->get("UserRepository"));
     },
     "GetSubmissionsByUserId" => function (ContainerInterface $c) {
-        return new GetSubmissionsByUserIdUseCase($c->get("SubmissionRepository"));
+        return new GetSubmissionsByUserIdUseCase($c->get("SubmissionRepository"), $c->get("UserRepository"));
     },
     "RemoveProblemLanguagesUseCase" => function (ContainerInterface $c) {
         return new RemoveProblemLanguagesUseCase($c->get("ProblemRepository"));
