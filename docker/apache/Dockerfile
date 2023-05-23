@@ -87,6 +87,8 @@ RUN apt-get update && apt-get install -y git
 RUN composer install \
   && npm install -D \
   && npx tailwindcss -i ./src/App/input.css -o ./dist/tailwind.css \
-  && ln -f ./node_modules/flowbite/dist/flowbite.min.js ./dist/
+  && ln -f ./node_modules/flowbite/dist/flowbite.min.js ./dist/ \
+  && ln -f ./node_modules/filepond/dist/filepond.min.js ./dist/ && ln -f ./node_modules/filepond/dist/filepond.min.css ./dist/ \
+  && ln -f ./node_modules/filepond-plugin-tarball/bundled/tarball.min.js ./dist/
 
 ENTRYPOINT ["apache2ctl", "-D", "FOREGROUND"]
