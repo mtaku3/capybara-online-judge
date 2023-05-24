@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Problem\Entity;
 
+use App\Domain\Common\Entity\IFile;
 use App\Domain\Problem\ValueObject\InputFileId;
 use App\Domain\Problem\ValueObject\TestCaseId;
 
-class InputFile
+class InputFile implements IFile
 {
     /**
      * @var InputFileId

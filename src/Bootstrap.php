@@ -2,12 +2,30 @@
 
 declare(strict_types=1);
 
+use App\Application\AddProblemLanguages\AddProblemLanguagesUseCase;
 use App\Application\Authorize\AuthorizeUseCase;
+use App\Application\CreateProblem\CreateProblemUseCase;
+use App\Application\CreateTestCase\CreateTestCaseUseCase;
+use App\Application\CreateUser\CreateUserUseCase;
+use App\Application\DeleteProblem\DeleteProblemUseCase;
+use App\Application\DeleteSubmission\DeleteSubmissionUseCase;
+use App\Application\DisableTestCase\DisableTestCaseUseCase;
+use App\Application\EnableTestCase\EnableTestCaseUseCase;
+use App\Application\GetProblemById\GetProblemByIdUseCase;
+use App\Application\GetProblems\GetProblemsUseCase;
+use App\Application\GetSubmissionById\GetSubmissionByIdUseCase;
+use App\Application\GetSubmissionsByProblemId\GetSubmissionsByProblemIdUseCase;
+use App\Application\GetSubmissionsByProblemIdAndUserId\GetSubmissionsByProblemIdAndUserIdUseCase;
+use App\Application\GetSubmissionsByUserId\GetSubmissionsByUserIdUseCase;
+use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesUseCase;
 use App\Application\Session\Entity\Session;
+use App\Application\Submit\SubmitUseCase;
+use App\Application\UpdateProblemTitleAndBody\UpdateProblemTitleAndBodyUseCase;
 use App\Application\ValidateSession\ValidateSessionUseCase;
 use App\Domain\Problem\Entity\Problem;
 use App\Domain\Submission\Entity\Submission;
 use App\Domain\User\Entity\User;
+use App\Infrastructure\Repository\File\FileRepository;
 use App\Infrastructure\Repository\JudgeQueue\JudgeQueueRepository;
 use App\Infrastructure\Repository\Problem\ProblemRepository;
 use App\Infrastructure\Repository\Session\SessionRepository;
@@ -91,6 +109,9 @@ $containerBuilder->addDefinitions([
     "JudgeQueueRepository" => function (ContainerInterface $c) {
         return new JudgeQueueRepository($c->get("Redis"));
     },
+    "FileRepository" => function () {
+        return new FileRepository();
+    },
 
     /** Presentation Layer */
     "Twig" => function () {
@@ -122,8 +143,59 @@ $containerBuilder->addDefinitions([
     },
 
     /** Application Layer */
+    "AddProblemLanguagesUseCase" => function (ContainerInterface $c) {
+        return new AddProblemLanguagesUseCase($c->get("ProblemRepository"));
+    },
     "AuthorizeUseCase" => function (ContainerInterface $c) {
         return new AuthorizeUseCase($c->get("UserRepository"), $c->get("SessionRepository"));
+    },
+    "CreateProblemUseCase" => function (ContainerInterface $c) {
+        return new CreateProblemUseCase($c->get("ProblemRepository"), $c->get("FileRepository"));
+    },
+    "CreateTestCaseUseCase" => function (ContainerInterface $c) {
+        return new CreateTestCaseUseCase($c->get("ProblemRepository"), $c->get("FileRepository"));
+    },
+    "CreateUserUseCase" => function (ContainerInterface $c) {
+        return new CreateUserUseCase($c->get("UserRepository"));
+    },
+    "DeleteProblemUseCase" => function (ContainerInterface $c) {
+        return new DeleteProblemUseCase($c->get("ProblemRepository"));
+    },
+    "DeleteSubmissionUseCase" => function (ContainerInterface $c) {
+        return new DeleteSubmissionUseCase($c->get("SubmissionRepository"));
+    },
+    "DisableTestCaseUseCase" => function (ContainerInterface $c) {
+        return new DisableTestCaseUseCase($c->get("ProblemRepository"));
+    },
+    "EnableTestCaseUseCase" => function (ContainerInterface $c) {
+        return new EnableTestCaseUseCase($c->get("ProblemRepository"));
+    },
+    "GetProblemByIdUseCase" => function (ContainerInterface $c) {
+        return new GetProblemByIdUseCase($c->get("ProblemRepository"));
+    },
+    "GetProblemsUseCase" => function (ContainerInterface $c) {
+        return new GetProblemsUseCase($c->get("ProblemRepository"));
+    },
+    "GetSubmissionByIdUseCase" => function (ContainerInterface $c) {
+        return new GetSubmissionByIdUseCase($c->get("SubmissionRepository"));
+    },
+    "GetSubmissionsByProblemIdUseCase" => function (ContainerInterface $c) {
+        return new GetSubmissionsByProblemIdUseCase($c->get("SubmissionRepository"), $c->get("ProblemRepository"));
+    },
+    "GetSubmissionsByProblemIdAndUserIdUseCase" => function (ContainerInterface $c) {
+        return new GetSubmissionsByProblemIdAndUserIdUseCase($c->get("SubmissionRepository"), $c->get("ProblemRepository"), $c->get("UserRepository"));
+    },
+    "GetSubmissionsByUserId" => function (ContainerInterface $c) {
+        return new GetSubmissionsByUserIdUseCase($c->get("SubmissionRepository"), $c->get("UserRepository"));
+    },
+    "RemoveProblemLanguagesUseCase" => function (ContainerInterface $c) {
+        return new RemoveProblemLanguagesUseCase($c->get("ProblemRepository"));
+    },
+    "SubmitUseCase" => function (ContainerInterface $c) {
+        return new SubmitUseCase($c->get("UserRepository"), $c->get("ProblemRepository"), $c->get("FileRepository"), $c->get("SubmissionRepository"), $c->get("JudgeQueueRepository"));
+    },
+    "UpdateProblemTitleAndBodyUseCase" => function (ContainerInterface $c) {
+        return new UpdateProblemTitleAndBodyUseCase($c->get("ProblemRepository"));
     },
     "ValidateSessionUseCase" => function (ContainerInterface $c) {
         return new ValidateSessionUseCase($c->get("UserRepository"), $c->get("SessionRepository"));

@@ -11,6 +11,10 @@ use App\Domain\Problem\Exception\AtLeastOneCompileRuleRequiredException;
 use App\Domain\Problem\Exception\AtLeastOneEnabledTestCaseRequiredException;
 use App\Domain\Problem\Exception\InvalidMemoryConstraintException;
 use App\Domain\Problem\Exception\InvalidTimeConstraintException;
+use App\Domain\Problem\Factory\CompileRuleFactoryDTO;
+use App\Domain\Problem\Factory\ExecutionRuleFactoryDTO;
+use App\Domain\Problem\Factory\ExecutionRuleFactoryDTOWithTestCaseId;
+use App\Domain\Problem\Factory\TestCaseFactoryDTO;
 use App\Domain\Problem\ValueObject\CompileRuleId;
 use App\Domain\Problem\ValueObject\ExecutionRuleId;
 use App\Domain\Problem\ValueObject\ProblemId;
@@ -217,7 +221,7 @@ class Problem
 
     /**
      * @param CompileRuleFactoryDTO[] $compileRuleDTOs
-     * @param ExecutionRuleDTOWithTestCaseId[] $executionRuleDTOs
+     * @param ExecutionRuleFactoryDTOWithTestCaseId[] $executionRuleDTOs
      * @return void
      * @throws InvalidDTOException
      */

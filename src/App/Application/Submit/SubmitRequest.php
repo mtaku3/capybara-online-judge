@@ -24,28 +24,28 @@ class SubmitRequest
      */
     public readonly Language $Language;
     /**
-     * @var int
-     */
-    public readonly int $CodeLength;
-    /**
      * @var SubmissionType
      */
     public readonly SubmissionType $SubmissionType;
+    /**
+     * @var string
+     */
+    public readonly string $UploadedFilePath;
 
     /**
      * @param UserId $userId
      * @param ProblemId $problemId
      * @param Language $language
-     * @param int $codeLength
      * @param SubmissionType $submissionType
+     * @param string $uploadedFilePath
      * @return void
      */
-    public function __construct(UserId $userId, ProblemId $problemId, Language $language, int $codeLength, SubmissionType $submissionType)
+    public function __construct(UserId $userId, ProblemId $problemId, Language $language, SubmissionType $submissionType, string $uploadedFilePath)
     {
         $this->UserId = $userId;
         $this->ProblemId = $problemId;
         $this->Language = $language;
-        $this->CodeLength = $codeLength;
         $this->SubmissionType = $submissionType;
+        $this->UploadedFilePath = $uploadedFilePath;
     }
 }

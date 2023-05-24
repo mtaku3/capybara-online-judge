@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\DisableTestCase;
+namespace App\Application\UpdateProblemTitleAndBody;
 
 use App\Domain\Problem\IProblemRepository;
 
-class DisableTestCaseUseCase
+class UpdateProblemTitleAndBodyUseCase
 {
     /**
      * @var IProblemRepository
@@ -23,10 +23,10 @@ class DisableTestCaseUseCase
     }
 
     /**
-     * @param DisableTestCaseRequest $request
-     * @return DisableTestCaseResponse
+     * @param UpdateProblemTitleAndBodyRequest $request
+     * @return UpdateProblemTitleAndBodyResponse
      */
-    public function handle(DisableTestCaseRequest $request): DisableTestCaseResponse
+    public function handle(UpdateProblemTitleAndBodyRequest $request): UpdateProblemTitleAndBodyResponse
     {
         // TODO
     }

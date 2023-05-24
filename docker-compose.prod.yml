@@ -9,8 +9,11 @@ services:
     build:
       args:
         - ENV=production
+      target: "production"
     networks:
       - net
+    environment:
+      - ENV=production
 
   apache:
     build:
