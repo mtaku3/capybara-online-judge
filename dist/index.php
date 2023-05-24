@@ -59,8 +59,12 @@ $router->respond("/", function (Request $req, AbstractResponse $res) use ($conta
     $container->get("ProblemListController")->get($req, $res);
 });
 
-$router->respond("/auth/register", function (Request $req, AbstractResponse $res) use ($container) {
+$router->get("/auth/register", function (Request $req, AbstractResponse $res) use ($container) {
     $container->get("RegisterController")->get($req, $res);
+});
+
+$router->post("/auth/register", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("RegisterController")->handleForm($req, $res);
 });
 
 $router->respond("/auth/login", function (Request $req, AbstractResponse $res) use ($container) {
