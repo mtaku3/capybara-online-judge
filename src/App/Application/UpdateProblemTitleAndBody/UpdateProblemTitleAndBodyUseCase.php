@@ -28,6 +28,13 @@ class UpdateProblemTitleAndBodyUseCase
      */
     public function handle(UpdateProblemTitleAndBodyRequest $request): UpdateProblemTitleAndBodyResponse
     {
-        // TODO
+        $problem = $this->ProblemRepository->findById($request->ProblemId);
+
+        $problem->setTitle($request->Title);
+        $problem->setBody($request->Body);
+
+        $this->ProblemRepository->save($problem);
+
+        return new UpdateProblemTitleAndBodyResponse($problem);
     }
 }
