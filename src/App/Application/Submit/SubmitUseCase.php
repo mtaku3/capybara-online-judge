@@ -7,7 +7,9 @@ namespace App\Application\Submit;
 use App\Domain\File\IFileRepository;
 use App\Domain\JudgeQueue\IJudgeQueueRepository;
 use App\Domain\Problem\IProblemRepository;
+use App\Domain\Submission\Entity\Submission;
 use App\Domain\Submission\ISubmissionRepository;
+use App\Domain\Submission\ValueObject\SubmissionType;
 use App\Domain\User\IUserRepository;
 
 class SubmitUseCase
@@ -34,12 +36,12 @@ class SubmitUseCase
     private readonly IJudgeQueueRepository $JudgeQueueRepository;
 
     /**
-     * @param IUserRepository $userRepository 
-     * @param IProblemRepository $problemRepository 
-     * @param IFileRepository $fileRepository 
-     * @param ISubmissionRepository $submissionRepository 
-     * @param IJudgeQueueRepository $judgeQueueRepository 
-     * @return void 
+     * @param IUserRepository $userRepository
+     * @param IProblemRepository $problemRepository
+     * @param IFileRepository $fileRepository
+     * @param ISubmissionRepository $submissionRepository
+     * @param IJudgeQueueRepository $judgeQueueRepository
+     * @return void
      */
     public function __construct(IUserRepository $userRepository, IProblemRepository $problemRepository, IFileRepository $fileRepository, ISubmissionRepository $submissionRepository, IJudgeQueueRepository $judgeQueueRepository)
     {
@@ -56,6 +58,22 @@ class SubmitUseCase
      */
     public function handle(SubmitRequest $request): SubmitResponse
     {
-        // TODO
+        $user = $this->UserRepository->findById($request->UserId);
+        $problem = $this->ProblemRepository->findById($request->ProblemId);
+
+        if ($request->SubmissionType === SubmissionType::SourceCode) {
+            $contentLength = filesize($request->UploadedFilePath);
+        } else {
+            $contentLength = $this->FileRepository->SumContentLengthsUp($request->UploadedFilePath);
+        }
+
+        $submission = Submission::Create($user, $problem, $request->Language, $request->SubmissionType, $contentLength);
+
+        $this->FileRepository->moveSourceCode($request->UploadedFilePath, $submission);
+        $this->SubmissionRepository->save($submission);
+
+        $this->JudgeQueueRepository->enqueue($submission);
+
+        return new SubmitResponse($submission);
     }
 }

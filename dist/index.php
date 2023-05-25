@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Application\ValidateSession\ValidateSessionRequest;
+use App\Domain\User\Entity\User;
 use App\Domain\User\ValueObject\UserId;
 use App\Presentation\Router\AbstractResponse;
 use App\Presentation\Router\Request;
