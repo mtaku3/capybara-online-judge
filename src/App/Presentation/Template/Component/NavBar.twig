@@ -9,19 +9,25 @@
             </div>
             <span class="self-center text-2xl font-gothic font-bold whitespace-nowrap dark:text-white">Online Judge</span>
         </a>
-        <div class="flex md:order-2 space-x-2">
-            {% if not user %}
-                <button type="button"
-                        onclick='location.href = "/auth/register"'
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    新規登録
-                </button>
-                <button type="button"
-                        onclick='location.href = "/auth/login"'
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    ログイン
-                </button>
-            {% endif %}
-        </div>
+        {% if not isAuthPage %}
+            <div class="flex md:order-2 space-x-2">
+                {% if not user %}
+                    <button type="button"
+                            onclick='location.href = "/auth/register"'
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        新規登録
+                    </button>
+                    <button type="button"
+                            onclick='location.href = "/auth/login"'
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        ログイン
+                    </button>
+                {% endif %}
+                {% if user %}
+                    <button type="button" onclick='location.href = "/auth/logout"' <span>
+                        <a class="text-sm  text-blue-600 dark:text-blue-500 hover:underline">ログアウト</a></span>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 </nav>
