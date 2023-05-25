@@ -17,10 +17,6 @@ RUN pecl install redis && docker-php-ext-enable redis
 
 ARG ENV
 
-COPY ./docker/apache/php/php.development.ini /
-COPY ./docker/apache/php/php.production.ini /
-RUN if [ "$ENV" = "production" ]; then cp /php.production.ini /usr/local/etc/php/php.ini; else cp /php.development.ini /usr/local/etc/php/php.ini; fi
-
 RUN apt-get update \
   && apt-get install -y libpq-dev \
   && docker-php-ext-install pgsql pdo pdo_pgsql
@@ -69,21 +65,30 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && npm --version
 
 
-COPY ./docker/apache/entrypoint.sh /
-RUN chmod +x /entrypoint.sh
-
 FROM base as development
+
+COPY ./docker/apache/php/php.development.ini /usr/local/etc/php/php.ini
 
 RUN apt-get update \
   && apt-get install -y openjdk-11-jre-headless graphviz
 
 WORKDIR /workspace
-USER vscode
+ENTRYPOINT ["apache2ctl", "-D", "FOREGROUND"]
 
-ENTRYPOINT /entrypoint.sh
 
 FROM base as production
 
-WORKDIR /workspace
+COPY ./docker/apache/php/php.production.ini /usr/local/etc/php/php.ini
 
-ENTRYPOINT /entrypoint.sh
+WORKDIR /workspace
+COPY ./ /workspace/
+
+RUN apt-get update && apt-get install -y git
+RUN composer install \
+  && npm install -D \
+  && npx tailwindcss -i ./src/App/input.css -o ./dist/tailwind.css \
+  && ln -f ./node_modules/flowbite/dist/flowbite.min.js ./dist/ \
+  && ln -f ./node_modules/filepond/dist/filepond.min.js ./dist/ && ln -f ./node_modules/filepond/dist/filepond.min.css ./dist/ \
+  && ln -f ./node_modules/filepond-plugin-tarball/bundled/tarball.min.js ./dist/
+
+ENTRYPOINT ["apache2ctl", "-D", "FOREGROUND"]

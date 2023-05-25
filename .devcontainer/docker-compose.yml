@@ -2,12 +2,18 @@ version: "3.8"
 
 services:
   judger:
+    build:
+      target: "development"
     network_mode: service:postgres
+    volumes:
+      - .:/workspace
 
   apache:
     build:
       target: "development"
     network_mode: service:postgres
+    volumes:
+      - .:/workspace
 
   redis:
     network_mode: service:postgres

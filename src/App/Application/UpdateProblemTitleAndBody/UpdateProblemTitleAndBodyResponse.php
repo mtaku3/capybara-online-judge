@@ -6,7 +6,7 @@ namespace App\Application\UpdateProblemTitleAndBody;
 
 use App\Domain\Problem\Entity\Problem;
 
-class UpdateProblemTitleResponse
+class UpdateProblemTitleAndBodyResponse
 {
     /**
      * @var Problem

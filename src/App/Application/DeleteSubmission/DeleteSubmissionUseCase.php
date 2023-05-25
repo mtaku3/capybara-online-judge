@@ -22,11 +22,11 @@ class DeleteSubmissionUseCase
         $this->SubmissionRepository = $submissionRepository;
     }
 
-            public function handle(DeleteSubmissionRequest $request): DeleteSubmissionResponse
-            {
-                $submission = $this->SubmissionRepository->findById($request->Id);
-                $this->SubmissionRepository->delete($submission);
+    public function handle(DeleteSubmissionRequest $request): DeleteSubmissionResponse
+    {
+        $submission = $this->SubmissionRepository->findById($request->Id);
+        $this->SubmissionRepository->delete($submission);
 
-                return new DeleteSubmissionResponse();
-            }
+        return new DeleteSubmissionResponse();
+    }
 }

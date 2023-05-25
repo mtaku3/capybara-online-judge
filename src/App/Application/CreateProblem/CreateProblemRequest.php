@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Application\CreateProblem;
 
+use App\Application\CreateProblem\DTO\CompileRuleDTO;
+use App\Application\CreateProblem\DTO\TestCaseDTO;
+
 class CreateProblemRequest
 {
     /**
@@ -23,11 +26,11 @@ class CreateProblemRequest
      */
     public readonly int $MemoryConstraint;
     /**
-     * @var CompileRuleFactoryDTO[]
+     * @var CompileRuleDTO[]
      */
     public readonly array $CompileRuleDTOs;
     /**
-     * @var TestCaseFactoryDTO[]
+     * @var TestCaseDTO[]
      */
     public readonly array $TestCaseDTOs;
 
@@ -36,8 +39,8 @@ class CreateProblemRequest
      * @param string $body
      * @param int $timeConstraint
      * @param int $memoryConstraint
-     * @param CompileRuleFactoryDTO[] $compileRuleDTOs
-     * @param TestCaseFactoryDTO[] $testCaseDTOs
+     * @param CompileRuleDTO[] $compileRuleDTOs
+     * @param TestCaseDTO[] $testCaseDTOs
      * @return void
      */
     public function __construct(string $title, string $body, int $timeConstraint, int $memoryConstraint, array $compileRuleDTOs, array $testCaseDTOs)

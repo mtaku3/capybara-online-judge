@@ -1,4 +1,4 @@
-FROM php:8-bullseye
+FROM php:8-bullseye as base
 
 # Install PhpRedis
 
@@ -8,10 +8,6 @@ RUN pecl install redis && docker-php-ext-enable redis
 # Configure php
 
 ARG ENV
-
-COPY ./docker/apache/php/php.development.ini /
-COPY ./docker/apache/php/php.production.ini /
-RUN if [ "$ENV" = "production" ]; then cp /php.production.ini /usr/local/etc/php/php.ini; else cp /php.development.ini /usr/local/etc/php/php.ini; fi
 
 RUN apt-get update \
   && apt-get install -y libpq-dev \
@@ -25,10 +21,22 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
   && mv composer.phar /usr/local/bin/composer
 
 
-COPY ./docker/judger/entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+FROM base as development
 
+COPY ./docker/judger/php/php.development.ini /usr/local/etc/php/php.ini
 
 WORKDIR /workspace
+ENTRYPOINT ["php", "src/Judger/Judge.php"]
 
-ENTRYPOINT /entrypoint.sh
+
+FROM base as production
+
+COPY ./docker/judger/php/php.production.ini /usr/local/etc/php/php.ini
+
+WORKDIR /workspace
+COPY ./ /workspace
+
+RUN apt-get update && apt-get install -y git
+RUN composer install
+
+ENTRYPOINT ["php", "src/Judger/Judge.php"]

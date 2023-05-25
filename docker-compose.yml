@@ -12,7 +12,6 @@ services:
       - redis
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - .:/workspace
       - coj-data:/data
 
   apache:
@@ -25,7 +24,6 @@ services:
       - postgres
       - redis
     volumes:
-      - .:/workspace
       - coj-data:/data
 
   postgres:

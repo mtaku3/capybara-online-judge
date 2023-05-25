@@ -137,3 +137,8 @@ dist/tailwind.css
 
 # Flowbite
 dist/flowbite.min.js
+
+# FilePond
+dist/filepond.min.js
+dist/filepond.min.css
+dist/tarball.min.js
