@@ -41,7 +41,8 @@ class ProblemListController
                 new Problem(ProblemId::NextIdentity(), "This is a problem 5", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
                 new Problem(ProblemId::NextIdentity(), "This is a problem 6", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
             ],
-            "page" => intval($req->page)
+            "page" => intval($req->page),
+            "totalNumberOfProblems" => 20
         ]))->send();
     }
 }
