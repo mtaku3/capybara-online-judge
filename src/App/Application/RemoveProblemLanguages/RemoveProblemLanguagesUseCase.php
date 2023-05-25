@@ -28,6 +28,18 @@ class RemoveProblemLanguagesUseCase
      */
     public function handle(RemoveProblemLanguagesRequest $request): RemoveProblemLanguagesResponse
     {
-        // TODO
+        $problem = $this->ProblemRepository->findById($request->ProblemId);
+
+        foreach($problem->getCompileRules() as $compileRule) {
+            if($request->Languages === $compileRule->getLanguage()) {
+                $compileRuleID =$compileRule->getId();
+                $problem->removeCompileRule($compileRuleID);
+                break;
+            }
+        }
+
+        $this->ProblemRepository->save($problem);
+
+        return new RemoveProblemLanguagesResponse($problem);
     }
 }
