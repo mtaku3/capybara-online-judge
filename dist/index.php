@@ -64,20 +64,4 @@ $router->respond("/auth/login", function (Request $req, AbstractResponse $res) u
     $container->get("LoginController")->get($req, $res);
 });
 
-$router->respond("/navbar/not-logged-in", function (Request $req, AbstractResponse $res) use ($container) {
-    return $container->get("Twig")->render("ProblemList.twig");
-});
-
-$router->respond("/navbar/logged-in", function (Request $req, AbstractResponse $res) use ($container) {
-    return $container->get("Twig")->render("ProblemList.twig", [
-        "user" => User::Create("test", "TEST1234", true)
-    ]);
-});
-
-$router->respond("/navbar/auth-page", function (Request $req, AbstractResponse $res) use ($container) {
-    return $container->get("Twig")->render("ProblemList.twig", [
-        "isAuthPage" => true
-    ]);
-});
-
 $router->dispatch();
