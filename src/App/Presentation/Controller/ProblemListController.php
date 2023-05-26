@@ -40,9 +40,15 @@ class ProblemListController
                 new Problem(ProblemId::NextIdentity(), "This is a problem 4", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
                 new Problem(ProblemId::NextIdentity(), "This is a problem 5", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
                 new Problem(ProblemId::NextIdentity(), "This is a problem 6", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
+                new Problem(ProblemId::NextIdentity(), "This is a problem 7", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
+                new Problem(ProblemId::NextIdentity(), "This is a problem 8", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
+                new Problem(ProblemId::NextIdentity(), "This is a problem 9", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
+                new Problem(ProblemId::NextIdentity(), "This is a problem 10", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
             ],
             "page" => intval($req->page),
-            "totalNumberOfProblems" => 20
+            "totalNumberOfProblems" => 100,
+            "totalNumberOfPages" => 10,
+            "limitPerPage" => ProblemListController::LimitPerPage,
         ]))->send();
     }
 }
