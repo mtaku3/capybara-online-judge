@@ -45,7 +45,7 @@ class ProblemListController
                 new Problem(ProblemId::NextIdentity(), "This is a problem 9", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
                 new Problem(ProblemId::NextIdentity(), "This is a problem 10", "Test string for body", 1000, 1000, array(), array(), new DateTimeImmutable()),
             ],
-            "page" => intval($req->page),
+            "page" => intval($req->param("page", 1)),
             "totalNumberOfProblems" => 100,
             "totalNumberOfPages" => 10,
             "limitPerPage" => ProblemListController::LimitPerPage,
