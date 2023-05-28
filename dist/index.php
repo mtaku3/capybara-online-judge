@@ -53,15 +53,88 @@ $router->respond(function (Request $req, AbstractResponse $res) use ($container)
             $res->cookie("x-access-token", expiry: 1);
             $res->cookie("x-refresh-token", expiry: 1);
         }
+        $container->get("Twig")->addGlobal("user", $req->user);
     }
 });
 
-$router->respond("/", function (Request $req, AbstractResponse $res) use ($container) {
+$router->get("/", function (Request $req, AbstractResponse $res) use ($container) {
     $container->get("ProblemListController")->get($req, $res);
 });
 
-$router->respond("/auth/login", function (Request $req, AbstractResponse $res) use ($container) {
+$router->get("/auth/login", function (Request $req, AbstractResponse $res) use ($container) {
     $container->get("LoginController")->get($req, $res);
+});
+
+$router->post("/problem", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("ProblemController")->handleCreate($req, $res);
+});
+
+$router->get("/problem/[s:problemId]", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("ProblemController")->get($req, $res);
+});
+
+$router->post("/problem/[s:problemId]/update", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("ProblemController")->handleUpdate($req, $res);
+});
+
+$router->post("/problem/[s:problemId]/delete", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("ProblemController")->handleDelete($req, $res);
+});
+
+$router->post("/problem/[s:problemId]/submit", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("ProblemController")->handleSubmit($req, $res);
+});
+
+$router->get("/problem/[s:problemId]/submissions", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("SubmissionController")->getByProblem($req, $res);
+});
+
+$router->get("/problem/[s:problemId]/testcases", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("TestCaseController")->get($req, $res);
+});
+
+$router->post("/problem/[s:problemId]/testcases/update", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("TestCaseController")->handleLanguageChanges($req, $res);
+});
+
+$router->post("/problem/[s:problemId]/testcase", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("TestCaseController")->handleCreate($req, $res);
+});
+
+$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/inputfile/download", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("TestCaseController")->handleDownloadInputFile($req, $res);
+});
+
+$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/outputfile/download", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("TestCaseController")->handleDownloadOutputFile($req, $res);
+});
+
+$router->post("/problem/[s:problemId]/testcase/[s:testCaseId]/update", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("TestCaseController")->handleUpdate($req, $res);
+});
+
+$router->post("/problem/[s:problemId]/testcase/[s:testCaseId]/enable", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("TestCaseController")->handleEnable($req, $res);
+});
+
+$router->post("/problem/[s:problemId]/testcase/[s:testCaseId]/disable", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("TestCaseController")->handleDisable($req, $res);
+});
+
+$router->get("/user/[s:userId]/submissions", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("SubmissionController")->getByUser($req, $res);
+});
+
+$router->get("/submission/[s:submissionId]", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("SubmissionController")->get($req, $res);
+});
+
+$router->get("/submission/[s:submissionId]/download", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("SubmissionController")->handleDownload($req, $res);
+});
+
+$router->post("/submission/[s:submissionId]/delete", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("SubmissionController")->handleDelete($req, $res);
 });
 
 $router->dispatch();
