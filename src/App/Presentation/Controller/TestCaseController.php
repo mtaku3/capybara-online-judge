@@ -18,16 +18,25 @@ use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesRequest;
 use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesUseCase;
 use App\Application\UpdateTestCase\UpdateTestCaseRequest;
 use App\Application\UpdateTestCase\UpdateTestCaseUseCase;
+use App\Domain\Common\Exception\CorruptedEntityException;
+use App\Domain\Common\Exception\EntityNotFoundException;
 use App\Domain\Common\ValueObject\Language;
+use App\Domain\Problem\Exception\AtLeastOneEnabledTestCaseRequiredException;
 use App\Domain\Problem\ValueObject\ExecutionRuleId;
 use App\Domain\Problem\ValueObject\ProblemId;
 use App\Domain\Problem\ValueObject\TestCaseId;
 use App\Infrastructure\Repository\Problem\Exception\ProblemNotFoundException;
-use App\Presentation\Router\AbstractResponse;
+use App\Presentation\Router\Exceptions\HttpException;
+use App\Presentation\Router\Exceptions\LockedResponseException;
+use App\Presentation\Router\Response;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
 use App\Presentation\Router\Request;
 use Exception;
+use InvalidArgumentException;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\SyntaxError;
+use Twig\Error\RuntimeError;
 
 class TestCaseController
 {
@@ -96,17 +105,21 @@ class TestCaseController
 
     /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
+     * @throws HttpException
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LockedResponseException
      * @throws ResponseAlreadySentException
      */
-    public function get(Request $req, AbstractResponse $res)
+    public function get(Request $req, Response $res)
     {
         try {
             $user = $req->user;
             if (!isset($user) || !$user->getIsAdmin()) {
-                $res->code(401)->send();
-                return;
+                throw HttpException::createFromCode(401);
             }
 
             $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest(new ProblemId($req->problemId)));
@@ -116,26 +129,27 @@ class TestCaseController
                     "testCases" => $getProblemByIdResponse->Problem->getTestCases()
                 ])
             )->send();
-        } catch (ProblemNotFoundException $e) {
-            $res->code(404)->send();
-        } catch (Exception $e) {
-            $res->code(400)->send();
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
     }
 
     /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
-     * @throws ResponseAlreadySentException
+     * @throws HttpException
+     * @throws AtLeastOneEnabledTestCaseRequiredException
+     * @throws InvalidArgumentException
+     * @throws CorruptedEntityException
+     * @throws LockedResponseException
      */
-    public function handleLanguageChanges(Request $req, AbstractResponse $res)
+    public function handleLanguageChanges(Request $req, Response $res)
     {
         try {
             $user = $req->user;
             if (!isset($user) || !$user->getIsAdmin()) {
-                $res->code(401)->send();
-                return;
+                throw HttpException::createFromCode(401);
             }
 
             $problemId = new ProblemId($req->problemId);
@@ -165,26 +179,25 @@ class TestCaseController
             $this->RemoveProblemLanguagesUseCase->handle(new RemoveProblemLanguagesRequest($problemId, $languagesToRemove));
 
             $res->redirect("/problem/" . $problemId . "/testcases");
-        } catch (ProblemNotFoundException $e) {
-            $res->code(404)->send();
-        } catch (Exception $e) {
-            $res->code(400)->send();
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
     }
 
     /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
-     * @throws ResponseAlreadySentException
+     * @throws HttpException
+     * @throws EntityNotFoundException
+     * @throws LockedResponseException
      */
-    public function handleUpdate(Request $req, AbstractResponse $res)
+    public function handleUpdate(Request $req, Response $res)
     {
         try {
             $user = $req->user;
             if (!isset($user) || !$user->getIsAdmin()) {
-                $res->code(401)->send();
-                return;
+                throw HttpException::createFromCode(401);
             }
 
             $problemId = new ProblemId($req->problemId);
@@ -203,26 +216,24 @@ class TestCaseController
             $this->UpdateTestCaseUseCase->handle(new UpdateTestCaseRequest($problemId, $testCaseId, $executionRuleDTOs));
 
             $res->redirect("/problem/" . $problemId . "/testcases");
-        } catch (ProblemNotFoundException $e) {
-            $res->code(404)->send();
-        } catch (Exception $e) {
-            $res->code(400)->send();
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
     }
 
-        /**
+    /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
-     * @throws ResponseAlreadySentException
+     * @throws HttpException
+     * @throws LockedResponseException
      */
-    public function handleCreate(Request $req, AbstractResponse $res)
+    public function handleCreate(Request $req, Response $res)
     {
         try {
             $user = $req->user;
             if (!isset($use) || !$user->getIsAdmin()) {
-                $res->code(401)->send();
-                return;
+                throw HttpException::createFromCode(401);
             }
 
             $problemId = new ProblemId($req->problemId);
@@ -245,26 +256,24 @@ class TestCaseController
             $problem = $createTestCaseResponse->Problem;
 
             $res->redirect("/problem/" . $problem->getId() . "/testcases");
-        } catch (ProblemNotFoundException $e) {
-            $res->code(404)->send();
-        } catch (Exception $e) {
-            $res->code(400)->send();
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
     }
 
     /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
-     * @throws ResponseAlreadySentException
+     * @throws HttpException
+     * @throws LockedResponseException
      */
-    public function handleEnable(Request $req, AbstractResponse $res)
+    public function handleEnable(Request $req, Response $res)
     {
         try {
             $user = $req->user;
             if (!isset($use) || !$user->getIsAdmin()) {
-                $res->code(401)->send();
-                return;
+                throw HttpException::createFromCode(401);
             }
 
             $problemId = new ProblemId($req->problemId);
@@ -273,26 +282,24 @@ class TestCaseController
             $this->EnableTestCaseUseCase->handle(new EnableTestCaseRequest($problemId, $testCaseId));
 
             $res->redirect("/problem/" . $problemId . "/testcases");
-        } catch (ProblemNotFoundException $e) {
-            $res->code(404)->send();
-        } catch (Exception $e) {
-            $res->code(400)->send();
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
     }
 
-        /**
+    /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
-     * @throws ResponseAlreadySentException
+     * @throws HttpException
+     * @throws LockedResponseException
      */
-    public function handleDisable(Request $req, AbstractResponse $res)
+    public function handleDisable(Request $req, Response $res)
     {
         try {
             $user = $req->user;
             if (!isset($use) || !$user->getIsAdmin()) {
-                $res->code(401)->send();
-                return;
+                throw HttpException::createFromCode(401);
             }
 
             $problemId = new ProblemId($req->problemId);
@@ -301,26 +308,25 @@ class TestCaseController
             $this->DisableTestCaseUseCase->handle(new DisableTestCaseRequest($problemId, $testCaseId));
 
             $res->redirect("/problem/" . $problemId . "/testcases");
-        } catch (ProblemNotFoundException $e) {
-            $res->code(404)->send();
-        } catch (Exception $e) {
-            $res->code(400)->send();
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
     }
 
     /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
+     * @throws HttpException
+     * @throws LockedResponseException
      * @throws ResponseAlreadySentException
      */
-    public function handleDownloadInputFile(Request $req, AbstractResponse $res)
+    public function handleDownloadInputFile(Request $req, Response $res)
     {
         try {
             $user = $req->user;
             if (!isset($user) || !$user->getIsAdmin()) {
-                $res->code(401)->send();
-                return;
+                throw HttpException::createFromCode(401);
             }
 
             $problemId = new ProblemId($req->problemId);
@@ -330,7 +336,7 @@ class TestCaseController
 
             $testCase = current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($problemId)));
             if ($testCase === false) {
-                $res->code(404)->send();
+                throw HttpException::createFromCode(404);
                 return;
             }
 
@@ -345,26 +351,25 @@ class TestCaseController
             $res->header("Content-Length", filesize($inputFilePath));
             $res->body(readfile($inputFilePath));
             $res->send();
-        } catch (ProblemNotFoundException $e) {
-            $res->code(404)->send();
-        } catch (Exception $e) {
-            $res->code(400)->send();
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
     }
 
     /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
+     * @throws HttpException
+     * @throws LockedResponseException
      * @throws ResponseAlreadySentException
      */
-    public function handleDownloadOutputFile(Request $req, AbstractResponse $res)
+    public function handleDownloadOutputFile(Request $req, Response $res)
     {
         try {
             $user = $req->user;
             if (!isset($user) || !$user->getIsAdmin()) {
-                $res->code(401)->send();
-                return;
+                throw HttpException::createFromCode(401);
             }
 
             $problemId = new ProblemId($req->problemId);
@@ -374,7 +379,7 @@ class TestCaseController
 
             $testCase = current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($problemId)));
             if ($testCase === false) {
-                $res->code(404)->send();
+                throw HttpException::createFromCode(404);
                 return;
             }
 
@@ -389,10 +394,8 @@ class TestCaseController
             $res->header("Content-Length", filesize($outputFilePath));
             $res->body(readfile($outputFilePath));
             $res->send();
-        } catch (ProblemNotFoundException $e) {
-            $res->code(404)->send();
-        } catch (Exception $e) {
-            $res->code(400)->send();
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
     }
 }

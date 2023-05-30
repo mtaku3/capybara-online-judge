@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller;
 
-use App\Presentation\Router\AbstractResponse;
+use App\Presentation\Router\Response;
 use App\Presentation\Router\Exceptions\LockedResponseException;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
 use App\Presentation\Router\Request;
@@ -31,7 +31,7 @@ class ProblemListController
 
     /**
      * @param Request $req
-     * @param AbstractResponse $res
+     * @param Response $res
      * @return void
      * @throws LoaderError
      * @throws SyntaxError
@@ -39,7 +39,7 @@ class ProblemListController
      * @throws LockedResponseException
      * @throws ResponseAlreadySentException
      */
-    public function get(Request $req, AbstractResponse $res)
+    public function get(Request $req, Response $res)
     {
         $res->body($this->Twig->render("ProblemList.twig"))->send();
     }
