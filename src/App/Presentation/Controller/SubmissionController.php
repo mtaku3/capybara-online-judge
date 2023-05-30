@@ -248,13 +248,18 @@ class SubmissionController
     public function handleDownload(Request $req, Response $res)
     {
         $user = $req->user;
-        if (!isset($user) || !$user->getIsAdmin()) {
+        if (!isset($user)) {
             throw HttpException::createFromCode(401);
         }
 
         $getSubmissionByIdResponse = $this->GetSubmissionByIdUseCase->handle(new GetSubmissionByIdRequest(new SubmissionId($req->submissionId)));
         $submission = $getSubmissionByIdResponse->Submission;
 
-        $res->file($submission->getSourceFile()->getPath(), mimetype: "application/x-tar");
+        $sourceFilePath = $submission->getSourceFile()->getPath();
+        if (!file_exists($sourceFilePath)) {
+            throw HttpException::createFromCode(500);
+        }
+
+        $res->file($sourceFilePath, mimetype: "application/x-tar");
     }
 }

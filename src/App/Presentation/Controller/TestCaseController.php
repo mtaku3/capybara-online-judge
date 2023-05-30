@@ -125,7 +125,7 @@ class TestCaseController
             $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest(new ProblemId($req->problemId)));
 
             $res->body(
-                $this->Twig->render("/TestCases.twig", [
+                $this->Twig->render("TestCases.twig", [
                     "testCases" => $getProblemByIdResponse->Problem->getTestCases()
                 ])
             );
@@ -340,7 +340,12 @@ class TestCaseController
                 return;
             }
 
-            $res->file($testCase->getInputFile()->getPath(), mimetype: "application/x-tar");
+            $inputFilePath = $testCase->getInputFile()->getPath();
+            if (file_exists($inputFilePath)) {
+                throw HttpException::createFromCode(500);
+            }
+
+            $res->file($inputFilePath, mimetype: "application/x-tar");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
         }
@@ -370,10 +375,14 @@ class TestCaseController
             $testCase = current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($problemId)));
             if ($testCase === false) {
                 throw HttpException::createFromCode(404);
-                return;
             }
 
-            $res->file($testCase->getOutputFile()->getPath(), mimetype: "application/x-tar");
+            $outputFilePath = $testCase->getOutputFile()->getPath();
+            if (file_exists($outputFilePath)) {
+                throw HttpException::createFromCode(500);
+            }
+
+            $res->file($outputFilePath, mimetype: "application/x-tar");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
         }
