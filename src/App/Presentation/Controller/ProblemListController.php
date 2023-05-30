@@ -41,6 +41,6 @@ class ProblemListController
      */
     public function get(Request $req, Response $res)
     {
-        $res->body($this->Twig->render("ProblemList.twig"))->send();
+        $res->body($this->Twig->render("ProblemList.twig"));
     }
 }

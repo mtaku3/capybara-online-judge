@@ -128,7 +128,7 @@ class TestCaseController
                 $this->Twig->render("/TestCases.twig", [
                     "testCases" => $getProblemByIdResponse->Problem->getTestCases()
                 ])
-            )->send();
+            );
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
         }
@@ -340,17 +340,7 @@ class TestCaseController
                 return;
             }
 
-            $inputFilePath = $testCase->getInputFile()->getPath();
-
-            $res->header("Content-Description", "File Transfer");
-            $res->header("Content-Type", "application/octet-stream");
-            $res->header("Content-Disposition", "attachment; filename=\"" . basename($inputFilePath) . "\"");
-            $res->header("Expires", 0);
-            $res->header("Cache-Control", "must-revalidate");
-            $res->header("Pragma", "public");
-            $res->header("Content-Length", filesize($inputFilePath));
-            $res->body(readfile($inputFilePath));
-            $res->send();
+            $res->file($testCase->getInputFile()->getPath(), mimetype: "application/x-tar");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
         }
@@ -383,17 +373,7 @@ class TestCaseController
                 return;
             }
 
-            $outputFilePath = $testCase->getOutputFile()->getPath();
-
-            $res->header("Content-Description", "File Transfer");
-            $res->header("Content-Type", "application/octet-stream");
-            $res->header("Content-Disposition", "attachment; filename=\"" . basename($outputFilePath) . "\"");
-            $res->header("Expires", 0);
-            $res->header("Cache-Control", "must-revalidate");
-            $res->header("Pragma", "public");
-            $res->header("Content-Length", filesize($outputFilePath));
-            $res->body(readfile($outputFilePath));
-            $res->send();
+            $res->file($testCase->getOutputFile()->getPath(), mimetype: "application/x-tar");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
         }

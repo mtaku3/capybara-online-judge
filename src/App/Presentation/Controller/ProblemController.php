@@ -106,7 +106,7 @@ class ProblemController
                     "problemBody" => $problem->getBody(),
                     "problemSubmittableLanguages" => $submittableLanguages
                 ])
-            )->send();
+            );
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
         }

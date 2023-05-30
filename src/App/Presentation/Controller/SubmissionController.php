@@ -126,7 +126,7 @@ class SubmissionController
                     "submission" => $submission,
                     "problem" => $problem
                 ])
-            )->send();
+            );
         } catch (SubmissionNotFoundException) {
             throw HttpException::createFromCode(404);
         }
@@ -168,7 +168,7 @@ class SubmissionController
                 "totalNumberOfPages" => intval(ceil($count / self::LimitPerPage)),
                 "limitPerPage" => self::LimitPerPage
             ])
-        )->send();
+        );
     }
 
     /**
@@ -208,7 +208,7 @@ class SubmissionController
                 "totalNumberOfPages" => intval(ceil($count / self::LimitPerPage)),
                 "limitPerPage" => self::LimitPerPage
             ])
-        )->send();
+        );
     }
 
     /**
@@ -254,16 +254,7 @@ class SubmissionController
 
         $getSubmissionByIdResponse = $this->GetSubmissionByIdUseCase->handle(new GetSubmissionByIdRequest(new SubmissionId($req->submissionId)));
         $submission = $getSubmissionByIdResponse->Submission;
-        $sourceFilePath = $submission->getSourceFile()->getPath();
 
-        $res->header("Content-Description", "File Transfer");
-        $res->header("Content-Type", "application/octet-stream");
-        $res->header("Content-Disposition", "attachment; filename=\"" . basename($sourceFilePath) . "\"");
-        $res->header("Expires", 0);
-        $res->header("Cache-Control", "must-revalidate");
-        $res->header("Pragma", "public");
-        $res->header("Content-Length", filesize($sourceFilePath));
-        $res->body(readfile($sourceFilePath));
-        $res->send();
+        $res->file($submission->getSourceFile()->getPath(), mimetype: "application/x-tar");
     }
 }
