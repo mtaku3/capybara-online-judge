@@ -65,6 +65,14 @@ $router->get("/auth/login", function (Request $req, AbstractResponse $res) use (
     $container->get("LoginController")->get($req, $res);
 });
 
+$router->post("/auth/login", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("LoginController")->handleForm($req, $res);
+});
+
+$router->get("/auth/logout", function (Request $req, AbstractResponse $res) use ($container) {
+    $container->get("LoginController")->handleLogout($req, $res);
+});
+
 $router->post("/problem", function (Request $req, AbstractResponse $res) use ($container) {
     $container->get("ProblemController")->handleCreate($req, $res);
 });

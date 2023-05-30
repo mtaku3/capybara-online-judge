@@ -78,4 +78,17 @@ class LoginController
             ]))->send();
         }
     }
+
+    public function handleLogout(Request $req, AbstractResponse $res): void
+    {
+        try {
+            $res->cookie("x-user-id", expiry: 1);
+            $res->cookie("x-access-token", expiry: 1);
+            $res->cookie("x-refresh-token", expiry: 1);
+
+            $res->redirect("/");
+        } catch (Exception $e) {
+            $res->code(500)->send();
+        }
+    }
 }
