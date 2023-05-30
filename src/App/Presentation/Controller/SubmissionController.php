@@ -115,7 +115,6 @@ class SubmissionController
 
             if (!$user->getIsAdmin() && !$submission->getUserId()->equals($user->getId())) {
                 throw HttpException::createFromCode(401);
-                return;
             }
 
             $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($submission->getProblemId()));
@@ -193,7 +192,6 @@ class SubmissionController
 
         if (!$user->getIsAdmin() && !$user->getId()->equals($requestedUserId)) {
             throw HttpException::createFromCode(401);
-            return;
         }
 
         $getSubmissionsByUserIdResponse = $this->GetSubmissionsByUserIdUseCase->handle(new GetSubmissionsByUserIdRequest($requestedUserId, intval($req->param("page", 1)), self::LimitPerPage));

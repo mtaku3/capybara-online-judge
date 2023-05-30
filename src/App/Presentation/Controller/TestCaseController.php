@@ -337,7 +337,6 @@ class TestCaseController
             $testCase = current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($problemId)));
             if ($testCase === false) {
                 throw HttpException::createFromCode(404);
-                return;
             }
 
             $inputFilePath = $testCase->getInputFile()->getPath();
