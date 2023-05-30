@@ -4,31 +4,42 @@ declare(strict_types=1);
 
 use App\Application\ValidateSession\ValidateSessionRequest;
 use App\Domain\User\ValueObject\UserId;
+use App\Presentation\Router\HttpStatus;
 use App\Presentation\Router\Response;
 use App\Presentation\Router\Request;
 use App\Presentation\Router\Router;
+use Psr\Container\ContainerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../src/Bootstrap.php';
 
 $router = new Router();
+/** @var ContainerInterface */
 $container = $GLOBALS["container"];
+/** @var \Twig\Environment */
+$twig = $container->get("Twig");
 
-$router->onHttpError(function (int $code, Router $router) use ($container) {
+$router->onHttpError(function (int $code, Router $router) use ($twig) {
     switch ($code) {
-        case 404:
-            $router->response()->body(
-                $container->get("Twig")->render("404.twig")
-            );
+        case 401:
+            $message = "権限が不足しています";
             break;
-        default:
-            $router->response()->body(
-                "Something went wrong " . $code
-            );
+        case 404:
+            $message = "ページが見つかりませんでした";
+            break;
+        case 500:
+            $message = "問題が発生しました。サーバー管理者に問い合わせてください。";
+            break;
     }
+
+    $router->response()->body($twig->render("Error.twig", [
+        "code" => $code,
+        "httpMessage" => HttpStatus::getMessageFromCode($code),
+        "message" => $message ?? ""
+    ]));
 });
 
-$router->respond(function (Request $req, Response $res) use ($container) {
+$router->respond(function (Request $req, Response $res) use ($container, $twig) {
     $cookies = $req->cookies();
 
     if (isset($cookies["x-user-id"]) && isset($cookies["x-refresh-token"])) {
@@ -47,12 +58,13 @@ $router->respond(function (Request $req, Response $res) use ($container) {
             }
 
             $req->user = $validateSessionResponse->User;
-        } catch (Exception $e) {
+        } catch (Throwable) {
             $res->cookie("x-user-id", expiry: 1);
             $res->cookie("x-access-token", expiry: 1);
             $res->cookie("x-refresh-token", expiry: 1);
         }
-        $container->get("Twig")->addGlobal("user", $req->user);
+
+        $twig->addGlobal("user", $req->user);
     }
 });
 
