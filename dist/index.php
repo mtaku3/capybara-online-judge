@@ -96,7 +96,7 @@ $router->post("/problem/[s:problemId]/update", function (Request $req, Response 
     $container->get("ProblemController")->handleUpdate($req, $res);
 });
 
-$router->post("/problem/[s:problemId]/delete", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/delete", function (Request $req, Response $res) use ($container) {
     $container->get("ProblemController")->handleDelete($req, $res);
 });
 
@@ -132,11 +132,11 @@ $router->post("/problem/[s:problemId]/testcase/[s:testCaseId]/update", function 
     $container->get("TestCaseController")->handleUpdate($req, $res);
 });
 
-$router->post("/problem/[s:problemId]/testcase/[s:testCaseId]/enable", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/enable", function (Request $req, Response $res) use ($container) {
     $container->get("TestCaseController")->handleEnable($req, $res);
 });
 
-$router->post("/problem/[s:problemId]/testcase/[s:testCaseId]/disable", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/disable", function (Request $req, Response $res) use ($container) {
     $container->get("TestCaseController")->handleDisable($req, $res);
 });
 
@@ -152,7 +152,7 @@ $router->get("/submission/[s:submissionId]/download", function (Request $req, Re
     $container->get("SubmissionController")->handleDownload($req, $res);
 });
 
-$router->post("/submission/[s:submissionId]/delete", function (Request $req, Response $res) use ($container) {
+$router->get("/submission/[s:submissionId]/delete", function (Request $req, Response $res) use ($container) {
     $container->get("SubmissionController")->handleDelete($req, $res);
 });
 

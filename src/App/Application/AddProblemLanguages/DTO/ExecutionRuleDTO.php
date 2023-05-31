@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace App\Application\AddProblemLanguages\DTO;
 
 use App\Domain\Common\ValueObject\Language;
+use App\Domain\Problem\ValueObject\TestCaseId;
 
 class ExecutionRuleDTO
 {
+    /**
+     * @var TestCaseId
+     */
+    public readonly TestCaseId $TestCaseId;
     /**
      * @var Language
      */
@@ -30,6 +35,7 @@ class ExecutionRuleDTO
     public readonly string $FileCompareCommand;
 
     /**
+     * @param TestCaseId $testCaseId
      * @param Language $language
      * @param string $sourceCodeExecutionCommand
      * @param string $sourceCodeCompareCommand
@@ -37,8 +43,9 @@ class ExecutionRuleDTO
      * @param string $fileCompareCommand
      * @return void
      */
-    public function __construct(Language $language, string $sourceCodeExecutionCommand, string $sourceCodeCompareCommand, string $fileExecutionCommand, string $fileCompareCommand)
+    public function __construct(TestCaseId $testCaseId, Language $language, string $sourceCodeExecutionCommand, string $sourceCodeCompareCommand, string $fileExecutionCommand, string $fileCompareCommand)
     {
+        $this->TestCaseId = $testCaseId;
         $this->Language = $language;
         $this->SourceCodeExecutionCommand = $sourceCodeExecutionCommand;
         $this->SourceCodeCompareCommand = $sourceCodeCompareCommand;

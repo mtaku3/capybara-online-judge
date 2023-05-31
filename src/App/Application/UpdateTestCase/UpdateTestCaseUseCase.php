@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\UpdateTestCase;
 
-use App\Application\Exception\TestCaseNotFoundException;
-use App\Domain\File\IFileRepository;
+
 use App\Domain\Problem\IProblemRepository;
 
 class UpdateTestCaseUseCase
@@ -27,6 +26,8 @@ class UpdateTestCaseUseCase
     public function handle(UpdateTestCaseRequest $request): UpdateTestCaseResponse
     {
         $problem = $this->ProblemRepository->findById($request->ProblemId);
+
+        $problem->setTitle($request->Title);
 
         foreach ($request->ExecutionRuleDTOs as $executionRuleDTO) {
             $problem->setExecutionRuleSourceCodeExecutionCommand($request->TestCaseId, $executionRuleDTO->ExecutionRuleId, $executionRuleDTO->SourceCodeExecutionCommand);

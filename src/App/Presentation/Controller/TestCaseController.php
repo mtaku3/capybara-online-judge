@@ -164,12 +164,13 @@ class TestCaseController
 
             $executionRuleDTOs = [];
             foreach ($req->executionRules as $executionRule) {
+                $testCaseId = new TestCaseId($executionRule["testCaseId"]);
                 $language = Language::from($executionRule["language"]);
                 $sourceCodeExecutionCommand = $executionRule["sourceCodeExecutionCommand"];
                 $sourceCodeCompareCommand = $executionRule["sourceCodeCompareCommand"];
                 $fileExecutionCommand = $executionRule["fileExecutionCommand"];
                 $fileCompareCommand = $executionRule["fileCompareCommand"];
-                $executionRuleDTOs[] = new \App\Application\AddProblemLanguages\DTO\ExecutionRuleDTO($language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
+                $executionRuleDTOs[] = new \App\Application\AddProblemLanguages\DTO\ExecutionRuleDTO($testCaseId, $language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
             }
 
             $this->AddProblemLanguagesUseCase->handle(new AddProblemLanguagesRequest($problemId, $compileRuleDTOs, $executionRuleDTOs));
@@ -202,6 +203,7 @@ class TestCaseController
 
             $problemId = new ProblemId($req->problemId);
             $testCaseId = new TestCaseId($req->testCaseId);
+            $title = $req->title;
 
             $executionRuleDTOs = [];
             foreach ($req->executionRules as $executionRule) {
@@ -213,7 +215,7 @@ class TestCaseController
                 $executionRuleDTOs[] = new \App\Application\UpdateTestCase\DTO\ExecutionRuleDTO($executionRuleId, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
             }
 
-            $this->UpdateTestCaseUseCase->handle(new UpdateTestCaseRequest($problemId, $testCaseId, $executionRuleDTOs));
+            $this->UpdateTestCaseUseCase->handle(new UpdateTestCaseRequest($problemId, $testCaseId, $title, $executionRuleDTOs));
 
             $res->redirect("/problem/" . $problemId . "/testcases");
         } catch (ProblemNotFoundException) {

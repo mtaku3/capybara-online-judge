@@ -18,6 +18,10 @@ class UpdateTestCaseRequest
      */
     public readonly TestCaseId $TestCaseId;
     /**
+     * @var string
+     */
+    public readonly string $Title;
+    /**
      * @var ExecutionRuleDTO[]
      */
     public readonly array $ExecutionRuleDTOs;
@@ -25,13 +29,15 @@ class UpdateTestCaseRequest
     /**
      * @param ProblemId $problemId
      * @param TestCaseId $testCaseId
+     * @param string $title
      * @param array $executionRuleDTOs
      * @return void
      */
-    public function __construct(ProblemId $problemId, TestCaseId $testCaseId, array $executionRuleDTOs)
+    public function __construct(ProblemId $problemId, TestCaseId $testCaseId, string $title, array $executionRuleDTOs)
     {
         $this->ProblemId = $problemId;
         $this->TestCaseId = $testCaseId;
+        $this->Title = $title;
         $this->ExecutionRuleDTOs = $executionRuleDTOs;
     }
 }
