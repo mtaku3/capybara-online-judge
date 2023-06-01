@@ -45,11 +45,11 @@ class AddProblemLanguagesUseCase
         foreach($request->ExecutionRuleDTOs as $executionRuleDTO) {
             $testCaseId = $executionRuleDTO->TestCaseId;
             $language = $executionRuleDTO->Language;
-            $sourceCodeCompileCommand = $executionRuleDTO->SourceCodeExecutionCommand;
+            $sourceCodeExecutionCommand = $executionRuleDTO->SourceCodeExecutionCommand;
             $sourceCodeCompareCommand = $executionRuleDTO->SourceCodeCompareCommand;
             $fileExcutionCommand = $executionRuleDTO->FileExecutionCommand;
             $fileCompareCommand = $executionRuleDTO->FileCompareCommand;
-            $executionRules[] = new ExecutionRuleFactoryDTOWithTestCaseId($testCaseId, $language, $sourceCodeCompileCommand, $sourceCodeCompareCommand, $fileExcutionCommand, $fileCompareCommand);
+            $executionRules[] = new ExecutionRuleFactoryDTOWithTestCaseId($testCaseId, $language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExcutionCommand, $fileCompareCommand);
         }
 
         $problem->createCompileRules($compileRules, $executionRules);
