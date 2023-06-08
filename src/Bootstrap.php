@@ -21,6 +21,7 @@ use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesUseCase;
 use App\Application\Session\Entity\Session;
 use App\Application\Submit\SubmitUseCase;
 use App\Application\UpdateProblemTitleAndBody\UpdateProblemTitleAndBodyUseCase;
+use App\Application\UpdateTestCase\UpdateTestCaseUseCase;
 use App\Application\ValidateSession\ValidateSessionUseCase;
 use App\Domain\Problem\Entity\Problem;
 use App\Domain\Submission\Entity\Submission;
@@ -32,7 +33,11 @@ use App\Infrastructure\Repository\Session\SessionRepository;
 use App\Infrastructure\Repository\Submission\SubmissionRepository;
 use App\Infrastructure\Repository\User\UserRepository;
 use App\Presentation\Controller\LoginController;
+use App\Presentation\Controller\ProblemController;
 use App\Presentation\Controller\ProblemListController;
+use App\Presentation\Controller\RegisterController;
+use App\Presentation\Controller\SubmissionController;
+use App\Presentation\Controller\TestCaseController;
 use Cycle\Database;
 use Cycle\Database\Config;
 use Cycle\ORM;
@@ -131,11 +136,47 @@ $containerBuilder->addDefinitions([
 
         return $twig;
     },
+    "LoginController" => function (ContainerInterface $c) {
+        return new LoginController($c->get("Twig"), $c->get("AuthorizeUseCase"));
+    },
+    "ProblemController" => function (ContainerInterface $c) {
+        return new ProblemController(
+            $c->get("Twig"),
+            $c->get("GetProblemByIdUseCase"),
+            $c->get("SubmitUseCase"),
+            $c->get("CreateProblemUseCase"),
+            $c->get("UpdateProblemTitleAndBodyUseCase"),
+            $c->get("DeleteProblemUseCase")
+        );
+    },
     "ProblemListController" => function (ContainerInterface $c) {
         return new ProblemListController($c->get("Twig"));
     },
-    "LoginController" => function (ContainerInterface $c) {
-        return new LoginController($c->get("Twig"), $c->get("AuthorizeUseCase"));
+    "RegisterController" => function (ContainerInterface $c) {
+        return new RegisterController($c->get("Twig"), $c->get("CreateUserUseCase"), $c->get("AuthorizeUseCase"));
+    },
+    "SubmissionController" => function (ContainerInterface $c) {
+        return new SubmissionController(
+            $c->get("Twig"),
+            $c->get("GetSubmissionsByProblemIdUseCase"),
+            $c->get("GetSubmissionsByProblemIdAndUserIdUseCase"),
+            $c->get("GetSubmissionsByUserIdUseCase"),
+            $c->get("GetSubmissionByIdUseCase"),
+            $c->get("GetProblemByIdUseCase"),
+            $c->get("DeleteSubmissionUseCase")
+        );
+    },
+    "TestCaseController" => function (ContainerInterface $c) {
+        return new TestCaseController(
+            $c->get("Twig"),
+            $c->get("GetProblemByIdUseCase"),
+            $c->get("AddProblemLanguagesUseCase"),
+            $c->get("RemoveProblemLanguagesUseCase"),
+            $c->get("UpdateTestCaseUseCase"),
+            $c->get("CreateTestCaseUseCase"),
+            $c->get("EnableTestCaseUseCase"),
+            $c->get("DisableTestCaseUseCase")
+        );
     },
 
     /** Application Layer */
@@ -181,7 +222,7 @@ $containerBuilder->addDefinitions([
     "GetSubmissionsByProblemIdAndUserIdUseCase" => function (ContainerInterface $c) {
         return new GetSubmissionsByProblemIdAndUserIdUseCase($c->get("SubmissionRepository"), $c->get("ProblemRepository"), $c->get("UserRepository"));
     },
-    "GetSubmissionsByUserId" => function (ContainerInterface $c) {
+    "GetSubmissionsByUserIdUseCase" => function (ContainerInterface $c) {
         return new GetSubmissionsByUserIdUseCase($c->get("SubmissionRepository"), $c->get("UserRepository"));
     },
     "RemoveProblemLanguagesUseCase" => function (ContainerInterface $c) {
@@ -192,6 +233,9 @@ $containerBuilder->addDefinitions([
     },
     "UpdateProblemTitleAndBodyUseCase" => function (ContainerInterface $c) {
         return new UpdateProblemTitleAndBodyUseCase($c->get("ProblemRepository"));
+    },
+    "UpdateTestCaseUseCase" => function (ContainerInterface $c) {
+        return new UpdateTestCaseUseCase($c->get("ProblemRepository"));
     },
     "ValidateSessionUseCase" => function (ContainerInterface $c) {
         return new ValidateSessionUseCase($c->get("UserRepository"), $c->get("SessionRepository"));

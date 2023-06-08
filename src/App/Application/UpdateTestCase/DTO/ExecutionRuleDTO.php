@@ -2,21 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Application\AddProblemLanguages\DTO;
+namespace App\Application\UpdateTestCase\DTO;
 
-use App\Domain\Common\ValueObject\Language;
-use App\Domain\Problem\ValueObject\TestCaseId;
+use App\Domain\Problem\ValueObject\ExecutionRuleId;
 
 class ExecutionRuleDTO
 {
     /**
-     * @var TestCaseId
+     * @var ExecutionRuleId
      */
-    public readonly TestCaseId $TestCaseId;
-    /**
-     * @var Language
-     */
-    public readonly Language $Language;
+    public readonly ExecutionRuleId $ExecutionRuleId;
     /**
      * @var string
      */
@@ -35,18 +30,16 @@ class ExecutionRuleDTO
     public readonly string $FileCompareCommand;
 
     /**
-     * @param TestCaseId $testCaseId
-     * @param Language $language
+     * @param ExecutionRuleId $executionRuleId
      * @param string $sourceCodeExecutionCommand
      * @param string $sourceCodeCompareCommand
      * @param string $fileExecutionCommand
      * @param string $fileCompareCommand
      * @return void
      */
-    public function __construct(TestCaseId $testCaseId, Language $language, string $sourceCodeExecutionCommand, string $sourceCodeCompareCommand, string $fileExecutionCommand, string $fileCompareCommand)
+    public function __construct(ExecutionRuleId $executionRuleId, string $sourceCodeExecutionCommand, string $sourceCodeCompareCommand, string $fileExecutionCommand, string $fileCompareCommand)
     {
-        $this->TestCaseId = $testCaseId;
-        $this->Language = $language;
+        $this->ExecutionRuleId = $executionRuleId;
         $this->SourceCodeExecutionCommand = $sourceCodeExecutionCommand;
         $this->SourceCodeCompareCommand = $sourceCodeCompareCommand;
         $this->FileExecutionCommand = $fileExecutionCommand;
