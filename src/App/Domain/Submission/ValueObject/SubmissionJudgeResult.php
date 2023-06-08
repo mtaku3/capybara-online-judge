@@ -20,6 +20,6 @@ enum SubmissionJudgeResult: string
      */
     public static function Cast(TestResultJudgeResult $testResultJudgeResult): SubmissionJudgeResult
     {
-        return self::from((string)$testResultJudgeResult);
+        return self::from($testResultJudgeResult->name);
     }
 }

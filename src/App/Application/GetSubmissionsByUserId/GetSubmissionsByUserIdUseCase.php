@@ -38,6 +38,7 @@ class GetSubmissionsByUserIdUseCase
         $user = $this->UserRepository->findById($request->UserId);
 
         return new GetSubmissionsByUserIdResponse(
+            $user,
             $this->SubmissionRepository->findByUserId(
                 $user->getId(),
                 $request->Page,

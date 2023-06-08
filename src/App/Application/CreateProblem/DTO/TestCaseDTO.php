@@ -6,6 +6,9 @@ namespace App\Application\CreateProblem\DTO;
 
 class TestCaseDTO
 {
+    /**
+     * @var string
+     */
     public readonly string $Title;
     /**
      * @var ExecutionRuleDTO[]
