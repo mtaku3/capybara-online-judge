@@ -1,3 +1,63 @@
 {% extends "Template.twig" %}
 {% block body %}
+    {%  set isAuthPage = true %}
+    {% include "Component/NavBar.twig" %}
+    <section class= bg-white">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">新規登録</h1>
+                    <form class="space-y-4 md:space-y-6"
+                          action="http://localhost/auth/register"
+                          method="POST">
+                        <div>
+                            <label for="username"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ユーザー名</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg fill="none"
+                                         class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                         stroke="currentColor"
+                                         stroke-width="1.5"
+                                         viewBox="0 0 24 24"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <input type="text"
+                                       name="username"
+                                       id="username"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="username"
+                                       required="">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="password"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">パスワード</label>
+                            <input type="password"
+                                   name="password"
+                                   id="password"
+                                   placeholder="••••••••"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                   required="">
+                        </div>
+                        <p id="filled_error_help"
+                           class="mt-2 text-xs text-red-600 dark:text-red-400">{{ error }}</p>
+                        <button type="submit"
+                                class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            登録
+                        </button>
+                        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                            すでにアカウントをお持ちですか？
+                            <a href="/auth/login"
+                               class="font-medium text-primary-600 hover:underline dark:text-primary-500">ログイン</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock body %}
