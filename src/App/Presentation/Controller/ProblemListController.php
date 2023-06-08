@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller;
 
+use App\Application\GetProblems\GetProblemsRequest;
+use App\Application\GetProblems\GetProblemsUseCase;
 use App\Presentation\Router\Response;
 use App\Presentation\Router\Exceptions\LockedResponseException;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
@@ -23,12 +25,19 @@ class ProblemListController
     private readonly Environment $Twig;
 
     /**
+     * @var GetProblemsUseCase
+     */
+    private readonly GetProblemsUseCase $GetProblemsUseCase;
+
+    /**
      * @param Environment $twig
+     * @param GetProblemsUseCase $getProblemsUseCase
      * @return void
      */
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, GetProblemsUseCase $getProblemsUseCase)
     {
         $this->Twig = $twig;
+        $this->GetProblemsUseCase = $getProblemsUseCase;
     }
 
     /**
@@ -43,6 +52,14 @@ class ProblemListController
      */
     public function get(Request $req, Response $res)
     {
-        $res->body($this->Twig->render("ProblemList.twig"));
+        $getProblemsResponse = $this->GetProblemsUseCase->handle(new GetProblemsRequest(intval($req->param("page", 1)), self::LimitPerPage));
+        $res->body($this->Twig->render("ProblemList.twig", [
+            "user" => $req->user,
+            "problems" => $getProblemsResponse->Problems,
+            "page" => intval($req->param("page", 1)),
+            "totalNumberOfProblems" => $getProblemsResponse->Count,
+            "totalNumberOfPages" => intval(ceil($getProblemsResponse->Count / self::LimitPerPage)),
+            "limitPerPage" => self::LimitPerPage
+        ]));
     }
 }
