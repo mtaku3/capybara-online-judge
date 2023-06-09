@@ -30,11 +30,10 @@ class RemoveProblemLanguagesUseCase
     {
         $problem = $this->ProblemRepository->findById($request->ProblemId);
 
-        foreach($problem->getCompileRules() as $compileRule) {
-            if($request->Languages === $compileRule->getLanguage()) {
-                $compileRuleID =$compileRule->getId();
+        foreach ($problem->getCompileRules() as $compileRule) {
+            if (array_search($compileRule->getLanguage(), $request->Languages)) {
+                $compileRuleID = $compileRule->getId();
                 $problem->removeCompileRule($compileRuleID);
-                break;
             }
         }
 
