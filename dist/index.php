@@ -72,6 +72,14 @@ $router->get("/", function (Request $req, Response $res) use ($container) {
     $container->get("ProblemListController")->get($req, $res);
 });
 
+$router->get("/auth/register", function (Request $req, Response $res) use ($container) {
+    $container->get("RegisterController")->get($req, $res);
+});
+
+$router->post("/auth/register", function (Request $req, Response $res) use ($container) {
+    $container->get("RegisterController")->handleForm($req, $res);
+});
+
 $router->get("/auth/login", function (Request $req, Response $res) use ($container) {
     $container->get("LoginController")->get($req, $res);
 });

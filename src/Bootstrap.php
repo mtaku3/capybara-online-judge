@@ -36,6 +36,7 @@ use App\Infrastructure\Repository\User\UserRepository;
 use App\Presentation\Controller\LoginController;
 use App\Presentation\Controller\ProblemController;
 use App\Presentation\Controller\ProblemListController;
+use App\Presentation\Controller\RegisterController;
 use App\Presentation\Controller\SubmissionController;
 use App\Presentation\Controller\TestCaseController;
 use Cycle\Database;
@@ -151,6 +152,9 @@ $containerBuilder->addDefinitions([
     },
     "ProblemListController" => function (ContainerInterface $c) {
         return new ProblemListController($c->get("Twig"));
+    },
+    "RegisterController" => function (ContainerInterface $c) {
+        return new RegisterController($c->get("Twig"), $c->get("CreateUserUseCase"), $c->get("AuthorizeUseCase"));
     },
     "SubmissionController" => function (ContainerInterface $c) {
         return new SubmissionController(
