@@ -43,7 +43,7 @@ class FileRepository implements IFileRepository
 
             self::ValidateTarball($src);
 
-            move_uploaded_file($src, $dest);
+            rename($src, $dest);
         }
     }
 
@@ -62,7 +62,7 @@ class FileRepository implements IFileRepository
 
         self::ValidateTarball($src);
 
-        move_uploaded_file($src, $dest);
+        rename($src, $dest);
     }
 
     public function moveOutputFile(string $src, TestCase $testCase): void
@@ -80,7 +80,7 @@ class FileRepository implements IFileRepository
 
         self::ValidateTarball($src);
 
-        move_uploaded_file($src, $dest);
+        rename($src, $dest);
     }
 
     /**
