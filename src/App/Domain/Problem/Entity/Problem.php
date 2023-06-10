@@ -379,6 +379,7 @@ class Problem
             );
         }
 
+        $this->TestCases; // required to retrieve the array before appending : CycleORM Proxy limitation
         $this->TestCases[] = TestCase::_create($title, false, $executionRules);
     }
 
