@@ -20,6 +20,7 @@ use App\Application\GetSubmissionsByUserId\GetSubmissionsByUserIdUseCase;
 use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesUseCase;
 use App\Application\Session\Entity\Session;
 use App\Application\Submit\SubmitUseCase;
+use App\Application\UpdateCompileRule\UpdateCompileRuleUseCase;
 use App\Application\UpdateProblemTitleAndBody\UpdateProblemTitleAndBodyUseCase;
 use App\Application\UpdateTestCase\UpdateTestCaseUseCase;
 use App\Application\ValidateSession\ValidateSessionUseCase;
@@ -175,7 +176,8 @@ $containerBuilder->addDefinitions([
             $c->get("UpdateTestCaseUseCase"),
             $c->get("CreateTestCaseUseCase"),
             $c->get("EnableTestCaseUseCase"),
-            $c->get("DisableTestCaseUseCase")
+            $c->get("DisableTestCaseUseCase"),
+            $c->get("UpdateCompileRuleUseCase")
         );
     },
 
@@ -230,6 +232,9 @@ $containerBuilder->addDefinitions([
     },
     "SubmitUseCase" => function (ContainerInterface $c) {
         return new SubmitUseCase($c->get("UserRepository"), $c->get("ProblemRepository"), $c->get("FileRepository"), $c->get("SubmissionRepository"), $c->get("JudgeQueueRepository"));
+    },
+    "UpdateCompileRuleUseCase" => function (ContainerInterface $c) {
+        return new UpdateCompileRuleUseCase($c->get("ProblemRepository"));
     },
     "UpdateProblemTitleAndBodyUseCase" => function (ContainerInterface $c) {
         return new UpdateProblemTitleAndBodyUseCase($c->get("ProblemRepository"));
