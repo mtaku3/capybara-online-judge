@@ -64,6 +64,10 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && node --version \
   && npm --version
 
+# Configure ownership of data directory to save all files uploaded to COJ
+WORKDIR /data
+RUN chown -R www-data:www-data /data
+
 
 FROM base as development
 
