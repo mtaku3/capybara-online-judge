@@ -52,6 +52,7 @@ CREATE TABLE
         "IsDisabled" bool NOT NULL,
         "InputFileId" varchar(36) NOT NULL UNIQUE,
         "OutputFileId" varchar(36) NOT NULL UNIQUE,
+        UNIQUE ("ProblemId", "Title"),
         FOREIGN KEY("ProblemId") REFERENCES "Problems"("Id") ON DELETE CASCADE,
         FOREIGN KEY("InputFileId") REFERENCES "Files"("Id"),
         FOREIGN KEY("OutputFileId") REFERENCES "Files"("Id")
