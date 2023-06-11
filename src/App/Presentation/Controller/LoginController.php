@@ -7,14 +7,16 @@ namespace App\Presentation\Controller;
 use App\Application\Authorize\AuthorizeRequest;
 use App\Application\Authorize\AuthorizeUseCase;
 use App\Application\Exception\WrongPasswordException;
+use App\Application\PurgeSessions\PurgeSessionsRequest;
+use App\Application\PurgeSessions\PurgeSessionsUseCase;
 use App\Infrastructure\Repository\User\Exception\UserNotFoundException;
-use App\Presentation\Router\Exceptions\HttpException;
 use App\Presentation\Router\Response;
 use App\Presentation\Router\Exceptions\LockedResponseException;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
 use App\Presentation\Router\Request;
 use Exception;
 use DomainException;
+use Throwable;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
@@ -30,15 +32,20 @@ class LoginController
      * @var AuthorizeUseCase
      */
     private readonly AuthorizeUseCase $AuthorizeUseCase;
+    /**
+     * @var PurgeSessionsUseCase
+     */
+    private readonly PurgeSessionsUseCase $PurgeSessionsUseCase;
 
     /**
      * @param Environment $twig
      * @return void
      */
-    public function __construct(Environment $twig, AuthorizeUseCase $authorizeUseCase)
+    public function __construct(Environment $twig, AuthorizeUseCase $authorizeUseCase, PurgeSessionsUseCase $purgeSessionsUseCase)
     {
         $this->Twig = $twig;
         $this->AuthorizeUseCase = $authorizeUseCase;
+        $this->PurgeSessionsUseCase = $purgeSessionsUseCase;
     }
 
     /**
@@ -83,6 +90,12 @@ class LoginController
                 "error" => "ユーザー名、またはパスワードが間違っています"
             ]));
         }
+
+        try {
+            $this->PurgeSessionsUseCase->handle(new PurgeSessionsRequest($req->user));
+        } catch (Throwable) {
+            // ignore
+        }
     }
 
     /**
@@ -98,5 +111,11 @@ class LoginController
         $res->cookie("x-refresh-token", expiry: 1);
 
         $res->redirect("/");
+
+        try {
+            $this->PurgeSessionsUseCase->handle(new PurgeSessionsRequest($req->user));
+        } catch (Throwable) {
+            // ignore
+        }
     }
 }

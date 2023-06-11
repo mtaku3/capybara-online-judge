@@ -18,8 +18,20 @@ interface ISessionRepository
     public function findByUserAndRefreshToken(User $user, RefreshToken $refreshToken): Session;
 
     /**
+     * @param User $user 
+     * @return Session[]
+     */
+    public function findByUser(User $user): array;
+
+    /**
      * @param Session $session
      * @return void
      */
     public function save(Session $session): void;
+
+    /**
+     * @param Session $session
+     * @return void
+     */
+    public function delete(Session $session): void;
 }

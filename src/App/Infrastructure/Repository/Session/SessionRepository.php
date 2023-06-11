@@ -10,6 +10,8 @@ use App\Domain\User\Entity\User;
 use App\Application\Session\ValueObject\RefreshToken;
 use App\Infrastructure\Repository\Session\Exception\SessionNotFoundException;
 use Cycle\ORM\EntityManagerInterface;
+use Cycle\ORM\Exception\ParserException;
+use Cycle\ORM\Exception\LoaderException;
 use Cycle\ORM\Select\Repository;
 
 class SessionRepository implements ISessionRepository
@@ -55,12 +57,33 @@ class SessionRepository implements ISessionRepository
     }
 
     /**
+     * @param User $user
+     * @return Session[]
+     * @throws ParserException
+     * @throws LoaderException
+     */
+    public function findByUser(User $user): array
+    {
+        return iterator_to_array($this->SessionRepository->findAll(["UserId" => $user->getId()]));
+    }
+
+    /**
      * @param Session $session
      * @return void
      */
     public function save(Session $session): void
     {
         $this->EntityManager->persist($session);
+        $this->EntityManager->run();
+    }
+
+    /**
+     * @param Session $session
+     * @return void
+     */
+    public function delete(Session $session): void
+    {
+        $this->EntityManager->delete($session);
         $this->EntityManager->run();
     }
 }

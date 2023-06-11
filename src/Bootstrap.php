@@ -17,6 +17,7 @@ use App\Application\GetSubmissionById\GetSubmissionByIdUseCase;
 use App\Application\GetSubmissionsByProblemId\GetSubmissionsByProblemIdUseCase;
 use App\Application\GetSubmissionsByProblemIdAndUserId\GetSubmissionsByProblemIdAndUserIdUseCase;
 use App\Application\GetSubmissionsByUserId\GetSubmissionsByUserIdUseCase;
+use App\Application\PurgeSessions\PurgeSessionsUseCase;
 use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesUseCase;
 use App\Application\Session\Entity\Session;
 use App\Application\Submit\SubmitUseCase;
@@ -138,7 +139,7 @@ $containerBuilder->addDefinitions([
         return $twig;
     },
     "LoginController" => function (ContainerInterface $c) {
-        return new LoginController($c->get("Twig"), $c->get("AuthorizeUseCase"));
+        return new LoginController($c->get("Twig"), $c->get("AuthorizeUseCase"), $c->get("PurgeSessionsUseCase"));
     },
     "ProblemController" => function (ContainerInterface $c) {
         return new ProblemController(
@@ -226,6 +227,9 @@ $containerBuilder->addDefinitions([
     },
     "GetSubmissionsByUserIdUseCase" => function (ContainerInterface $c) {
         return new GetSubmissionsByUserIdUseCase($c->get("SubmissionRepository"), $c->get("UserRepository"));
+    },
+    "PurgeSessionsUseCase" => function (ContainerInterface $c) {
+        return new PurgeSessionsUseCase($c->get("SessionRepository"));
     },
     "RemoveProblemLanguagesUseCase" => function (ContainerInterface $c) {
         return new RemoveProblemLanguagesUseCase($c->get("ProblemRepository"));
