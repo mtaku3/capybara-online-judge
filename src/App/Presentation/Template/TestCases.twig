@@ -72,7 +72,7 @@
                                     <div class="w-full flex text-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                         <ul data-tabs-toggle="#language-edit-modal-compilerule-tab-contents"
                                             role="tablist"
-                                            class="w-48 text-sm font-medium text-gray-900 bg-white border-r border-gray-200 rounded-l-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            class="w-48 text-sm font-medium text-gray-900 bg-white border-r border-gray-200 rounded-l-lg dark:bg-gray-800 dark:border-gray-600 dark:text-white">
                                             {% for language in availableLanguages %}
                                                 <li role="presentation"
                                                     class="{{ loop.last ? "flex items-center w-full px-4 py-2 rounded-b-lg" : "flex items-center w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600" }}">
@@ -121,7 +121,9 @@
                             <div id="language-edit-modal-executionrule-tab" class="hidden">
                                 <div class="p-6 space-y-6">
                                     <div id="language-edit-modal-executionrule-tab-contents-notation"
-                                         class="w-full flex items-center justify-center">編集は必要ありません</div>
+                                         class="w-full flex items-center justify-center dark:text-white">
+                                        編集は必要ありません
+                                    </div>
                                     <div id="language-edit-modal-executionrule-tab-contents-edit"
                                          class="hidden w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                         <ul class="ml-48 flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-tr-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
@@ -147,8 +149,12 @@
                                                     ファイルで提出時
                                                 </button>
                                             </li>
-                                            <select id="language-edit-modal-executionrule-tab-contents-select" onchange="languageEditModal.changeSelectLanguage(this)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-auto mr-2 my-2 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option class="hidden" id="language-edit-modal-executionrule-tab-contents-option-DUMMY" language="DUMMY">DUMMY</option>
+                                            <select id="language-edit-modal-executionrule-tab-contents-select"
+                                                    onchange="languageEditModal.changeSelectLanguage(this)"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-auto mr-2 my-2 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option class="hidden"
+                                                        id="language-edit-modal-executionrule-tab-contents-option-DUMMY"
+                                                        language="DUMMY">DUMMY</option>
                                                 {% for language in availableLanguages %}
                                                     <option id="language-edit-modal-executionrule-tab-contents-option-{{ language }}"
                                                             class="hidden"
@@ -160,12 +166,16 @@
                                             <div class="w-48 text-sm font-medium text-gray-900 bg-white rounded-bl-lg dark:bg-gray-700 dark:text-white">
                                                 {% for testCase in problem.getTestCases %}
                                                     {% if not loop.last %}
-                                                        <button type="button" id="language-edit-modal-executionrule-tab-contents-testcase-select-{{ testCase.getId }}" class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
+                                                        <button type="button"
+                                                                id="language-edit-modal-executionrule-tab-contents-testcase-select-{{ testCase.getId }}"
+                                                                class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
                                                             {{ testCase.getTitle }}
                                                         </button>
                                                     {% endif %}
                                                     {% if loop.last %}
-                                                        <button type="button" id="language-edit-modal-executionrule-tab-contents-testcase-select-{{ testCase.getId }}" class="block w-full px-4 py-2 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
+                                                        <button type="button"
+                                                                id="language-edit-modal-executionrule-tab-contents-testcase-select-{{ testCase.getId }}"
+                                                                class="block w-full px-4 py-2 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
                                                             {{ testCase.getTitle }}
                                                         </button>
                                                     {% endif %}
@@ -173,37 +183,38 @@
                                             </div>
                                             <div id="language-edit-modal-executionrule-tab-contents" class="flex-grow">
                                                 <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
-                                                    id="language-edit-modal-executionrule-tab-contents-sourcecode-tab"
-                                                    role="tabpanel"
-                                                    aria-labelledby="sourcecode-tab">
-                                                    <div id="language-edit-modal-sourcecode-tab-contents-DUMMY" language="DUMMY"></div>
+                                                     id="language-edit-modal-executionrule-tab-contents-sourcecode-tab"
+                                                     role="tabpanel"
+                                                     aria-labelledby="sourcecode-tab">
+                                                    <div id="language-edit-modal-sourcecode-tab-contents-DUMMY"
+                                                         language="DUMMY"></div>
                                                     {% for language in availableLanguages %}
                                                         <div id="language-edit-modal-sourcecode-tab-contents-{{ language }}"
-                                                            language="{{ language }}">
+                                                             language="{{ language }}">
                                                             {% for testCase in problem.getTestCases %}
                                                                 <div id="language-edit-modal-sourcecode-tab-contents-{{ language }}-{{ testCase.getId }}"
-                                                                    testCaseId="{{ testCase.getId }}"
-                                                                    language="{{ language }}"
-                                                                    class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
+                                                                     testCaseId="{{ testCase.getId }}"
+                                                                     language="{{ language }}"
+                                                                     class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
                                                                     <input id="language-edit-modal-sourcecode-tab-contents-testcaseid-{{ testCase.getId }}"
-                                                                        type="text"
-                                                                        value="{{ testCase.getId }}"
-                                                                        class="hidden">
+                                                                           type="text"
+                                                                           value="{{ testCase.getId }}"
+                                                                           class="hidden">
                                                                     <input id="language-edit-modal-sourcecode-tab-contents-language-{{ language }}"
-                                                                        type="text"
-                                                                        value="{{ language }}"
-                                                                        class="hidden">
+                                                                           type="text"
+                                                                           value="{{ language }}"
+                                                                           class="hidden">
                                                                     <div class="mb-4">
                                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
                                                                         <input id="language-edit-modal-sourcecode-tab-contents-sourcecodeexecutioncommand-{{ testCase.getId }}"
-                                                                            type="text"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                               type="text"
+                                                                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                     </div>
                                                                     <div class="mb-4">
                                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行結果比較コマンド</label>
                                                                         <input id="language-edit-modal-sourcecode-tab-contents-sourcecodecomparecommand-{{ testCase.getId }}"
-                                                                            type="text"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                               type="text"
+                                                                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                     </div>
                                                                 </div>
                                                             {% endfor %}
@@ -211,29 +222,29 @@
                                                     {% endfor %}
                                                 </div>
                                                 <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
-                                                    id="language-edit-modal-executionrule-tab-contents-file-tab"
-                                                    role="tabpanel"
-                                                    aria-labelledby="file-tab">
+                                                     id="language-edit-modal-executionrule-tab-contents-file-tab"
+                                                     role="tabpanel"
+                                                     aria-labelledby="file-tab">
                                                     <div id="language-edit-modal-file-tab-contents-DUMMY" language="DUMMY"></div>
                                                     {% for language in availableLanguages %}
                                                         <div id="language-edit-modal-file-tab-contents-{{ language }}"
-                                                            language="{{ language }}">
+                                                             language="{{ language }}">
                                                             {% for testCase in problem.getTestCases %}
                                                                 <div id="language-edit-modal-file-tab-contents-{{ language }}-{{ testCase.getId }}"
-                                                                    testCaseId="{{ testCase.getId }}"
-                                                                    language="{{ language }}"
-                                                                    class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
+                                                                     testCaseId="{{ testCase.getId }}"
+                                                                     language="{{ language }}"
+                                                                     class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
                                                                     <div class="mb-4">
                                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
                                                                         <input id="language-edit-modal-file-tab-contents-fileexecutioncommand-{{ testCase.getId }}"
-                                                                            type="text"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                               type="text"
+                                                                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                     </div>
                                                                     <div class="mb-4">
                                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行結果比較コマンド</label>
                                                                         <input id="language-edit-modal-file-tab-contents-filecomparecommand-{{ testCase.getId }}"
-                                                                            type="text"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                               type="text"
+                                                                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                     </div>
                                                                 </div>
                                                             {% endfor %}
@@ -244,7 +255,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                <div class="flex items-center w-full p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button id="language-edit-modal-executionrule-tab-contents-back-button"
                                             type="button"
                                             class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
@@ -297,7 +308,9 @@
                                 <span class="sr-only">テストケース作成モーダルを閉じる</span>
                             </button>
                         </div>
-                        <form action="/problem/{{ problemId }}/testcase" method="post" enctype="multipart/form-data">
+                        <form action="/problem/{{ problemId }}/testcase"
+                              method="post"
+                              enctype="multipart/form-data">
                             <div class="p-6 space-y-6 text-left">
                                 <div>
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ケース名</label>
@@ -482,9 +495,9 @@
                                     <span class="sr-only">テストケースを複製する</span>
                                 </button>
                                 <div id="duplicate-modal-{{ testCase.getId }}"
-                                    tabindex="-1"
-                                    aria-hidden="true"
-                                    class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                     tabindex="-1"
+                                     aria-hidden="true"
+                                     class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                     <div class="relative w-full max-w-2xl max-h-full">
                                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                             <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -493,30 +506,36 @@
                                                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                                                         data-modal-hide="duplicate-modal-{{ testCase.getId }}">
                                                     <svg aria-hidden="true"
-                                                        class="w-5 h-5"
-                                                        fill="currentColor"
-                                                        viewBox="0 0 20 20"
-                                                        xmlns="http://www.w3.org/2000/svg">
+                                                         class="w-5 h-5"
+                                                         fill="currentColor"
+                                                         viewBox="0 0 20 20"
+                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd">
                                                         </path>
                                                     </svg>
                                                     <span class="sr-only">テストケース作成モーダルを閉じる</span>
                                                 </button>
                                             </div>
-                                            <form action="/problem/{{ problemId }}/testcase" method="post" enctype="multipart/form-data">
+                                            <form action="/problem/{{ problemId }}/testcase"
+                                                  method="post"
+                                                  enctype="multipart/form-data">
                                                 <div class="p-6 space-y-6 text-left">
                                                     <div>
                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ケース名</label>
                                                         <input type="text"
-                                                            name="title"
-                                                            value="{{ testCase.getTitle }}"
-                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                               name="title"
+                                                               value="{{ testCase.getTitle }}"
+                                                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                     </div>
                                                     <div>
                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">入力データ</label>
-                                                        <input id="duplicate-modal-inputFile-{{ testCase.getId }}" type="file" name="inputFile">
+                                                        <input id="duplicate-modal-inputFile-{{ testCase.getId }}"
+                                                               type="file"
+                                                               name="inputFile">
                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">出力データ</label>
-                                                        <input id="duplicate-modal-outputFile-{{ testCase.getId }}" type="file" name="outputFile">
+                                                        <input id="duplicate-modal-outputFile-{{ testCase.getId }}"
+                                                               type="file"
+                                                               name="outputFile">
                                                     </div>
                                                     <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                                         <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
@@ -555,59 +574,59 @@
                                                         </ul>
                                                         <div id="duplicate-modal-tab-contents-{{ testCase.getid }}">
                                                             <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
-                                                                id="duplicate-modal-sourcecode-tab-{{ testCase.getId }}"
-                                                                testCaseId="{{ testCase.getId }}"
-                                                                role="tabpanel"
-                                                                aria-labelledby="sourcecode-tab">
+                                                                 id="duplicate-modal-sourcecode-tab-{{ testCase.getId }}"
+                                                                 testCaseId="{{ testCase.getId }}"
+                                                                 role="tabpanel"
+                                                                 aria-labelledby="sourcecode-tab">
                                                                 {% for executionRule in testCase.getExecutionRules|sort((a, b) => b.getLanguage.comparesTo(a.getLanguage)) %}
                                                                     <div id="duplicate-modal-sourcecode-tab-contents-{{ executionRule.getId }}"
-                                                                        executionRuleId="{{ executionRule.getId }}"
-                                                                        language="{{ executionRule.getLanguage.name }}"
-                                                                        class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
+                                                                         executionRuleId="{{ executionRule.getId }}"
+                                                                         language="{{ executionRule.getLanguage.name }}"
+                                                                         class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
                                                                         <input type="text"
-                                                                            name="executionRules[{{ loop.index0 }}][language]"
-                                                                            value="{{ executionRule.getLanguage.value }}"
-                                                                            class="hidden">
+                                                                               name="executionRules[{{ loop.index0 }}][language]"
+                                                                               value="{{ executionRule.getLanguage.value }}"
+                                                                               class="hidden">
                                                                         <div class="mb-4">
                                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
                                                                             <input type="text"
-                                                                                name="executionRules[{{ loop.index0 }}][sourceCodeExecutionCommand]"
-                                                                                value="{{ executionRule.getSourceCodeExecutionCommand }}"
-                                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                                   name="executionRules[{{ loop.index0 }}][sourceCodeExecutionCommand]"
+                                                                                   value="{{ executionRule.getSourceCodeExecutionCommand }}"
+                                                                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                         </div>
                                                                         <div class="mb-4">
                                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行結果比較コマンド</label>
                                                                             <input type="text"
-                                                                                name="executionRules[{{ loop.index0 }}][sourceCodeCompareCommand]"
-                                                                                value="{{ executionRule.getSourceCodeCompareCommand }}"
-                                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                                   name="executionRules[{{ loop.index0 }}][sourceCodeCompareCommand]"
+                                                                                   value="{{ executionRule.getSourceCodeCompareCommand }}"
+                                                                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                         </div>
                                                                     </div>
                                                                 {% endfor %}
                                                             </div>
                                                             <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
-                                                                id="duplicate-modal-file-tab-{{ testCase.getId }}"
-                                                                testCaseId="{{ testCase.getId }}"
-                                                                role="tabpanel"
-                                                                aria-labelledby="file-tab">
+                                                                 id="duplicate-modal-file-tab-{{ testCase.getId }}"
+                                                                 testCaseId="{{ testCase.getId }}"
+                                                                 role="tabpanel"
+                                                                 aria-labelledby="file-tab">
                                                                 {% for executionRule in testCase.getExecutionRules|sort((a, b) => b.getLanguage.comparesTo(a.getLanguage)) %}
                                                                     <div id="duplicate-modal-file-tab-contents-{{ executionRule.getLanguage.name }}"
-                                                                        executionRuleId="{{ executionRule.getId }}"
-                                                                        language="{{ executionRule.getLanguage.name }}"
-                                                                        class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
+                                                                         executionRuleId="{{ executionRule.getId }}"
+                                                                         language="{{ executionRule.getLanguage.name }}"
+                                                                         class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
                                                                         <div class="mb-4">
                                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
                                                                             <input type="text"
-                                                                                name="executionRules[{{ loop.index0 }}][fileExecutionCommand]"
-                                                                                value="{{ executionRule.getFileExecutionCommand }}"
-                                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                                   name="executionRules[{{ loop.index0 }}][fileExecutionCommand]"
+                                                                                   value="{{ executionRule.getFileExecutionCommand }}"
+                                                                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                         </div>
                                                                         <div class="mb-4">
                                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行結果比較コマンド</label>
                                                                             <input type="text"
-                                                                                name="executionRules[{{ loop.index0 }}][fileCompareCommand]"
-                                                                                value="{{ executionRule.getFileCompareCommand }}"
-                                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                                   name="executionRules[{{ loop.index0 }}][fileCompareCommand]"
+                                                                                   value="{{ executionRule.getFileCompareCommand }}"
+                                                                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                         </div>
                                                                     </div>
                                                                 {% endfor %}
@@ -810,10 +829,10 @@
         </table>
         {% if testCases|filter(t => t.getIsDisabled)|length > 0 %}
             <div id="disabled-testcases-accordion"
-                class="mt-4"
-                data-accordion="collapse"
-                data-active-classes="bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                data-inactive-classes="text-gray-500 dark:text-gray-400">
+                 class="mt-4"
+                 data-accordion="collapse"
+                 data-active-classes="bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                 data-inactive-classes="text-gray-500 dark:text-gray-400">
                 <h2 id="disabled-testcases-accordion-heading">
                     <button type="button"
                             class="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400"
@@ -822,18 +841,18 @@
                             aria-controls="disabled-testcases-accordion-body">
                         <span>無効化されたテストケース</span>
                         <svg data-accordion-icon
-                            class="w-6 h-6 rotate-180 shrink-0"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
+                             class="w-6 h-6 rotate-180 shrink-0"
+                             fill="currentColor"
+                             viewBox="0 0 20 20"
+                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd">
                             </path>
                         </svg>
                     </button>
                 </h2>
                 <div id="disabled-testcases-accordion-body"
-                    class="hidden"
-                    aria-labelledby="disabled-testcases-accordion-heading">
+                     class="hidden"
+                     aria-labelledby="disabled-testcases-accordion-heading">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -856,12 +875,12 @@
                                                     onclick='location.href = "/problem/{{ problemId }}/testcase/{{ testCase.getId }}/inputfile/download"'
                                                     class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
                                                 <svg class="w-4 h-4"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="1.5"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    aria-hidden="true">
+                                                     fill="none"
+                                                     stroke="currentColor"
+                                                     stroke-width="1.5"
+                                                     viewBox="0 0 24 24"
+                                                     xmlns="http://www.w3.org/2000/svg"
+                                                     aria-hidden="true">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"></path>
                                                 </svg>
                                                 <span class="sr-only">入力データをダウンロードする</span>
@@ -872,12 +891,12 @@
                                                     onclick='location.href = "/problem/{{ problemId }}/testcase/{{ testCase.getId }}/outputfile/download"'
                                                     class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
                                                 <svg class="w-4 h-4"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="1.5"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    aria-hidden="true">
+                                                     fill="none"
+                                                     stroke="currentColor"
+                                                     stroke-width="1.5"
+                                                     viewBox="0 0 24 24"
+                                                     xmlns="http://www.w3.org/2000/svg"
+                                                     aria-hidden="true">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"></path>
                                                 </svg>
                                                 <span class="sr-only">出力データをダウンロードする</span>
@@ -890,12 +909,12 @@
                                                     data-modal-toggle="testcase-enable-confirmation-modal"
                                                     class="text-green-700 border border-green-700 hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:focus:ring-green-800 dark:hover:bg-green-500">
                                                 <svg class="w-4 h-4"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="1.5"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    aria-hidden="true">
+                                                     fill="none"
+                                                     stroke="currentColor"
+                                                     stroke-width="1.5"
+                                                     viewBox="0 0 24 24"
+                                                     xmlns="http://www.w3.org/2000/svg"
+                                                     aria-hidden="true">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75"></path>
                                                 </svg>
                                                 <span class="sr-only">テストケースを有効化する</span>
@@ -1009,7 +1028,7 @@
     <script>
         class LanguageEditModal {
             constructor() {
-                this.languages = [{{  problem.getCompileRules|map(c => "'#{c.getLanguage.name}'")|join(", ")|raw }}];
+                this.languages = [{{ problem.getCompileRules|map(c => "'#{c.getLanguage.name}'")|join(", ")|raw }}];
                 this.languagesToAdd = [];
                 this.availableLanguages = [{{ availableLanguages|map(x => "'#{x}'")|join(", ")|raw }}];
                 this.languagesToRemoveEl = document.querySelector("#language-edit-modal-languages-to-remove");
@@ -1107,7 +1126,7 @@
                     }
                 } else {
                     let executionRuleIdx = this.executionRuleTabs.index;
-                    
+
                     if (checked) {
                         let tabContentsEl = document.querySelector(`div[id='language-edit-modal-compilerule-tab-contents-${language}']`);
                         let languageEl = tabContentsEl.querySelector("input[id^='language-edit-modal-compilerule-tab-contents-language']");
