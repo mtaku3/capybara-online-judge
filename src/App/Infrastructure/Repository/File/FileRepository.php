@@ -15,6 +15,7 @@ use Phar;
 use PharData;
 use RecursiveIteratorIterator;
 use RuntimeException;
+use Throwable;
 
 class FileRepository implements IFileRepository
 {
@@ -107,7 +108,7 @@ class FileRepository implements IFileRepository
     {
         try {
             new PharData($src, format: Phar::TAR);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new FileMustBeArchivedAsTarballException(previous: $e);
         }
     }

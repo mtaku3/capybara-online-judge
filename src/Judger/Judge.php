@@ -248,7 +248,7 @@ while (1) {
                 throw new Exception("Failed to remove container:" . (string)$res->getBody());
             }
         }
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         echo $e;
     }
 }

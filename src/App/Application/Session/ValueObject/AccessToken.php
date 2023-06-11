@@ -13,6 +13,7 @@ use DomainException;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Throwable;
 
 class AccessToken
 {
@@ -47,7 +48,7 @@ class AccessToken
 
         try {
             $decoded = (array)JWT::decode($this->Value, new Key($_ENV["JWT_SECRET"], self::Algorithm));
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new InvalidAccessTokenException();
         }
 
