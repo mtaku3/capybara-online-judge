@@ -137,44 +137,46 @@
                                     </div>
                                     <div id="language-edit-modal-executionrule-tab-contents-edit"
                                          class="hidden w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                        <ul class="ml-48 flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-tr-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
-                                            data-tabs-toggle="#language-edit-modal-executionrule-tab-contents"
-                                            role="tablist">
-                                            <li class="mr-2 flex">
-                                                <button data-tabs-target="#language-edit-modal-executionrule-tab-contents-sourcecode-tab"
-                                                        type="button"
-                                                        role="tab"
-                                                        aria-controls="sourcecode"
-                                                        aria-selected="true"
-                                                        class="flex-grow inline-block px-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
-                                                    ソースコードで提出時
-                                                </button>
-                                            </li>
-                                            <li class="mr-2 flex">
-                                                <button data-tabs-target="#language-edit-modal-executionrule-tab-contents-file-tab"
-                                                        type="button"
-                                                        role="tab"
-                                                        aria-controls="file"
-                                                        aria-selected="false"
-                                                        class="flex-grow inline-block px-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                                                    ファイルで提出時
-                                                </button>
-                                            </li>
-                                            <select id="language-edit-modal-executionrule-tab-contents-select"
-                                                    onchange="languageEditModal.changeSelectLanguage(this)"
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-auto mr-2 my-2 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option class="hidden"
-                                                        id="language-edit-modal-executionrule-tab-contents-option-DUMMY"
-                                                        language="DUMMY">DUMMY</option>
-                                                {% for language in availableLanguages %}
-                                                    <option id="language-edit-modal-executionrule-tab-contents-option-{{ language }}"
-                                                            class="hidden"
-                                                            language="{{ language }}">{{ language }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </ul>
+                                        <div class="flex border-b border-gray-200 dark:border-gray-700">
+                                            <ul class="ml-48 flex flex-grow text-sm font-medium text-center text-gray-500 border-l border-gray-200 rounded-tr-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
+                                                data-tabs-toggle="#language-edit-modal-executionrule-tab-contents"
+                                                role="tablist">
+                                                <li class="mr-2 flex">
+                                                    <button data-tabs-target="#language-edit-modal-executionrule-tab-contents-sourcecode-tab"
+                                                            type="button"
+                                                            role="tab"
+                                                            aria-controls="sourcecode"
+                                                            aria-selected="true"
+                                                            class="flex-grow inline-block px-4 text-blue-600 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
+                                                        ソースコードで提出時
+                                                    </button>
+                                                </li>
+                                                <li class="mr-2 flex">
+                                                    <button data-tabs-target="#language-edit-modal-executionrule-tab-contents-file-tab"
+                                                            type="button"
+                                                            role="tab"
+                                                            aria-controls="file"
+                                                            aria-selected="false"
+                                                            class="flex-grow inline-block px-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
+                                                        ファイルで提出時
+                                                    </button>
+                                                </li>
+                                                <select id="language-edit-modal-executionrule-tab-contents-select"
+                                                        onchange="languageEditModal.changeSelectLanguage(this)"
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-auto mr-2 my-2 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                    <option class="hidden"
+                                                            id="language-edit-modal-executionrule-tab-contents-option-DUMMY"
+                                                            language="DUMMY">DUMMY</option>
+                                                    {% for language in availableLanguages %}
+                                                        <option id="language-edit-modal-executionrule-tab-contents-option-{{ language }}"
+                                                                class="hidden"
+                                                                language="{{ language }}">{{ language }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </ul>
+                                        </div>
                                         <div class="flex w-full">
-                                            <div class="w-48 text-sm font-medium text-gray-900 bg-white rounded-bl-lg dark:bg-gray-700 dark:text-white">
+                                            <div class="w-48 text-sm font-medium text-gray-900 bg-white rounded-bl-lg dark:bg-gray-800 dark:text-white">
                                                 {% for testCase in problem.getTestCases %}
                                                     {% if not loop.last %}
                                                         <button type="button"
@@ -192,8 +194,9 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             </div>
-                                            <div id="language-edit-modal-executionrule-tab-contents" class="flex-grow">
-                                                <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+                                            <div id="language-edit-modal-executionrule-tab-contents"
+                                                 class="flex-grow border-l border-gray-200 dark:border-gray-700">
+                                                <div class="hidden p-4 bg-white rounded-br-lg md:p-8 dark:bg-gray-800"
                                                      id="language-edit-modal-executionrule-tab-contents-sourcecode-tab"
                                                      role="tabpanel"
                                                      aria-labelledby="sourcecode-tab">
