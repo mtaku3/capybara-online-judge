@@ -45,7 +45,8 @@
                             </button>
                         </div>
                         <div class="p-6">
-                            <ol class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base">
+                            <ol id="language-edit-modal-stepper"
+                                class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base">
                                 <li class="flex md:w-full items-center whitespace-nowrap text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
                                     <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
                                         <svg aria-hidden="true"
@@ -56,11 +57,20 @@
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd">
                                             </path>
                                         </svg>
+                                        <span id="language-edit-modal-stepper-num-1" class="hidden mr-2">1</span>
                                         コンパイルコマンド登録
                                     </span>
                                 </li>
                                 <li class="flex items-center whitespace-nowrap">
-                                    <span class="mr-2">2</span>
+                                    <svg aria-hidden="true"
+                                         class="hidden w-4 h-4 mr-2 sm:w-5 sm:h-5"
+                                         fill="currentColor"
+                                         viewBox="0 0 20 20"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd">
+                                        </path>
+                                    </svg>
+                                    <span id="language-edit-modal-stepper-num-2" class="mr-2">2</span>
                                     実行・実行比較コマンド登録
                                 </li>
                             </ol>
@@ -113,6 +123,7 @@
                                 <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button id="language-edit-modal-compilerule-tab-contents-next-button"
                                             type="button"
+                                            onclick="languageEditModal.changeStepper(2)"
                                             class="ml-auto first-line:text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         次へ
                                     </button>
@@ -255,14 +266,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex items-center w-full p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                <div class="flex items-center w-full p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button id="language-edit-modal-executionrule-tab-contents-back-button"
                                             type="button"
+                                            onclick="languageEditModal.changeStepper(1)"
                                             class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                                         戻る
                                     </button>
                                     <button id="language-edit-modal-executionrule-tab-contents-save-button"
                                             type="submit"
+                                            onclick="languageEditModal.changeStepper(2)"
                                             class="ml-auto first-line:text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         保存
                                     </button>
@@ -1033,6 +1046,9 @@
                 this.availableLanguages = [{{ availableLanguages|map(x => "'#{x}'")|join(", ")|raw }}];
                 this.languagesToRemoveEl = document.querySelector("#language-edit-modal-languages-to-remove");
 
+                this.stepperEl = document.querySelector("#language-edit-modal-stepper");
+                this.stepperNum = 1;
+
                 this.stepperTab = new Tabs([{
                     id: "compilerule",
                     triggerEl: document.querySelector("#language-edit-modal-executionrule-tab-contents-back-button"),
@@ -1085,6 +1101,27 @@
                 let language = el.selectedOptions[0].getAttribute("language");
                 this.executionRuleTabs.language.sourcecode.show(language);
                 this.executionRuleTabs.language.file.show(language);
+            }
+
+            changeStepper(num) {
+                let nextIdx = num - 1;
+                let currentIdx = this.stepperNum - 1;
+
+                let currentListItemEl = this.stepperEl.querySelectorAll("li")[currentIdx];
+                let currentSvgEl = currentListItemEl.querySelector("svg");
+                let currentNumEl = currentListItemEl.querySelector("span[id^='language-edit-modal-stepper-num-']");
+                currentListItemEl.classList.remove("text-blue-600", "dark:text-blue-500");
+                currentSvgEl.classList.add("hidden");
+                currentNumEl.classList.remove("hidden");
+
+                let nextListItemEl = this.stepperEl.querySelectorAll("li")[nextIdx];
+                let nextSvgEl = nextListItemEl.querySelector("svg");
+                let nextNumEl = nextListItemEl.querySelector("span[id^='language-edit-modal-stepper-num-']");
+                nextListItemEl.classList.add("text-blue-600", "dark:text-blue-500");
+                nextSvgEl.classList.remove("hidden");
+                nextNumEl.classList.add("hidden");
+
+                this.stepperNum = num;
             }
 
             toggleLanguage(e) {
