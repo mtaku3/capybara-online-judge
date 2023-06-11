@@ -26,8 +26,8 @@
         "[php]": {
           "editor.defaultFormatter": "junstyle.php-cs-fixer"
         },
-        "djlint.formatJs": true,
-        "djlint.formatCss": true,
+        "djlint.formatJs": false,
+        "djlint.formatCss": false,
         "php-cs-fixer.executablePath": "${extensionPath}/php-cs-fixer.phar",
         "intelephense.stubs": [
           "apache",
