@@ -43,7 +43,7 @@ class RegisterController
 
     public function get(Request $req, AbstractResponse $res)
     {
-        $res->body($this->Twig->render("auth/register.twig"))->send();
+        $res->body($this->Twig->render("Auth/Register.twig"))->send();
     }
 
     public function handleForm(Request $req, AbstractResponse $res)
@@ -53,7 +53,7 @@ class RegisterController
                 new CreateUserRequest($req->username, $req->password, false)
             );
         } catch (Exception $e) {
-            $res->body($this->Twig->render("auth/register.twig", [
+            $res->body($this->Twig->render("Auth/Register.twig", [
                 "error" => "ユーザー名が既に使用されているか、パスワードが無効です"
             ]))->send();
             return;

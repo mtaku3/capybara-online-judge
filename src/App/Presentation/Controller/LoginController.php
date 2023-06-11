@@ -60,7 +60,7 @@ class LoginController
      */
     public function get(Request $req, Response $res): void
     {
-        $res->body($this->Twig->render("auth/login.twig"));
+        $res->body($this->Twig->render("Auth/Login.twig"));
     }
 
     /**
@@ -86,7 +86,7 @@ class LoginController
 
             $res->redirect("/");
         } catch (WrongPasswordException|UserNotFoundException) {
-            $res->body($this->Twig->render("auth/login.twig", [
+            $res->body($this->Twig->render("Auth/Login.twig", [
                 "error" => "ユーザー名、またはパスワードが間違っています"
             ]));
         }
