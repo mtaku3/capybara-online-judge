@@ -136,7 +136,6 @@ class TestCaseController
 
             $res->body(
                 $this->Twig->render("TestCases.twig", [
-                    "problemId" => $problemId,
                     "problem" => $getProblemByIdResponse->Problem,
                     "testCases" => $getProblemByIdResponse->Problem->getTestCases()
                 ])

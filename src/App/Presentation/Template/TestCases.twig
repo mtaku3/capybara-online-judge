@@ -1,10 +1,12 @@
-{% set activeTab = 'testcases' %}
+{% import "Component/Libraries.twig" as libraries %}
 {% set availableLanguages = [ "C", "CPP" ] %}
-{% extends "Component/ProblemContainer.twig" %}
+{% extends "Template.twig" %}
 {% block head %}
-    {% include "Component/filepond.twig" %}
+    {{ libraries.filepond() }}
 {% endblock head %}
-{% block contents %}
+{% block body %}
+    {% embed "Component/ProblemContainer.twig" with { "activeTab": "testcases" } %}
+    {% block contents %}
     <div class="w-full relative">
         <div class="flex mb-6">
             <button type="button"
@@ -1419,4 +1421,6 @@
             editModalTabs[testCaseId].file.show(executionRuleId);
         }
     </script>
-{% endblock contents %}
+    {% endblock contents %}
+    {% endembed %}
+{% endblock body %}

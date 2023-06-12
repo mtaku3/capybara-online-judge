@@ -1,4 +1,7 @@
 {% extends "Template.twig" %}
 {% block body %}
-    {% include "Component/NavBar.twig" %}
+    {% embed "Component/ProblemContainer.twig" with { "activeTab": "submissions" } %}
+        {% block contents %}
+        {% endblock contents %}
+    {% endembed %}
 {% endblock body %}
