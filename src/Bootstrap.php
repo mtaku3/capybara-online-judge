@@ -202,7 +202,7 @@ $containerBuilder->addDefinitions([
         return new DeleteProblemUseCase($c->get("ProblemRepository"));
     },
     "DeleteSubmissionUseCase" => function (ContainerInterface $c) {
-        return new DeleteSubmissionUseCase($c->get("SubmissionRepository"));
+        return new DeleteSubmissionUseCase($c->get("SubmissionRepository"), $c->get("FileRepository"));
     },
     "DisableTestCaseUseCase" => function (ContainerInterface $c) {
         return new DisableTestCaseUseCase($c->get("ProblemRepository"));

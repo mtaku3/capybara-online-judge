@@ -8,6 +8,7 @@ use App\Domain\File\IFileRepository;
 use App\Domain\Submission\Entity\Submission;
 use App\Domain\Problem\Entity\TestCase;
 use App\Domain\Common\ValueObject\Language;
+use App\Domain\Submission\Entity\SourceFile;
 use App\Domain\Submission\ValueObject\SubmissionType;
 use App\Infrastructure\Repository\File\Exception\FileMustBeArchivedAsTarballException;
 use Exception;
@@ -127,5 +128,18 @@ class FileRepository implements IFileRepository
         }
 
         return $length;
+    }
+
+    /**
+     * @param SourceFile $sourceFile
+     * @return void
+     */
+    public function deleteSourceFile(SourceFile $sourceFile): void
+    {
+        $path = $sourceFile->getPath();
+
+        if (file_exists($path)) {
+            unlink($path);
+        }
     }
 }
