@@ -1,5 +1,5 @@
 {% from "Component/NavBar.twig" import NavBar %}
-{% set ActiveStyle = 'inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500' %}
+{% set ActiveStyle = 'inline-block p-4 text-blue-600 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500' %}
 {% set InactiveStyle = 'inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300' %}
 <div class="flex flex-col h-screen w-screen space-y-4 bg-white dark:bg-gray-900">
     {{ NavBar(user, false) }}
@@ -10,7 +10,7 @@
                         type="button"
                         onclick='location.href = "/problem/{{ problemId }}"'
                         aria-selected="{{ activeTab == 'problem' ? 'true' : 'false' }}"
-                        class="{{ activeTab == 'problem' ? ActiveStyle : InactiveStyle }}">問題</button>
+                        class="{{ activeTab == 'problem' ? ActiveStyle : InactiveStyle }} rounded-tl-lg">問題</button>
             </li>
             {% if user %}
                 <li class="mr-2">
