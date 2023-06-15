@@ -30,6 +30,7 @@
     }
   },
   "require-dev": {
-    "bartlett/umlwriter": "^3"
+    "bartlett/umlwriter": "^3",
+    "phpunit/phpunit": "^10"
   }
 }
