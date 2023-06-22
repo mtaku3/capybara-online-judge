@@ -1,13 +1,16 @@
 {% extends "Template.twig" %}
+{#}{% set languages = ["C", "CPP"] %}
+#}
 {% block body %}
     {% include "Component/NavBar.twig" %}
+    {#}{{ dump(problemSubmittableLanguages) }}#}
     <div class="w-full h-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
         <div class="place-self-center display:flex">
             <a href="http://localhost/problem"
                class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">問題</a>
             {% if 1 %}
-                <a href="http://localhost/problem"
-                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">提出</a>
+                <a href="http://localhost//problem/{{ problemId }}/submissions"
+                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">提出結果</a>
             {% endif %}
         </div>
         <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700">
@@ -51,14 +54,14 @@
                     {% endif %}
                     {% if 1 %}
                         <div class="w-1/2 bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                            <div class="place-self-center display:flex">
+                            <div class=" display:flex ">
                                 <a href="http://localhost/problem"
-                                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">ソースコードを入力</a>
+                                   class=" font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">ソースコードを入力</a>
                                 <a href="http://localhost/problem"
-                                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">ファイルでアップロード</a>
+                                   class=" font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">ファイルでアップロード</a>
                                 <button id="dropdownDefaultButton"
                                         data-dropdown-toggle="dropdown"
-                                        class="text-lg bg-white hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        class=" ml-auto text-lg bg-white hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-right inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         type="button">
                                     C
                                     <svg class="w-4 h-4 ml-2"
@@ -75,6 +78,14 @@
                                      class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                         aria-labelledby="dropdownDefaultButton">
+                                        {#}
+                                        {% for i in problemSubmittableLanguages %}
+                                            <li>
+                                                <a href="#"
+                                                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ languages[i] }}</a>
+                                            </li>
+                                        {% endfor %}
+                                        #}
                                         <li>
                                             <a href="#"
                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
