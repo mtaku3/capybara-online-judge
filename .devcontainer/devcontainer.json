@@ -5,7 +5,8 @@
   "workspaceFolder": "/workspace",
   "forwardPorts": [80, 5432, 6379],
   "remoteEnv": {
-    "PHP_CS_FIXER_IGNORE_ENV": "1"
+    "PHP_CS_FIXER_IGNORE_ENV": "1",
+    "PATH": "${containerEnv:PATH}:/workspace/vendor/phpunit/phpunit"
   },
   "customizations": {
     "vscode": {
