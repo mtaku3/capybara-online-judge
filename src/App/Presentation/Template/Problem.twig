@@ -1,18 +1,44 @@
 {% extends "Template.twig" %}
 {#}{% set languages = ["C", "CPP"] %}
 #}
+{% block head %}
+    {% include "Component/texme.twig" %}
+    {% include "Component/codemirror.twig" %}
+    <script>
+        window.onload = function() {
+            var inputEl = $("#input")[0];
+            var output = texme.render(inputEl.value);
+            var renderEl = $("#render")[0];
+            renderEl.innerHTML = output;
+            window.MathJax.texReset();
+            window.MathJax.typesetPromise();
+
+            var editor = CodeMirror.fromTextArea($("#code")[0], {
+                mode: "text/x-csrc",
+                lineNumbers: true,
+                extraKeys: {
+                    "Ctrl-Space": "autocomplete"
+                }
+            });
+            editor.setSize("80%", "100%");
+        }
+    </script>
+{% endblock head %}
 {% block body %}
     {% include "Component/NavBar.twig" %}
-    {#}{{ dump(problemSubmittableLanguages) }}#}
-    {% set i = 1 %}{# 未ログイン時：０　ログイン時：１　管理者ログイン　２ #}
     <div class="w-full h-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
         <div class="place-self-center display:flex">
             <a href="http://localhost/problem"
                class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">問題</a>
-            {% if i %}
+            {% if user %}
                 {#ログイン時表示#}
                 <a href="http://localhost//problem/{{ problemId }}/submissions"
                    class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">提出結果</a>
+            {% endif %}
+            {% if user.getIsAdmin %}
+                {#ログイン時表示#}
+                <a href="http://localhost//problem/{{ problemId }}/testcases"
+                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">テストケース</a>
             {% endif %}
         </div>
         <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700">
@@ -22,14 +48,21 @@
                         <div class ="w-full display:flex">
                             <div>
                                 <h2 class="text-4xl font-extrabold dark:text-white">{{ problemTitle }}</h2>
-                                {% set k = 1 %}
-                                {% if k == 1 %}
+                                {% if user.getIsAdmin %}
                                     {#管理者ログイン時#}
                                     <!-- Modal toggle -->
                                     <button data-modal-target="defaultModal"
                                             data-modal-toggle="defaultModal"
                                             class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                            type="button">Toggle modal</button>
+                                            type="button">
+                                        <svg class="w-5 h-5 ml-2"
+                                             fill="currentColor"
+                                             viewBox="0 0 20 20"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
+                                            <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
+                                        </svg>
+                                    </button>
                                     <!-- Main modal -->
                                     <div id="defaultModal"
                                          tabindex="-1"
@@ -84,48 +117,40 @@
                             </div>
                         </div>
                         <p class="my-4 text-lg text-gray-500">時間制限：{{ problemTimeConstraint }} メモリ制限：{{ problemMemoryConstraint }}</p>
-                        <p class="my-4 text-lg text-gray-500">{{ problemBody }}</p>
+                        <div id="render" class="markdown"></div>
+                        <textarea id="input" hidden>
+                        {{ problemBody|raw }}
+                        </textarea>
                     </div>
-                    {% if i == 0 %}
-                        {#未ログイン時#}
-                        <div class="w-1/2  place-self-center ">
-                            <div class="w-full p-6 obj place-self-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                <p class="mb-3 font-normal　text-center　text-gray-700 dark:text-gray-400">プログラムを提出するにはログインしてください</p>
-                                <a href="http://localhost/auth/login"
-                                   class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    ログイン
-                                    <svg aria-hidden="true"
-                                         class="w-4 h-4 ml-2 -mr-1"
-                                         fill="currentColor"
-                                         viewBox="0 0 20 20"
-                                         xmlns="http://localhost/auth/login">
-                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
-                                        </path>
-                                    </svg>
-                                </a>
-                                <a href="http://localhost/auth/register"
-                                   class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    新規登録
-                                    <svg aria-hidden="true"
-                                         class="w-4 h-4 ml-2 -mr-1"
-                                         fill="currentColor"
-                                         viewBox="0 0 20 20"
-                                         xmlns="http://localhost/auth/register">
-                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
-                                        </path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    {% endif %}
-                    {% if i == 1 %}
+                    {% if user %}
                         {#ログイン時#}
                         <div class="w-1/2 bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                            <div class=" display:flex ">
-                                <a href="http://localhost/problem"
-                                   class=" font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">ソースコードを入力</a>
-                                <a href="http://localhost/problem"
-                                   class=" font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">ファイルでアップロード</a>
+                            <ul class="w-full flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 "
+                                id="defaultTab"
+                                data-tabs-toggle="#defaultTabContent"
+                                role="tablist">
+                                <li class="mr-2">
+                                    <button id="source-tab"
+                                            data-tabs-target="#source"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="source"
+                                            aria-selected="true"
+                                            class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
+                                        ソースコードで提出
+                                    </button>
+                                </li>
+                                <li class="mr-2">
+                                    <button id="file-tab"
+                                            data-tabs-target="#file"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="file"
+                                            aria-selected="false"
+                                            class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
+                                        ファイルでアップロード
+                                    </button>
+                                </li>
                                 <button id="dropdownDefaultButton"
                                         data-dropdown-toggle="dropdown"
                                         class=" ml-auto text-lg bg-white hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-right inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -171,34 +196,31 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
-                            {% set j = 1 %} {# ０：ソースコード選択　１：ファイル提出選択　#}
-                            {% if j == 0  %}
+                            </ul>
+                            <div id="defaultTabContent">
                                 {#ソースコード選択時#}
-                                <div class="w-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700">
-                                    <form>
-                                        <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                                            <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-                                                <label for="comment" class="sr-only">Your comment</label>
-                                                <textarea id="comment"
-                                                          rows="4"
-                                                          class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                                                          placeholder="Write a code"
-                                                          required></textarea>
-                                            </div>
-                                            <div class="flex place-self-end px-3 py-2 border-t dark:border-gray-600 display:flex justify-end">
-                                                <button type="submit"
-                                                        class="inline-flex items-center  py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                                                    提出
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                <div class="w-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
+                                     id="source">
+                                    <textarea id="code" name="code">
+#include <stdio.h>
+int main() {
+    int number;
+   
+    printf("Enter an integer: ");  
+    
+    // reads and stores input
+    scanf("%d", &number);
+
+    // displays output
+    printf("You entered: %d", number);
+    
+    return 0;
+}
+{{problemBody}}
+</textarea>
                                 </div>
-                            {% endif %}
-                            {% if j == 1 %}
                                 {#ファイル提出選択時#}
-                                <div class="flex items-center justify-center w-full">
+                                <div class="flex hidden items-center justify-center w-full"id="file">
                                     <label for="dropzone-file"
                                            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -219,11 +241,41 @@
                                         <input id="dropzone-file" type="file" class="hidden" />
                                     </label>
                                 </div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </div>
-            </a>
+                            </div>
+                        {% else %}
+                            {#未ログイン時#}
+                            <div class="w-1/2  place-self-center ">
+                                <div class="w-full p-6 obj place-self-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                    <p class="mb-3 font-normal　text-center　text-gray-700 dark:text-gray-400">プログラムを提出するにはログインしてください</p>
+                                    <a href="http://localhost/auth/login"
+                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        ログイン
+                                        <svg aria-hidden="true"
+                                             class="w-4 h-4 ml-2 -mr-1"
+                                             fill="currentColor"
+                                             viewBox="0 0 20 20"
+                                             xmlns="http://localhost/auth/login">
+                                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
+                                            </path>
+                                        </svg>
+                                    </a>
+                                    <a href="http://localhost/auth/register"
+                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        新規登録
+                                        <svg aria-hidden="true"
+                                             class="w-4 h-4 ml-2 -mr-1"
+                                             fill="currentColor"
+                                             viewBox="0 0 20 20"
+                                             xmlns="http://localhost/auth/register">
+                                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
+                                            </path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
         </div>
-    </div>
-{% endblock body %}
+    {% endblock body %}
