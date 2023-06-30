@@ -99,11 +99,11 @@ class Problem
      */
     public static function Create(string $title, string $body, int $timeConstraint, int $memoryConstraint, array $compileRuleDTOs, array $testCaseDTOs): Problem
     {
-        if ($timeConstraint <= 0 && self::MaxTimeConstraint < $timeConstraint) {
+        if ($timeConstraint <= 0 || self::MaxTimeConstraint < $timeConstraint) {
             throw new InvalidTimeConstraintException();
         }
 
-        if ($memoryConstraint <= 0 && self::MaxMemoryConstraint < $memoryConstraint) {
+        if ($memoryConstraint <= 0 || self::MaxMemoryConstraint < $memoryConstraint) {
             throw new InvalidMemoryConstraintException();
         }
 
