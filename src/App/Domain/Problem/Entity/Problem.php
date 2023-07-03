@@ -281,14 +281,14 @@ class Problem
     /**
      * @param CompileRuleId $compileRuleId
      * @return void
-     * @throws AtLeastOneEnabledTestCaseRequiredException
+     * @throws AtLeastOneCompileRuleRequiredException
      * @throws InvalidArgumentException
      * @throws CorruptedEntityException
      */
     public function removeCompileRule(CompileRuleId $compileRuleId): void
     {
         if (count($this->CompileRules) === 1) {
-            throw new AtLeastOneEnabledTestCaseRequiredException();
+            throw new AtLeastOneCompileRuleRequiredException();
         }
 
         $compileRule = current(array_filter($this->CompileRules, fn ($e) => $e->getId()->equals($compileRuleId)));
