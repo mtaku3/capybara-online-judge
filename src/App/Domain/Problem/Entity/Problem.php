@@ -419,6 +419,10 @@ class Problem
      */
     public function disableTestCase(TestCaseId $testCaseId): void
     {
+        if (count(array_filter($this->TestCases, fn ($e) => !$e->getIsDisabled())) === 1) {
+            throw new AtLeastOneEnabledTestCaseRequiredException();
+        }
+
         if ($testCase = current(array_filter($this->TestCases, fn ($e) => $e->getId()->equals($testCaseId)))) {
             $testCase->_disable();
         } else {
