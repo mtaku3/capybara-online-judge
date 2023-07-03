@@ -2,13 +2,12 @@
 
 declare(strict_type=1);
 
+use App\Domain\Common\Exception\InvalidDTOException;
 use App\Domain\Problem\Entity\Problem;
 use App\Domain\Problem\Factory\CompileRuleFactoryDTO;
 use PHPUnit\Framework\TestCase;
-use App\Domain\User\Entity\User;
-use App\Domain\User\Exception\InvalidPasswordException;
-use App\Domain\User\Exception\InvalidUsernameException;
 use App\Domain\Common\ValueObject\Language;
+use App\Domain\Problem\Exception\AtLeastOneEnabledTestCaseRequiredException;
 use App\Domain\Problem\Exception\InvalidMemoryConstraintException;
 use App\Domain\Problem\Exception\InvalidTimeConstraintException;
 use App\Domain\Problem\Factory\ExecutionRuleFactoryDTO;
@@ -69,7 +68,7 @@ class ProblemTest extends TestCase
         }
     }
 
-    public function test_does_one_language_have_just_one_compileRule()
+    public function test_does_one_language_have_one_compileRule()
     {
         $this->expectException(InvalidDTOException::class);
 
@@ -83,9 +82,9 @@ class ProblemTest extends TestCase
         $ExecutionRuleDTOs = array(new ExecutionRuleFactoryDTO($langueageC, 'right', 'right', 'right', 'right'));
         $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
-        
+
     }
-    public function test_does_one_language_have_just_one_executionRule()
+    public function test_does_one_language_have_one_executionRule()
     {
         $this->expectException(InvalidDTOException::class);
         $langueageC = Language::C;
@@ -112,11 +111,6 @@ class ProblemTest extends TestCase
 
     // public function test_problm_atLeastOneEnabledTestCase_whenDisable()
     // {
-    //     $this->expectException(AtLeastOneEnabledTestCaseRequiredException::class);
-    //     $langueageC = Language::C;
-    //     $compileRuleDTOs = array(new CompileRuleFactoryDTO($langueageC, 'rightComand1', 'rightComand1'));
-    //     $testCaseDTOs = array();
-    //     $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
     // }
 
     public function test_allSubmittableLanguage_excutionRule()
@@ -135,7 +129,7 @@ class ProblemTest extends TestCase
         $ExecutionRuleDTOs = array(
             new ExecutionRuleFactoryDTO($langueageC, 'right1', 'right1', 'right1', 'right1'),
         );
-        $testCaseDTOs = array();
+        $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
     }
 }
