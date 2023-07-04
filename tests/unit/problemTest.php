@@ -12,6 +12,7 @@ use App\Domain\Problem\Exception\InvalidMemoryConstraintException;
 use App\Domain\Problem\Exception\InvalidTimeConstraintException;
 use App\Domain\Problem\Factory\ExecutionRuleFactoryDTO;
 use App\Domain\Problem\Factory\TestCaseFactoryDTO;
+use App\Domain\Problem\ValueObject\TestCaseId;
 
 class ProblemTest extends TestCase
 {
@@ -110,9 +111,16 @@ class ProblemTest extends TestCase
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
     }
 
-    // public function test_atLeastOneEnabledTestCase_whenDisable()
-    // {
-    // }
+    public function test_atLeastOneEnabledTestCase_whenDisable()
+    {
+        $this->expectException(AtLeastOneEnabledTestCaseRequiredException::class);
+        $langueageC = Language::C;
+        $compileRuleDTOs = array(new CompileRuleFactoryDTO($langueageC, 'rightComand1', 'rightComand1'));
+        $ExecutionRuleDTOs = array(new ExecutionRuleFactoryDTO($langueageC, 'right', 'right', 'right', 'right'));
+        $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
+        $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
+        $problem->disableTestCase(new TestCaseId('right'), );
+    }
 
     public function test_excutionRule_inTestCase_registered_allSubmittableLanguage()
     {
