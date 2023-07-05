@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_type=1);
+declare(strict_types=1);
 
 use App\Domain\Common\Exception\InvalidDTOException;
 use App\Domain\Problem\Entity\Problem;
@@ -16,7 +16,7 @@ use App\Domain\Problem\ValueObject\TestCaseId;
 
 class ProblemTest extends TestCase
 {
-    public function test_timeConstraint_overflow()
+    public function test_timeConstraint_exceeds()
     {
         $this->expectException(InvalidTimeConstraintException::class);
         $langueage  = Language::C;
@@ -26,7 +26,7 @@ class ProblemTest extends TestCase
         Problem::Create('rightTitle', 'rightBoby', 10001, 1, $compileRuleDTOs, $testCaseDTOs);
     }
 
-    public function test_timeConstraint_underflow()
+    public function test_timeConstraint_subceeds()
     {
         $this->expectException(InvalidTimeConstraintException::class);
         $langueage = Language::C;
@@ -36,7 +36,7 @@ class ProblemTest extends TestCase
         Problem::Create('rightTitle', 'rightBoby', 0, 1, $compileRuleDTOs, $testCaseDTOs);
     }
 
-    public function test_memoryConstraint_overflow()
+    public function test_memoryConstraint_exceeds()
     {
         $this->expectException(InvalidMemoryConstraintException::class);
         $langueage = Language::C;
@@ -46,7 +46,7 @@ class ProblemTest extends TestCase
         Problem::Create('rightTitle', 'rightBoby', 1, 2 * 1024 * 1024+1, $compileRuleDTOs, $testCaseDTOs);
     }
 
-    public function test_memoryConstraint_underflow()
+    public function test_memoryConstraint_subceeds()
     {
         $this->expectException(InvalidMemoryConstraintException::class);
         $langueage = Language::C;
@@ -58,7 +58,7 @@ class ProblemTest extends TestCase
 
 
 
-    public function test_is_disableFlag_faluse_whenProblemCreate()
+    public function test_whether_testcases_being_disabled_at_instantiation()
     {
         $langueageC = Language::C;
         $compileRuleDTOs = array(new CompileRuleFactoryDTO($langueageC, 'rightComand', 'rightComand'));
@@ -71,7 +71,7 @@ class ProblemTest extends TestCase
         }
     }
 
-    public function test_one_language_have_one_compileRule()
+    public function test_multiple_compilerules_with_the_same_language_at_instantiation()
     {
         $this->expectException(InvalidDTOException::class);
 
@@ -86,7 +86,7 @@ class ProblemTest extends TestCase
         $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
     }
-    public function test_one_language_have_one_executionRule()
+    public function test_multiple_executionrules_with_the_same_language_at_instantiation()
     {
         $this->expectException(InvalidDTOException::class);
         $langueageC = Language::C;
@@ -102,7 +102,7 @@ class ProblemTest extends TestCase
     }
 
 
-    public function test_atLeastOneEnabledTestCase_whenCeate()
+    public function test_whether_problem_instantiation_without_testcase_prohibited()
     {
         $this->expectException(AtLeastOneEnabledTestCaseRequiredException::class);
         $langueageC = Language::C;
@@ -111,7 +111,7 @@ class ProblemTest extends TestCase
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
     }
 
-    public function test_atLeastOneEnabledTestCase_whenDisable()
+    public function test_whether_disabling_all_testcases_prohibited()
     {
         $this->expectException(AtLeastOneEnabledTestCaseRequiredException::class);
         $langueageC = Language::C;
@@ -119,10 +119,10 @@ class ProblemTest extends TestCase
         $ExecutionRuleDTOs = array(new ExecutionRuleFactoryDTO($langueageC, 'right', 'right', 'right', 'right'));
         $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
-        $problem->disableTestCase(new TestCaseId('right'), );
+        $problem->disableTestCase($problem->getTestCases[0]->getId());
     }
 
-    public function test_excutionRule_inTestCase_registered_allSubmittableLanguage()
+    public function test_whether_problem_instantiation_with_mismatching_compilerules_and_executionrules_prohibited()
     {
         $this->expectException(InvalidDTOException::class);
         $langueageC = Language::C;
