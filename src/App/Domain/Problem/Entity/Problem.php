@@ -255,7 +255,7 @@ class Problem
             $requiredLanguages = $newlyAddedLanguages;
             $executionRules = $testCase->getExecutionRules();
             foreach ($executionRuleDTOsForTestCase as $executionRuleDTO) {
-                if (array_filter($requiredLanguages, fn ($e) => $e === $executionRuleDTO->Language) === false) {
+                if (current(array_filter($requiredLanguages, fn ($e) => $e === $executionRuleDTO->Language)) === false) {
                     throw new InvalidDTOException();
                 }
 
