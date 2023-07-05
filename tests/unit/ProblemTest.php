@@ -57,8 +57,6 @@ class ProblemTest extends TestCase
         Problem::Create('rightTitle', 'rightBoby', 1, 0, $compileRuleDTOs, $testCaseDTOs);
     }
 
-
-
     public function test_whether_testcases_being_disabled_at_instantiation()
     {
         $langueageC = Language::C;
@@ -88,7 +86,6 @@ class ProblemTest extends TestCase
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
     }
 
-
     public function test_multiple_compilerules_with_the_same_language_at_addition()
     {
         $this->expectException(InvalidDTOException::class);
@@ -105,7 +102,6 @@ class ProblemTest extends TestCase
         $executionRuleDTOsForTestCase = array(new ExecutionRuleFactoryDTOWithTestCaseId($problem->getTestCases()[0]->getId(), $langueageCPP, 'right', 'right', 'right', 'right'));
         $problem -> createCompileRules($compileRuleDTOs2, $executionRuleDTOsForTestCase);
     }
-
 
     public function test_multiple_executionrules_with_the_same_language_at_instantiation()
     {

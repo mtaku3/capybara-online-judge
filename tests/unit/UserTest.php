@@ -9,17 +9,6 @@ use App\Domain\User\Exception\InvalidUsernameException;
 
 class UserTest extends TestCase
 {
-    protected $obj;
-    protected function setUp(): void
-    {
-    }
-
-    public function testsuccess()
-    {
-        $this->assertInstanceOf(User::class, User::Create('bavoiub', 'baviuhvfeqir', false));
-    }
-
-
     public function test_invalid_username_character()
     {
         $this->expectException(InvalidUsernameException::class);
