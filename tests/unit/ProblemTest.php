@@ -11,6 +11,7 @@ use App\Domain\Problem\Exception\AtLeastOneEnabledTestCaseRequiredException;
 use App\Domain\Problem\Exception\InvalidMemoryConstraintException;
 use App\Domain\Problem\Exception\InvalidTimeConstraintException;
 use App\Domain\Problem\Factory\ExecutionRuleFactoryDTO;
+use App\Domain\Problem\Factory\ExecutionRuleFactoryDTOWithTestCaseId;
 use App\Domain\Problem\Factory\TestCaseFactoryDTO;
 use App\Domain\Problem\ValueObject\TestCaseId;
 
@@ -86,6 +87,26 @@ class ProblemTest extends TestCase
         $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
     }
+
+
+    public function test_multiple_compilerules_with_the_same_language_at_addition()
+    {
+        $this->expectException(InvalidDTOException::class);
+
+        $langueageC = Language::C;
+        $langueageCPP = Language::CPP;
+
+        $compileRuleDTOs1 = array(new CompileRuleFactoryDTO($langueageC, 'rightComand1', 'rightComand1'),);
+        $ExecutionRuleDTOs = array(new ExecutionRuleFactoryDTO($langueageC, 'right', 'right', 'right', 'right'));
+        $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
+        $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs1, $testCaseDTOs);
+
+        $compileRuleDTOs2 = array(new CompileRuleFactoryDTO($langueageC, 'rightComand2', 'rightComand2'));
+        $executionRuleDTOsForTestCase = array(new ExecutionRuleFactoryDTOWithTestCaseId($problem->getTestCases()[0]->getId(), $langueageCPP, 'right', 'right', 'right', 'right'));
+        $problem -> createCompileRules($compileRuleDTOs2, $executionRuleDTOsForTestCase);
+    }
+
+
     public function test_multiple_executionrules_with_the_same_language_at_instantiation()
     {
         $this->expectException(InvalidDTOException::class);
@@ -101,6 +122,22 @@ class ProblemTest extends TestCase
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
     }
 
+    public function test_multiple_executionrules_with_the_same_language_at_addition()
+    {
+        $this->expectException(InvalidDTOException::class);
+
+        $langueageC = Language::C;
+        $langueageCPP = Language::CPP;
+
+        $compileRuleDTOs1 = array(new CompileRuleFactoryDTO($langueageC, 'rightComand1', 'rightComand1'));
+        $ExecutionRuleDTOs = array( new ExecutionRuleFactoryDTO($langueageC, 'right1', 'right1', 'right1', 'right1'),);
+        $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
+        $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs1, $testCaseDTOs);
+
+        $compileRuleDTOs2 = array(new CompileRuleFactoryDTO($langueageCPP, 'rightComand2', 'rightComand2'));
+        $executionRuleDTOsForTestCase = array(new ExecutionRuleFactoryDTOWithTestCaseId($problem->getTestCases()[0]->getId(), $langueageC, 'right', 'right', 'right', 'right'));
+        $problem -> createCompileRules($compileRuleDTOs2, $executionRuleDTOsForTestCase);
+    }
 
     public function test_whether_problem_instantiation_without_testcase_prohibited()
     {
@@ -119,7 +156,7 @@ class ProblemTest extends TestCase
         $ExecutionRuleDTOs = array(new ExecutionRuleFactoryDTO($langueageC, 'right', 'right', 'right', 'right'));
         $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
-        $problem->disableTestCase($problem->getTestCases[0]->getId());
+        $problem->disableTestCase($problem->getTestCases()[0]->getId());
     }
 
     public function test_whether_problem_instantiation_with_mismatching_compilerules_and_executionrules_prohibited()
