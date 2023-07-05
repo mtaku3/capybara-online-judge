@@ -4,6 +4,7 @@
 {% block head %}
     {% include "Component/texme.twig" %}
     {% include "Component/codemirror.twig" %}
+    {% include "Component/filepond.twig" %}
     <script>
         window.onload = function() {
             var inputEl = $("#input")[0];
@@ -26,151 +27,163 @@
 {% endblock head %}
 {% block body %}
     {% include "Component/NavBar.twig" %}
-    <div class="w-full h-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
-        <div class="place-self-center display:flex">
-            <a href="http://localhost/problem"
-               class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">問題</a>
-            {% if user %}
-                {#ログイン時表示#}
-                <a href="http://localhost//problem/{{ problemId }}/submissions"
-                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">提出結果</a>
-            {% endif %}
-            {% if user.getIsAdmin %}
-                {#ログイン時表示#}
-                <a href="http://localhost//problem/{{ problemId }}/testcases"
-                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">テストケース</a>
-            {% endif %}
-        </div>
-        <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href="#" class="w-1/2">
-                <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  display: flex">
-                    <div class="w-full">
-                        <div class ="w-full display:flex">
-                            <div>
-                                <h2 class="text-4xl font-extrabold dark:text-white">{{ problemTitle }}</h2>
-                                {% if user.getIsAdmin %}
-                                    {#管理者ログイン時#}
-                                    <!-- Modal toggle -->
-                                    <button data-modal-target="defaultModal"
-                                            data-modal-toggle="defaultModal"
-                                            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                            type="button">
-                                        <svg class="w-5 h-5 ml-2"
-                                             fill="currentColor"
-                                             viewBox="0 0 20 20"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
-                                            <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
-                                        </svg>
-                                    </button>
-                                    <!-- Main modal -->
-                                    <div id="defaultModal"
-                                         tabindex="-1"
-                                         aria-hidden="true"
-                                         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                        <div class="relative w-full max-w-2xl max-h-full">
-                                            <!-- Modal content -->
-                                            <div class="relative w-full bg-white rounded-lg shadow dark:bg-gray-700">
-                                                <!-- Modal header -->
-                                                <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Terms of Service</h3>
-                                                    <button type="button"
-                                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                            data-modal-hide="defaultModal">
-                                                        <svg aria-hidden="true"
-                                                             class="w-5 h-5"
-                                                             fill="currentColor"
-                                                             viewBox="0 0 20 20"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd">
-                                                            </path>
-                                                        </svg>
-                                                        <span class="sr-only">Close modal</span>
-                                                    </button>
-                                                </div>
-                                                <!-- Modal body -->
-                                                <div class="p-6 space-y-6">
-                                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                                        With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
-                                                    </p>
-                                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                                        The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them.
-                                                    </p>
-                                                </div>
-                                                <!-- Modal footer -->
-                                                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                                                    <button data-modal-hide="defaultModal"
-                                                            type="button"
-                                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                        I accept
-                                                    </button>
-                                                    <button data-modal-hide="defaultModal"
-                                                            type="button"
-                                                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                                        Decline
-                                                    </button>
+    <div class="w-full h-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
+        <div class="w-1/2">
+            <div class="place-self-center display:flex">
+                <a href="https://localhost/problem"
+                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">
+                    問題
+                </a>
+                {% if user %}
+                    {#ログイン時表示#}
+                    <a href="https://localhost//problem/{{ problemId }}/submissions"
+                       class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">
+                        提出結果
+                    </a>
+                {% endif %}
+                {% if user.getIsAdmin %}
+                    {#管理者ログイン時表示#}
+                    <a href="https://localhost//problem/{{ problemId }}/testcases"
+                       class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">
+                        テストケース
+                    </a>
+                {% endif %}
+            </div>
+            <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700">
+                <a href="#" class="w-1/2">
+                    <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  display: flex">
+                        <div class="w-full">
+                            <div class="w-full display:flex">
+                                <div>
+                                    <h2 class="text-4xl font-extrabold dark:text-white">{{ problemTitle }}</h2>
+                                    {% if user.getIsAdmin %}
+                                        {#管理者ログイン時#}
+                                        <!-- Modal toggle -->
+                                        <button data-modal-target="defaultModal"
+                                                data-modal-toggle="defaultModal"
+                                                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                type="button">
+                                            <svg class="w-5 h-5 ml-2"
+                                                 fill="currentColor"
+                                                 viewBox="0 0 20 20"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
+                                                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
+                                            </svg>
+                                        </button>
+                                        <!-- Main modal -->
+                                        <div id="defaultModal"
+                                             tabindex="-1"
+                                             aria-hidden="true"
+                                             class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                            <div class="relative w-full max-w-2xl max-h-full">
+                                                <!-- Modal content -->
+                                                <div class="relative w-full bg-white rounded-lg shadow dark:bg-gray-700">
+                                                    <!-- Modal header -->
+                                                    <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                                                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Terms of Service</h3>
+                                                        <button type="button"
+                                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                                data-modal-hide="defaultModal">
+                                                            <svg aria-hidden="true"
+                                                                 class="w-5 h-5"
+                                                                 fill="currentColor"
+                                                                 viewBox="0 0 20 20"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd">
+                                                                </path>
+                                                            </svg>
+                                                            <span class="sr-only">Close modal</span>
+                                                        </button>
+                                                    </div>
+                                                    <!-- Modal body -->
+                                                    <div class="p-6 space-y-6">
+                                                        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                                            With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
+                                                        </p>
+                                                        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                                            The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them.
+                                                        </p>
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                                        <button data-modal-hide="defaultModal"
+                                                                type="button"
+                                                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                            I accept
+                                                        </button>
+                                                        <button data-modal-hide="defaultModal"
+                                                                type="button"
+                                                                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                                            Decline
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endif %}
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                        <p class="my-4 text-lg text-gray-500">時間制限：{{ problemTimeConstraint }} メモリ制限：{{ problemMemoryConstraint }}</p>
-                        <div id="render" class="markdown"></div>
-                        <textarea id="input" hidden>
+                            <p class="my-4 text-lg text-gray-500">時間制限：{{ problemTimeConstraint }} メモリ制限：{{ problemMemoryConstraint }}</p>
+                            <div id="render" class="markdown"></div>
+                            <textarea id="input" hidden>
                         {{ problemBody|raw }}
                         </textarea>
+                        </div>
                     </div>
-                    {% if user %}
-                        {#ログイン時#}
-                        <div class="w-1/2 bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                            <ul class="w-full flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 "
-                                id="defaultTab"
-                                data-tabs-toggle="#defaultTabContent"
-                                role="tablist">
-                                <li class="mr-2">
-                                    <button id="source-tab"
-                                            data-tabs-target="#source"
-                                            type="button"
-                                            role="tab"
-                                            aria-controls="source"
-                                            aria-selected="true"
-                                            class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
-                                        ソースコードで提出
-                                    </button>
-                                </li>
-                                <li class="mr-2">
-                                    <button id="file-tab"
-                                            data-tabs-target="#file"
-                                            type="button"
-                                            role="tab"
-                                            aria-controls="file"
-                                            aria-selected="false"
-                                            class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                                        ファイルでアップロード
-                                    </button>
-                                </li>
-                                <button id="dropdownDefaultButton"
-                                        data-dropdown-toggle="dropdown"
-                                        class=" ml-auto text-lg bg-white hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-right inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                        type="button">
-                                    C
-                                    <svg class="w-4 h-4 ml-2"
-                                         aria-hidden="true"
-                                         fill="none"
-                                         stroke="currentColor"
-                                         viewBox="0 0 24 24"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </button>
-                                <!-- Dropdown menu -->
-                                <div id="dropdown"
-                                     class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                        aria-labelledby="dropdownDefaultButton">
-                                        {#}
+                </a>
+            </div>
+        </div>
+        <div class="w-1/2">
+            {% if user %}
+                {#ログイン時#}
+                <div class="w-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <ul class="w-full flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 "
+                        id="defaultTab"
+                        data-tabs-toggle="#defaultTabContent"
+                        role="tablist">
+                        <li class="mr-2">
+                            <button id="source-tab"
+                                    data-tabs-target="#source"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="source"
+                                    aria-selected="true"
+                                    class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
+                                ソースコードで提出
+                            </button>
+                        </li>
+                        <li class="mr-2">
+                            <button id="file-tab"
+                                    data-tabs-target="#file"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="file"
+                                    aria-selected="false"
+                                    class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
+                                ファイルでアップロード
+                            </button>
+                        </li>
+                        <button id="dropdownDefaultButton"
+                                data-dropdown-toggle="dropdown"
+                                class=" ml-auto text-lg bg-white hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-4 py-2.5 text-right inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                type="button">
+                            C
+                            <svg class="w-4 h-4 ml-2"
+                                 aria-hidden="true"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="dropdown"
+                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                aria-labelledby="dropdownDefaultButton">
+                                {#}
                                         {% for i in problemSubmittableLanguages %}
                                             <li>
                                                 <a href="#"
@@ -178,30 +191,30 @@
                                             </li>
                                         {% endfor %}
                                         #}
-                                        <li>
-                                            <a href="#"
-                                               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <li>
+                                    <a href="#"
+                                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                                </li>
                             </ul>
-                            <div id="defaultTabContent">
-                                {#ソースコード選択時#}
-                                <div class="w-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
-                                     id="source">
-                                    <textarea id="code" name="code">
+                        </div>
+                    </ul>
+                    <div id="defaultTabContent">
+                        {#ソースコード選択時#}
+                        <div class="w-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
+                             id="source">
+                            <textarea id="code" name="code">
 #include <stdio.h>
 int main() {
     int number;
@@ -218,64 +231,51 @@ int main() {
 }
 {{problemBody}}
 </textarea>
-                                </div>
-                                {#ファイル提出選択時#}
-                                <div class="flex hidden items-center justify-center w-full"id="file">
-                                    <label for="dropzone-file"
-                                           class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                            <svg aria-hidden="true"
-                                                 class="w-10 h-10 mb-3 text-gray-400"
-                                                 fill="none"
-                                                 stroke="currentColor"
-                                                 viewBox="0 0 24 24"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
-                                                </path>
-                                            </svg>
-                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                <span class="font-semibold">Click to upload</span> or drag and drop
-                                            </p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                                        </div>
-                                        <input id="dropzone-file" type="file" class="hidden" />
-                                    </label>
-                                </div>
-                            </div>
-                        {% else %}
-                            {#未ログイン時#}
-                            <div class="w-1/2  place-self-center ">
-                                <div class="w-full p-6 obj place-self-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                    <p class="mb-3 font-normal　text-center　text-gray-700 dark:text-gray-400">プログラムを提出するにはログインしてください</p>
-                                    <a href="http://localhost/auth/login"
-                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        ログイン
-                                        <svg aria-hidden="true"
-                                             class="w-4 h-4 ml-2 -mr-1"
-                                             fill="currentColor"
-                                             viewBox="0 0 20 20"
-                                             xmlns="http://localhost/auth/login">
-                                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
-                                            </path>
-                                        </svg>
-                                    </a>
-                                    <a href="http://localhost/auth/register"
-                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        新規登録
-                                        <svg aria-hidden="true"
-                                             class="w-4 h-4 ml-2 -mr-1"
-                                             fill="currentColor"
-                                             viewBox="0 0 20 20"
-                                             xmlns="http://localhost/auth/register">
-                                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
-                                            </path>
-                                        </svg>
-                                    </a>
-                                </div>
-                            </div>
-                        {% endif %}
+                        </div>
+                        {#ファイル提出選択時#}
+                        <div class="flex hidden items-center justify-center w-full"id="file">
+                            <input id="fileup" type="file">
+                        </div>
                     </div>
-                </a>
-            </div>
+                </div>
+            {% else %}
+                {#未ログイン時#}
+                <div class="w-1/2  place-self-center ">
+                    <div class="w-full p-6 obj place-self-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <p class="mb-3 font-normal　text-center　text-gray-700 dark:text-gray-400">プログラムを提出するにはログインしてください</p>
+                        <a href="https://localhost/auth/login"
+                           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            ログイン
+                            <svg aria-hidden="true"
+                                 class="w-4 h-4 ml-2 -mr-1"
+                                 fill="currentColor"
+                                 viewBox="0 0 20 20"
+                                 xmlns="http://localhost/auth/login">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
+                                </path>
+                            </svg>
+                        </a>
+                        <a href="https://localhost/auth/register"
+                           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            新規登録
+                            <svg aria-hidden="true"
+                                 class="w-4 h-4 ml-2 -mr-1"
+                                 fill="currentColor"
+                                 viewBox="0 0 20 20"
+                                 xmlns="http://localhost/auth/register">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
+                                </path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
-    {% endblock body %}
+    </div>
+    <script>
+        const input = document.querySelector('input[id="fileup"]');
+        FilePond.create(input, {
+            storeAsFile: true,
+        });
+    </script>
+{% endblock body %}
