@@ -197,10 +197,23 @@ class SubmissionController
         $getSubmissionsByUserIdResponse = $this->GetSubmissionsByUserIdUseCase->handle(new GetSubmissionsByUserIdRequest($requestedUserId, intval($req->param("page", 1)), self::LimitPerPage));
         $count = $getSubmissionsByUserIdResponse->Count;
 
+        $submissions = $getSubmissionsByUserIdResponse->Submissions;
+        $problems = [];
+        foreach (array_reduce($submissions, function ($c, $e) {
+            if (array_search($e->getProblemId(), $c) === false) {
+                $c[] = $e->getProblemId();
+            }
+            return $c;
+        }, []) as $problemId) {
+            $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($problemId));
+            $problems[] = $getProblemByIdResponse->Problem;
+        }
+
         $res->body(
             $this->Twig->render("User/Submissions.twig", [
                 "requestedUser" => $getSubmissionsByUserIdResponse->User,
-                "submissions" => $getSubmissionsByUserIdResponse->Submissions,
+                "submissions" => $submissions,
+                "problems" => $problems,
                 "page" => intval($req->param("page", 1)),
                 "totalNumberOfSubmissions" => $count,
                 "totalNumberOfPages" => intval(ceil($count / self::LimitPerPage)),
