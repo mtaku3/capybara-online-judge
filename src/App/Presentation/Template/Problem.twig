@@ -136,45 +136,46 @@
         </div>
         <div class="w-1/2">
             {% if user %}
-                {#ログイン時#}
-                <div class="w-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <ul class="w-full flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 "
-                        id="defaultTab"
-                        data-tabs-toggle="#defaultTabContent"
-                        role="tablist">
-                        <li class="mr-2">
-                            <button id="source-tab"
-                                    data-tabs-target="#source"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="source"
-                                    aria-selected="true"
-                                    class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
-                                ソースコードで提出
-                            </button>
-                        </li>
-                        <li class="mr-2">
-                            <button id="file-tab"
-                                    data-tabs-target="#file"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="file"
-                                    aria-selected="false"
-                                    class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                                ファイルでアップロード
-                            </button>
-                        </li>
-                        <select id="languages"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Choose a language</option>
-                            {% for language in problemSubmittableLanguages %}
-                                <option value="{{ language.value }}">{{ language.value }}</option>
-                            {% endfor %}
-                        </select>
-                        <div id="defaultTabContent" class="w-full">
-                            {#ソースコード選択時#}
-                            <form method="POST"
-                                  action="https://localhost//problem/{{ problemId }}/submissions">
+                <form method="POST"
+                      action="https://localhost//problem/{{ problemId }}/submissions">
+                    {#ログイン時#}
+                    <div class="w-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <ul class="w-full flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 "
+                            id="defaultTab"
+                            data-tabs-toggle="#defaultTabContent"
+                            role="tablist">
+                            <li class="mr-2">
+                                <button id="source-tab"
+                                        data-tabs-target="#source"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="source"
+                                        aria-selected="true"
+                                        class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
+                                    ソースコードで提出
+                                </button>
+                            </li>
+                            <li class="mr-2">
+                                <button id="file-tab"
+                                        data-tabs-target="#file"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="file"
+                                        aria-selected="false"
+                                        class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
+                                    ファイルでアップロード
+                                </button>
+                            </li>
+                            <select id="language"
+                                    name="language"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Choose a language</option>
+                                {% for language in problemSubmittableLanguages %}
+                                    <option value="{{ language.value }}">{{ language.value }}</option>
+                                {% endfor %}
+                            </select>
+                            <div id="defaultTabContent" class="w-full">
+                                {#ソースコード選択時#}
                                 <div class="w-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
                                      id="source">
                                     <textarea id="code" name="code">
@@ -194,20 +195,21 @@ int main() {
 }
 {{problemBody}}
 </textarea>
-                                    <label for="languages">選択言語:</label>
+                                    <label for="language">選択言語:</label>
+                                    <input id="language" type="hidden">
                                     <button type="submit"
                                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                         提出！！
                                     </button>
                                 </div>
-                            </form>
-                            {#ファイル提出選択時#}
-                            <div class="flex hidden items-center justify-center w-full"id="file">
-                                <input id="fileup" type="file">
+                                {#ファイル提出選択時#}
+                                <div class="flex hidden items-center justify-center w-full"id="file">
+                                    <input id="fileup" type="file">
+                                </div>
                             </div>
-                        </div>
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
+                </form>
             {% else %}
                 {#未ログイン時#}
                 <div class="w-full  place-self-center ">
