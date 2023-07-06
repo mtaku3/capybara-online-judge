@@ -6,6 +6,11 @@
       "App\\": "src/App/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests/_files/"
+    }
+  },
   "authors": [
     {
       "name": "mtaku3",
