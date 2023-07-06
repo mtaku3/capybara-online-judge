@@ -96,7 +96,7 @@ class ProblemController
         try {
             $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest(new ProblemId($req->problemId)));
             $problem = $getProblemByIdResponse->Problem;
-            $submittableLanguages = array_filter($problem->getCompileRules(), fn ($e) => $e->getLanguage());
+            $submittableLanguages = array_map(fn ($e) => $e->getLanguage(), $problem->getCompileRules());
             $res->body(
                 $this->Twig->render("Problem.twig", [
                     "problemId" => new ProblemId($req->problemId),
