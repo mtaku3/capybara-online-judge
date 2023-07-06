@@ -164,57 +164,20 @@
                                 ファイルでアップロード
                             </button>
                         </li>
-                        <button id="dropdownDefaultButton"
-                                data-dropdown-toggle="dropdown"
-                                class=" ml-auto text-lg bg-white hover:bg-slate-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-4 py-2.5 text-right inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                type="button">
-                            C
-                            <svg class="w-4 h-4 ml-2"
-                                 aria-hidden="true"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 viewBox="0 0 24 24"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <!-- Dropdown menu -->
-                        <div id="dropdown"
-                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                aria-labelledby="dropdownDefaultButton">
-                                {#}
-                                        {% for i in problemSubmittableLanguages %}
-                                            <li>
-                                                <a href="#"
-                                                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ languages[i] }}</a>
-                                            </li>
-                                        {% endfor %}
-                                        #}
-                                <li>
-                                    <a href="#"
-                                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </ul>
-                    <div id="defaultTabContent">
-                        {#ソースコード選択時#}
-                        <div class="w-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
-                             id="source">
-                            <textarea id="code" name="code">
+                        <select id="languages"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Choose a language</option>
+                            {% for language in problemSubmittableLanguages %}
+                                <option value="{{ language.value }}">{{ language.value }}</option>
+                            {% endfor %}
+                        </select>
+                        <div id="defaultTabContent" class="w-full">
+                            {#ソースコード選択時#}
+                            <form method="POST"
+                                  action="https://localhost//problem/{{ problemId }}/submissions">
+                                <div class="w-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
+                                     id="source">
+                                    <textarea id="code" name="code">
 #include <stdio.h>
 int main() {
     int number;
@@ -231,16 +194,23 @@ int main() {
 }
 {{problemBody}}
 </textarea>
+                                    <label for="languages">選択言語:</label>
+                                    <button type="submit"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                        提出！！
+                                    </button>
+                                </div>
+                            </form>
+                            {#ファイル提出選択時#}
+                            <div class="flex hidden items-center justify-center w-full"id="file">
+                                <input id="fileup" type="file">
+                            </div>
                         </div>
-                        {#ファイル提出選択時#}
-                        <div class="flex hidden items-center justify-center w-full"id="file">
-                            <input id="fileup" type="file">
-                        </div>
-                    </div>
+                    </ul>
                 </div>
             {% else %}
                 {#未ログイン時#}
-                <div class="w-1/2  place-self-center ">
+                <div class="w-full  place-self-center ">
                     <div class="w-full p-6 obj place-self-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <p class="mb-3 font-normal　text-center　text-gray-700 dark:text-gray-400">プログラムを提出するにはログインしてください</p>
                         <a href="https://localhost/auth/login"
@@ -250,7 +220,7 @@ int main() {
                                  class="w-4 h-4 ml-2 -mr-1"
                                  fill="currentColor"
                                  viewBox="0 0 20 20"
-                                 xmlns="http://localhost/auth/login">
+                                 xmlns="https://localhost/auth/login">
                                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
                                 </path>
                             </svg>
@@ -262,7 +232,7 @@ int main() {
                                  class="w-4 h-4 ml-2 -mr-1"
                                  fill="currentColor"
                                  viewBox="0 0 20 20"
-                                 xmlns="http://localhost/auth/register">
+                                 xmlns="https://localhost/auth/register">
                                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
                                 </path>
                             </svg>
