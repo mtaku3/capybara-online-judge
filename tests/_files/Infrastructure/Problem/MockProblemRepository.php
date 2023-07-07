@@ -36,9 +36,6 @@ class MockProblemRepository implements IProblemRepository
     */
     public function count(): int
     {
-        if(empty($this->records)) {
-            throw new ProblemNotFoundException();
-        }
         return count($this->records);
     }
 
@@ -51,7 +48,7 @@ class MockProblemRepository implements IProblemRepository
     {
         $existingProblem = current(array_filter($this->records, fn ($e) => $e->getId()->equals($id)));
 
-        if (empty($existingProblem)) {
+        if ($existingProblem === false) {
             throw new ProblemNotFoundException();
         }
 
@@ -80,8 +77,6 @@ class MockProblemRepository implements IProblemRepository
     */
     public function delete(Problem $problem): void
     {
-        $records = array_filter($this->records, fn ($e) => !($e->equals($problem)));
-
-
+        $this->records = array_filter($this->records, fn ($e) => !($e->equals($problem)));
     }
 }
