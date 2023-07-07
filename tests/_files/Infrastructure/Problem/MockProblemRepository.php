@@ -61,7 +61,7 @@ class MockProblemRepository implements IProblemRepository
     */
     public function save(Problem $problem): void
     {
-        $existingProblem = current(array_filter($this->records, fn ($e) => $e->equals($problem)));
+        $existingProblem = current(array_filter($this->records, fn ($e) => $e->getId()->equals($problem->getId())));
 
         if ($existingProblem === false) {
             $this->records[] = $problem;
