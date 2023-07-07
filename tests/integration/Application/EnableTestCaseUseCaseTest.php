@@ -12,7 +12,7 @@ use App\Domain\Problem\Factory\TestCaseFactoryDTO;
 use PHPUnit\Framework\TestCase;
 use Test\Infrastructure\Problem\MockProblemRepository;
 
-class EnableTestCaseTest extends TestCase
+class EnableTestCaseUseCaseTest extends TestCase
 {
     protected EnableTestCaseUseCase $enableTestCaseUseCase;
     protected MockProblemRepository $mockProblemRepository;
