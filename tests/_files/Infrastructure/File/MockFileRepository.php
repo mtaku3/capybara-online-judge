@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Infrastructure\file;
+namespace Test\Infrastructure\File;
 
 use App\Domain\file\IFileRepository;
 use App\Domain\file\Entity\file;
