@@ -34,12 +34,6 @@ class MockProblemRepository implements IProblemRepository
     }
 
     /**
-     * @param string $username
-     * @return User
-     */
-
-
-    /**
     * @return int
     * @throws SchemaException
     * @throws BuilderException
