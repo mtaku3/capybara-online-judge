@@ -53,6 +53,7 @@ class MockSubmissionRepository implements ISubmissionRepository
     {
         return count(array_filter($this->records, fn ($e) => $e->getUserId()->equals($userId)));
     }
+
     /**
      * @param ProblemId $problemId
      * @param int $page
@@ -63,6 +64,7 @@ class MockSubmissionRepository implements ISubmissionRepository
     {
         return array_slice(array_filter($this->records, fn ($e) => $e->getProblemId()->equals($problemId)), ($page - 1) * $limit, $limit);
     }
+
     /**
      * @param ProblemId $problemId
      * @return int
@@ -94,6 +96,7 @@ class MockSubmissionRepository implements ISubmissionRepository
     {
         return count(array_filter($this->records, fn ($e) => $e->getProblemId()->equals($problemId) && $e->getUserId()->equals($userId)));
     }
+
     /**
      * @param Submission $submission
      * @return void
