@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Infrastructure\User;
+namespace Test\Infrastructure\Submission;
 
 use App\Domain\Problem\ValueObject\ProblemId;
 use App\Domain\Submission\ISubmissionRepository;
@@ -39,7 +39,6 @@ class MockSubmissionRepository implements ISubmissionRepository
      * @param int $limit
      * @return Submission[]
      */
-
     public function findByUserId(UserId $userId, int $page = 1, int $limit = 10): array
     {
         return array_slice(array_filter($this->records, fn ($e) => $e->getUserId()->equals($userId)), ($page - 1) * $limit, $limit);
@@ -117,6 +116,6 @@ class MockSubmissionRepository implements ISubmissionRepository
      */
     public function delete(Submission $submission): void
     {
-        $recode = array_filter($this->records, fn ($e) => !($e->getId()->equals($submission->getId())));
+        $this->records = array_filter($this->records, fn ($e) => !($e->getId()->equals($submission->getId())));
     }
 }
