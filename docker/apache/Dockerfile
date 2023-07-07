@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/php:8 AS base
+FROM mcr.microsoft.com/devcontainers/php:8-bullseye AS base
 
 # Configure apache2
 
