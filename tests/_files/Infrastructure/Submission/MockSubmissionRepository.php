@@ -39,6 +39,7 @@ class MockSubmissionRepository implements ISubmissionRepository
      * @param int $limit
      * @return Submission[]
      */
+
     public function findByUserId(UserId $userId, int $page = 1, int $limit = 10): array
     {
         return array_slice(array_filter($this->records, fn ($e) => $e->getUserId()->equals($userId)), ($page - 1) * $limit, $limit);
