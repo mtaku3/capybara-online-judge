@@ -25,7 +25,7 @@ class RemoveProblemLanguageUseCaseTest extends TestCase
     }
 
 
-    public function test1(): void
+    public function test_removeProblemLanguageUseCase(): void
     {
         $this->expectNotToPerformAssertions();
         $langueageC  = Language::C;
