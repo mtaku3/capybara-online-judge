@@ -26,11 +26,7 @@ class MockProblemRepository implements IProblemRepository
      */
     public function fetchAll(int $page = 1, int $limit = 10): array
     {
-        if(empty($this->records)) {
-            throw new ProblemNotFoundException();
-        } else {
-            return array_slice($this->records, ($page - 1) * $limit, $limit);
-        }
+        return array_slice($this->records, ($page - 1) * $limit, $limit);
     }
 
     /**
