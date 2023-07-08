@@ -62,7 +62,7 @@ class SessionRepository implements ISessionRepository
      * @throws ParserException
      * @throws LoaderException
      */
-    public function findByUser(UserId $userId): array
+    public function findByUserId(UserId $userId): array
     {
         return iterator_to_array($this->SessionRepository->findAll(["UserId" => $userId]));
     }

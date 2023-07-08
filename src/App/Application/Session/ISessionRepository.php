@@ -21,7 +21,7 @@ interface ISessionRepository
      * @param UserId $userId
      * @return Session[]
      */
-    public function findByUser(UserId $userId): array;
+    public function findByUserId(UserId $userId): array;
 
     /**
      * @param Session $session

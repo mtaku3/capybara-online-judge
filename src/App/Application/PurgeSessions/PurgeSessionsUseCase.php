@@ -30,7 +30,7 @@ class PurgeSessionsUseCase
      */
     public function handle(PurgeSessionsRequest $request): PurgeSessionsResponse
     {
-        $sessions = $this->SessionRepository->findByUser($request->User->getId());
+        $sessions = $this->SessionRepository->findByUserId($request->User->getId());
 
         foreach ($sessions as $session) {
             if ($session->getExpiresAt() < (new DateTimeImmutable())) {
