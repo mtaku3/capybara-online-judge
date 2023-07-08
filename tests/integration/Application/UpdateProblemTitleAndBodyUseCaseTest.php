@@ -39,7 +39,7 @@ class UpdateProblemTitleAndBodyUseCaseTest extends TestCase
 
         $problemId = $problem->getId();
         $request = new UpdateProblemTitleAndBodyRequest($problemId, 'title1', 'body1');
-        $response =$this->updateProblemTitleAndBodyUseCase->handle($request);
+        $response = $this->updateProblemTitleAndBodyUseCase->handle($request);
         $this->assertSame($response->Problem->getTitle(), 'title1');
         $this->assertSame($response->Problem->getBody(), 'body1');
     }
