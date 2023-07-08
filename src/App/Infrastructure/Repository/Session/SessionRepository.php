@@ -6,8 +6,8 @@ namespace App\Infrastructure\Repository\Session;
 
 use App\Application\Session\Entity\Session;
 use App\Application\Session\ISessionRepository;
-use App\Domain\User\Entity\User;
 use App\Application\Session\ValueObject\RefreshToken;
+use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Repository\Session\Exception\SessionNotFoundException;
 use Cycle\ORM\EntityManagerInterface;
 use Cycle\ORM\Exception\ParserException;
@@ -37,15 +37,15 @@ class SessionRepository implements ISessionRepository
     }
 
     /**
-     * @param User $user
+     * @param UserId $userId
      * @param RefreshToken $refreshToken
      * @return Session
      * @throws SessionNotFoundException
      */
-    public function findByUserAndRefreshToken(User $user, RefreshToken $refreshToken): Session
+    public function findByUserAndRefreshToken(UserId $userId, RefreshToken $refreshToken): Session
     {
         $session = $this->SessionRepository->findOne([
-            "UserId" => $user->getId(),
+            "UserId" => $userId,
             "RefreshToken" => $refreshToken
         ]);
 
@@ -57,14 +57,14 @@ class SessionRepository implements ISessionRepository
     }
 
     /**
-     * @param User $user
+     * @param UserId $userId
      * @return Session[]
      * @throws ParserException
      * @throws LoaderException
      */
-    public function findByUser(User $user): array
+    public function findByUser(UserId $userId): array
     {
-        return iterator_to_array($this->SessionRepository->findAll(["UserId" => $user->getId()]));
+        return iterator_to_array($this->SessionRepository->findAll(["UserId" => $userId]));
     }
 
     /**

@@ -6,22 +6,22 @@ namespace App\Application\Session;
 
 use App\Application\Session\Entity\Session;
 use App\Application\Session\ValueObject\RefreshToken;
-use App\Domain\User\Entity\User;
+use App\Domain\User\ValueObject\UserId;
 
 interface ISessionRepository
 {
     /**
-     * @param User $user
+     * @param UserId $userId
      * @param RefreshToken $refreshToken
      * @return Session
      */
-    public function findByUserAndRefreshToken(User $user, RefreshToken $refreshToken): Session;
+    public function findByUserAndRefreshToken(UserId $userId, RefreshToken $refreshToken): Session;
 
     /**
-     * @param User $user 
+     * @param UserId $userId
      * @return Session[]
      */
-    public function findByUser(User $user): array;
+    public function findByUser(UserId $userId): array;
 
     /**
      * @param Session $session
