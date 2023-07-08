@@ -15,7 +15,7 @@ interface ISessionRepository
      * @param RefreshToken $refreshToken
      * @return Session
      */
-    public function findByUserAndRefreshToken(UserId $userId, RefreshToken $refreshToken): Session;
+    public function findByUserIdAndRefreshToken(UserId $userId, RefreshToken $refreshToken): Session;
 
     /**
      * @param UserId $userId

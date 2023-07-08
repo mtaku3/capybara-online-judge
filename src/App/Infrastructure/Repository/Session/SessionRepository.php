@@ -42,7 +42,7 @@ class SessionRepository implements ISessionRepository
      * @return Session
      * @throws SessionNotFoundException
      */
-    public function findByUserAndRefreshToken(UserId $userId, RefreshToken $refreshToken): Session
+    public function findByUserIdAndRefreshToken(UserId $userId, RefreshToken $refreshToken): Session
     {
         $session = $this->SessionRepository->findOne([
             "UserId" => $userId,

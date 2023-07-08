@@ -59,7 +59,7 @@ class ValidateSessionUseCase
         }
 
         try {
-            $session = $this->SessionRepository->findByUserAndRefreshToken($user->getId(), new RefreshToken($request->RefreshToken));
+            $session = $this->SessionRepository->findByUserIdAndRefreshToken($user->getId(), new RefreshToken($request->RefreshToken));
         } catch (SessionNotFoundException $e) {
             $session = null;
         }
