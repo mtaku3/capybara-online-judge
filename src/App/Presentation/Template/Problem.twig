@@ -21,14 +21,14 @@
                     "Ctrl-Space": "autocomplete"
                 }
             });
-            editor.setSize("80%", "100%");
+            editor.setSize("100%", "100%");
         }
     </script>
 {% endblock head %}
 {% block body %}
     {% include "Component/NavBar.twig" %}
     <div class="w-full h-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
-        <div class="w-1/2">
+        <div class="w-1/2 h-full">
             <div class="place-self-center display:flex">
                 <a href="https://localhost/problem"
                    class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">
@@ -53,69 +53,74 @@
                 <a href="#" class="w-1/2">
                     <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  display: flex">
                         <div class="w-full">
-                            <div class="w-full display:flex">
+                            <div class="w-full flex justify-evenly">
                                 <div>
                                     <h2 class="text-4xl font-extrabold dark:text-white">{{ problemTitle }}</h2>
+                                </div>
+                                <div>
                                     {% if user.getIsAdmin %}
                                         {#管理者ログイン時#}
                                         <!-- Modal toggle -->
-                                        <button data-modal-target="defaultModal"
-                                                data-modal-toggle="defaultModal"
-                                                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        <button data-modal-target="extralarge-modal"
+                                                data-modal-toggle="extralarge-modal"
+                                                class="block w-3/4 md:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                                 type="button">
-                                            <svg class="w-5 h-5 ml-2"
+                                            <svg class="w-6 h-6 text-white  dark:text-white"
+                                                 aria-hidden="true"
+                                                 xmlns="http://www.w3.org/2000/svg"
                                                  fill="currentColor"
-                                                 viewBox="0 0 20 20"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
-                                                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
+                                                 viewBox="0 0 18 18">
+                                                <path d="M17 0h-5.768a1 1 0 1 0 0 2h3.354L8.4 8.182A1.003 1.003 0 1 0 9.818 9.6L16 3.414v3.354a1 1 0 0 0 2 0V1a1 1 0 0 0-1-1Z" />
+                                                <path d="m14.258 7.985-3.025 3.025A3 3 0 1 1 6.99 6.768l3.026-3.026A3.01 3.01 0 0 1 8.411 2H2.167A2.169 2.169 0 0 0 0 4.167v11.666A2.169 2.169 0 0 0 2.167 18h11.666A2.169 2.169 0 0 0 16 15.833V9.589a3.011 3.011 0 0 1-1.742-1.604Z" />
                                             </svg>
                                         </button>
-                                        <!-- Main modal -->
-                                        <div id="defaultModal"
+                                        <!-- Extra Large Modal -->
+                                        <div id="extralarge-modal"
                                              tabindex="-1"
-                                             aria-hidden="true"
                                              class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                            <div class="relative w-full max-w-2xl max-h-full">
+                                            <div class="relative w-full max-w-7xl max-h-full">
                                                 <!-- Modal content -->
-                                                <div class="relative w-full bg-white rounded-lg shadow dark:bg-gray-700">
+                                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                                     <!-- Modal header -->
-                                                    <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                                                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Terms of Service</h3>
+                                                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                                                        <h3 class="text-xl font-medium text-gray-900 dark:text-white">問題編集画面</h3>
                                                         <button type="button"
-                                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                                data-modal-hide="defaultModal">
-                                                            <svg aria-hidden="true"
-                                                                 class="w-5 h-5"
-                                                                 fill="currentColor"
-                                                                 viewBox="0 0 20 20"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd">
-                                                                </path>
+                                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                                data-modal-hide="extralarge-modal">
+                                                            <svg class="w-3 h-3"
+                                                                 aria-hidden="true"
+                                                                 xmlns="http://www.w3.org/2000/svg"
+                                                                 fill="none"
+                                                                 viewBox="0 0 14 14">
+                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                             </svg>
                                                             <span class="sr-only">Close modal</span>
                                                         </button>
                                                     </div>
                                                     <!-- Modal body -->
-                                                    <div class="p-6 space-y-6">
-                                                        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                                            With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
-                                                        </p>
-                                                        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                                            The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them.
-                                                        </p>
+                                                    <div class="flex">
+                                                        <div class="w-1/2 p-6 space-y-6">
+                                                            <p class="text-gray-800">問題文</p>
+                                                            <textarea id="code" name="code">
+{{problemTitle}}
+</textarea>
+                                                        </div>
+                                                        <div id="render" class="markdown w-1/2"></div>
+                                                        <textarea id="input" hidden>
+                        {{ problemBody|raw }}
+                        </textarea>
                                                     </div>
                                                     <!-- Modal footer -->
                                                     <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                                                        <button data-modal-hide="defaultModal"
+                                                        <button data-modal-hide="extralarge-modal"
                                                                 type="button"
                                                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                            I accept
+                                                            保存
                                                         </button>
-                                                        <button data-modal-hide="defaultModal"
+                                                        <button data-modal-hide="extralarge-modal"
                                                                 type="button"
-                                                                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                                            Decline
+                                                                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                                            キャンセル
                                                         </button>
                                                     </div>
                                                 </div>
@@ -134,77 +139,78 @@
                 </a>
             </div>
         </div>
-        <div class="w-1/2">
+        <div class="w-1/2 h-full">
             {% if user %}
-                <form method="POST"
-                      action="https://localhost//problem/{{ problemId }}/submissions">
-                    {#ログイン時#}
-                    <div class="w-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                        <ul class="w-full flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 "
-                            id="defaultTab"
-                            data-tabs-toggle="#defaultTabContent"
-                            role="tablist">
-                            <li class="mr-2">
-                                <button id="source-tab"
-                                        data-tabs-target="#source"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="source"
-                                        aria-selected="true"
-                                        class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
-                                    ソースコードで提出
-                                </button>
-                            </li>
-                            <li class="mr-2">
-                                <button id="file-tab"
-                                        data-tabs-target="#file"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="file"
-                                        aria-selected="false"
-                                        class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                                    ファイルでアップロード
-                                </button>
-                            </li>
-                            <select id="language"
-                                    name="language"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option selected>Choose a language</option>
-                                {% for language in problemSubmittableLanguages %}
-                                    <option value="{{ language.value }}">{{ language.value }}</option>
-                                {% endfor %}
-                            </select>
-                            <div id="defaultTabContent" class="w-full">
-                                {#ソースコード選択時#}
-                                <div class="w-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
+                {#ログイン時#}
+                <div class="w-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <ul class="w-full flex h-full flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 "
+                        id="defaultTab"
+                        data-tabs-toggle="#defaultTabContent"
+                        role="tablist">
+                        <li class="mr-2">
+                            <button id="source-tab"
+                                    data-tabs-target="#source"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="source"
+                                    aria-selected="true"
+                                    class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">
+                                ソースコードで提出
+                            </button>
+                        </li>
+                        <li class="mr-2">
+                            <button id="file-tab"
+                                    data-tabs-target="#file"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="file"
+                                    aria-selected="false"
+                                    class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">
+                                ファイルでアップロード
+                            </button>
+                        </li>
+                        <select id="language"
+                                name="language"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Choose a language</option>
+                            {% for language in problemSubmittableLanguages %}
+                                <option value="{{ language.value }}">{{ language.value }}</option>
+                            {% endfor %}
+                        </select>
+                        <div id="defaultTabContent" class="w-full h-full">
+                            {#ソースコード選択時#}
+                            <form method="post"
+                                  action="https://localhost//problem/{{ problemId }}/submissions">
+                                <div class="w-full h-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
                                      id="source">
+                                    <input class="hidden" name="language" id="sourceCodeTabLanguage" value="C" />
+                                    <input type="hidden"
+                                           id="submissionType"
+                                           name="submissionType"
+                                           value="SourceCode">
                                     <textarea id="code" name="code">
-#include <stdio.h>
-int main() {
-    int number;
-   
-    printf("Enter an integer: ");  
-    
-    // reads and stores input
-    scanf("%d", &number);
-
-    // displays output
-    printf("You entered: %d", number);
-    
-    return 0;
-}
-{{problemBody}}
+ここを書き換えてください
 </textarea>
-                                    <label for="language">選択言語:</label>
                                     <input id="language" type="hidden">
                                     <button type="submit"
                                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                         提出！！
                                     </button>
                                 </div>
-                                {#ファイル提出選択時#}
-                                <div class="flex hidden items-center justify-center w-full"id="file">
-                                    <input id="fileup" type="file">
+                            </form>
+                            {#ファイル提出選択時#}
+                            <form method="post"
+                                  action="https://localhost//problem/{{ problemId }}/submissions">
+                                <div class="bg-white hidden items-center justify-center w-full h-full"
+                                     id="file">
+                                    <input class="hidden" name="language" id="FileTabLanguage" value="C" />
+                                    <input type="hidden" id="submissionType" name="submissionType" value="File">
+                                    <input id="fileup" type="file" name="sourceFile">
+                                    <input id="language" type="hidden">
+                                    <button type="submit"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                        提出！！
+                                    </button>
                                 </div>
                             </div>
                         </ul>
@@ -244,6 +250,16 @@ int main() {
             {% endif %}
         </div>
     </div>
+    <script>
+        const sourceCodeTabLanguage = document.querySelector("#sourceCodeTabLanguage");
+        const FileTabLanguage = document.querySelector("#FileTabLanguage");
+        const languageSelect = document.querySelector("#language");
+        languageSelect.addEventListener("change", (e) => {
+            let language = e.target.value;
+            sourceCodeTabLanguage.setAttribute("value", language);
+            FileTabLanguage.setAttribute("value", language);
+        });
+    </script>
     <script>
         const input = document.querySelector('input[id="fileup"]');
         FilePond.create(input, {
