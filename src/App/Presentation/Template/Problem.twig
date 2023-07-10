@@ -5,14 +5,32 @@
     {% include "Component/texme.twig" %}
     {% include "Component/codemirror.twig" %}
     {% include "Component/filepond.twig" %}
+    <style>
+        .CodeMirror {
+            background-color: #f2f2f2;
+            /* グレーの背景色 */
+        }
+    </style>
     <script>
         window.onload = function() {
+            //problembody
+
+
             var inputEl = $("#input")[0];
-            var output = texme.render(inputEl.value);
             var renderEl = $("#render")[0];
-            renderEl.innerHTML = output;
+            var renderEl2 = $("#render2")[0];
+            var Bodyoutput = texme.render(inputEl.value);
+            renderEl.innerHTML = Bodyoutput;
+            renderEl2.innerHTML = Bodyoutput;
             window.MathJax.texReset();
             window.MathJax.typesetPromise();
+
+            inputEl.addEventListener("keydown", (e) => {
+                var Bodyoutput = texme.render(inputEl.value);
+                renderEl2.innerHTML = Bodyoutput;
+                window.MathJax.texReset();
+                window.MathJax.typesetPromise();
+            });
 
             var editor = CodeMirror.fromTextArea($("#code")[0], {
                 mode: "text/x-csrc",
@@ -28,92 +46,79 @@
 {% block body %}
     {% include "Component/NavBar.twig" %}
     <div class="w-full h-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
-        <div class="w-1/2 h-full">
-            <div class="place-self-center display:flex">
-                <a href="https://localhost/problem"
-                   class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">
-                    問題
-                </a>
-                {% if user %}
-                    {#ログイン時表示#}
-                    <a href="https://localhost//problem/{{ problemId }}/submissions"
-                       class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">
-                        提出結果
-                    </a>
-                {% endif %}
-                {% if user.getIsAdmin %}
-                    {#管理者ログイン時表示#}
-                    <a href="https://localhost//problem/{{ problemId }}/testcases"
-                       class="place-self-center font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline m-8">
-                        テストケース
-                    </a>
-                {% endif %}
-            </div>
-            <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700">
-                <a href="#" class="w-1/2">
-                    <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  display: flex">
-                        <div class="w-full">
-                            <div class="w-full flex justify-evenly">
-                                <div>
-                                    <h2 class="text-4xl font-extrabold dark:text-white">{{ problemTitle }}</h2>
-                                </div>
-                                <div>
-                                    {% if user.getIsAdmin %}
-                                        {#管理者ログイン時#}
-                                        <!-- Modal toggle -->
-                                        <button data-modal-target="extralarge-modal"
-                                                data-modal-toggle="extralarge-modal"
-                                                class="block w-3/4 md:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                                type="button">
-                                            <svg class="w-6 h-6 text-white  dark:text-white"
-                                                 aria-hidden="true"
-                                                 xmlns="http://www.w3.org/2000/svg"
-                                                 fill="currentColor"
-                                                 viewBox="0 0 18 18">
-                                                <path d="M17 0h-5.768a1 1 0 1 0 0 2h3.354L8.4 8.182A1.003 1.003 0 1 0 9.818 9.6L16 3.414v3.354a1 1 0 0 0 2 0V1a1 1 0 0 0-1-1Z" />
-                                                <path d="m14.258 7.985-3.025 3.025A3 3 0 1 1 6.99 6.768l3.026-3.026A3.01 3.01 0 0 1 8.411 2H2.167A2.169 2.169 0 0 0 0 4.167v11.666A2.169 2.169 0 0 0 2.167 18h11.666A2.169 2.169 0 0 0 16 15.833V9.589a3.011 3.011 0 0 1-1.742-1.604Z" />
-                                            </svg>
-                                        </button>
-                                        <!-- Extra Large Modal -->
-                                        <div id="extralarge-modal"
-                                             tabindex="-1"
-                                             class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                            <div class="relative w-full max-w-7xl max-h-full">
-                                                <!-- Modal content -->
-                                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                                    <!-- Modal header -->
-                                                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
-                                                        <h3 class="text-xl font-medium text-gray-900 dark:text-white">問題編集画面</h3>
-                                                        <button type="button"
-                                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                                data-modal-hide="extralarge-modal">
-                                                            <svg class="w-3 h-3"
-                                                                 aria-hidden="true"
-                                                                 xmlns="http://www.w3.org/2000/svg"
-                                                                 fill="none"
-                                                                 viewBox="0 0 14 14">
-                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                            </svg>
-                                                            <span class="sr-only">Close modal</span>
-                                                        </button>
-                                                    </div>
-                                                    <!-- Modal body -->
+        <div class="w-full h-full">
+            <a href="#" class="w-full">
+                <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  display: flex">
+                    <div class="w-full">
+                        <div class="w-full flex justify-evenly">
+                            <div>
+                                <h2 class="text-4xl font-extrabold dark:text-white">{{ problemTitle }}</h2>
+                            </div>
+                            <div>
+                                {% if user.getIsAdmin %}
+                                    {#管理者ログイン時#}
+                                    <!-- Modal toggle -->
+                                    <button data-modal-target="extralarge-modal"
+                                            data-modal-toggle="extralarge-modal"
+                                            class="block w-3/4 md:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                            type="button">
+                                        <svg class="w-6 h-6 text-white  dark:text-white"
+                                             aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             fill="currentColor"
+                                             viewBox="0 0 18 18">
+                                            <path d="M17 0h-5.768a1 1 0 1 0 0 2h3.354L8.4 8.182A1.003 1.003 0 1 0 9.818 9.6L16 3.414v3.354a1 1 0 0 0 2 0V1a1 1 0 0 0-1-1Z" />
+                                            <path d="m14.258 7.985-3.025 3.025A3 3 0 1 1 6.99 6.768l3.026-3.026A3.01 3.01 0 0 1 8.411 2H2.167A2.169 2.169 0 0 0 0 4.167v11.666A2.169 2.169 0 0 0 2.167 18h11.666A2.169 2.169 0 0 0 16 15.833V9.589a3.011 3.011 0 0 1-1.742-1.604Z" />
+                                        </svg>
+                                    </button>
+                                    <!-- Extra Large Modal -->
+                                    <div id="extralarge-modal"
+                                         tabindex="-1"
+                                         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                        <div class="relative w-full max-w-7xl max-h-full">
+                                            <!-- Modal content -->
+                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                <!-- Modal header -->
+                                                <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                                                    <h3 class="text-xl font-medium text-gray-900 dark:text-white">問題編集画面</h3>
+                                                    <button type="button"
+                                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                            data-modal-hide="extralarge-modal">
+                                                        <svg class="w-3 h-3"
+                                                             aria-hidden="true"
+                                                             xmlns="http://www.w3.org/2000/svg"
+                                                             fill="none"
+                                                             viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                        <span class="sr-only">Close modal</span>
+                                                    </button>
+                                                </div>
+                                                <!-- Modal body -->
+                                                <form method="post" action="/problem/{{ problemId }}/update">
                                                     <div class="flex">
                                                         <div class="w-1/2 p-6 space-y-6">
-                                                            <p class="text-gray-800">問題文</p>
-                                                            <textarea id="code" name="code">
-{{problemTitle}}
-</textarea>
+                                                            <div>
+                                                                <p class="text-gray-800">問題名</p>
+                                                                <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                       name="title"
+                                                                       value="{{ problemTitle|raw }}">
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-gray-800">問題文</p>
+                                                                <textarea id="input"
+                                                                          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                          name="body">{{ problemBody|raw }}</textarea>
+                                                            </div>
                                                         </div>
-                                                        <div id="render" class="markdown w-1/2"></div>
-                                                        <textarea id="input" hidden>
-                        {{ problemBody|raw }}
-                        </textarea>
+                                                        <div class="w-1/2">
+                                                            <div id="render2" class="markdown"></div>
+                                                        </div>
                                                     </div>
                                                     <!-- Modal footer -->
                                                     <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                                                         <button data-modal-hide="extralarge-modal"
-                                                                type="button"
+                                                                type="submit"
                                                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                                             保存
                                                         </button>
@@ -123,23 +128,23 @@
                                                             キャンセル
                                                         </button>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </div>
                                         </div>
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                {% endif %}
                             </div>
-                            <p class="my-4 text-lg text-gray-500">時間制限：{{ problemTimeConstraint }} メモリ制限：{{ problemMemoryConstraint }}</p>
-                            <div id="render" class="markdown"></div>
-                            <textarea id="input" hidden>
+                        </div>
+                        <p class="my-4 text-lg text-gray-500">時間制限：{{ problemTimeConstraint }} メモリ制限：{{ problemMemoryConstraint }}</p>
+                        <div id="render" class="markdown"></div>
+                        <textarea id="input" hidden>
                         {{ problemBody|raw }}
                         </textarea>
-                        </div>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
-        <div class="w-1/2 h-full">
+        <div class="w-full h-full">
             {% if user %}
                 {#ログイン時#}
                 <div class="w-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -179,18 +184,15 @@
                         </select>
                         <div id="defaultTabContent" class="w-full h-full">
                             {#ソースコード選択時#}
-                            <form method="post"
-                                  action="https://localhost//problem/{{ problemId }}/submissions">
-                                <div class="w-full h-full  p-6 obj place-self-center bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
+                            <form method="post" action="/problem/{{ problemId }}/submissions">
+                                <div class="w-full h-full  p-6 obj text-left bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
                                      id="source">
                                     <input class="hidden" name="language" id="sourceCodeTabLanguage" value="C" />
                                     <input type="hidden"
                                            id="submissionType"
                                            name="submissionType"
                                            value="SourceCode">
-                                    <textarea id="code" name="code">
-ここを書き換えてください
-</textarea>
+                                    <textarea id="code" name="code">ここを書き換えてください</textarea>
                                     <input id="language" type="hidden">
                                     <button type="submit"
                                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -199,8 +201,7 @@
                                 </div>
                             </form>
                             {#ファイル提出選択時#}
-                            <form method="post"
-                                  action="https://localhost//problem/{{ problemId }}/submissions">
+                            <form method="post" action="/problem/{{ problemId }}/submissions">
                                 <div class="bg-white hidden items-center justify-center w-full h-full"
                                      id="file">
                                     <input class="hidden" name="language" id="FileTabLanguage" value="C" />
@@ -221,26 +222,26 @@
                 <div class="w-full  place-self-center ">
                     <div class="w-full p-6 obj place-self-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <p class="mb-3 font-normal　text-center　text-gray-700 dark:text-gray-400">プログラムを提出するにはログインしてください</p>
-                        <a href="https://localhost/auth/login"
+                        <a href="/auth/login"
                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             ログイン
                             <svg aria-hidden="true"
                                  class="w-4 h-4 ml-2 -mr-1"
                                  fill="currentColor"
                                  viewBox="0 0 20 20"
-                                 xmlns="https://localhost/auth/login">
+                                 xmlns="/auth/login">
                                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
                                 </path>
                             </svg>
                         </a>
-                        <a href="https://localhost/auth/register"
+                        <a href="/auth/register"
                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             新規登録
                             <svg aria-hidden="true"
                                  class="w-4 h-4 ml-2 -mr-1"
                                  fill="currentColor"
                                  viewBox="0 0 20 20"
-                                 xmlns="https://localhost/auth/register">
+                                 xmlns="/auth/register">
                                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd">
                                 </path>
                             </svg>
