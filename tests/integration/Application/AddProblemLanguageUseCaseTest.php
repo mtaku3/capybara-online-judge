@@ -42,7 +42,7 @@ class AddProblemLanguageUseCaseTest extends TestCase
 
         $this->mockProblemRepository->save($problem);
         $compileRuleDTOs = array(new CompileRuleDTO(Language::CPP, 'rightComand', 'rightComand'));
-        $executionRuleDTOs = array_map(fn ($e) =>new ExecutionRuleDTO($e->getId(), Language::CPP, "", "", "", ""), $problem->getTestCases());
+        $executionRuleDTOs = array_map(fn ($e) => new ExecutionRuleDTO($e->getId(), Language::CPP, "", "", "", ""), $problem->getTestCases());
 
         $request = new AddProblemLanguagesRequest($problemId, $compileRuleDTOs, $executionRuleDTOs);
         $response = $this->addProblemLanguageUseCase->handle($request);
