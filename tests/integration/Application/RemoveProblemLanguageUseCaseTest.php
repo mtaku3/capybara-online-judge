@@ -17,17 +17,17 @@ use Test\Infrastructure\Problem\MockProblemRepository;
 class RemoveProblemLanguageUseCaseTest extends TestCase
 {
     protected RemoveProblemLanguagesUseCase $removeProblemLanguagesUseCase;
+    protected MockProblemRepository $mockProblemRepository;
 
     protected function setUp(): void
     {
-        $mockProblemRepository = new MockProblemRepository();
-        $this->removeProblemLanguagesUseCase = new RemoveProblemLanguagesUseCase($mockProblemRepository);
+        $this->mockProblemRepository = new MockProblemRepository();
+        $this->removeProblemLanguagesUseCase = new RemoveProblemLanguagesUseCase($this->mockProblemRepository);
     }
 
 
     public function test_removeProblemLanguageUseCase(): void
     {
-        $this->expectNotToPerformAssertions();
         $langueageC  = Language::C;
         $langueageCPP  = Language::CPP;
         $compileRuleDTOs = array(
@@ -41,9 +41,11 @@ class RemoveProblemLanguageUseCaseTest extends TestCase
         $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
         $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
 
+        $this->mockProblemRepository->save($problem);
 
-        $removeProblemLanguagesResponse = $this->removeProblemLanguagesUseCase->handle(new RemoveProblemLanguagesRequest($problem->getId(), array($langueageC)));
-        $problem = $removeProblemLanguagesResponse->Problem;
+        $request = new RemoveProblemLanguagesRequest($problem->getId(), array($langueageC));
+        $response = $this->removeProblemLanguagesUseCase->handle($request);
+        $problem = $response->Problem;
 
         foreach($problem->getCompileRules() as $compileRule) {
             $this->assertEquals($compileRule->getLanguage(), Language::CPP);
