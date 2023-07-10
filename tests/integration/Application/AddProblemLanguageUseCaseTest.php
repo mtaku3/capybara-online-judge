@@ -48,7 +48,7 @@ class AddProblemLanguageUseCaseTest extends TestCase
         $response = $this->addProblemLanguageUseCase->handle($request);
         $array_some = function ($arr, $con) {
             foreach($arr as $e) {
-                if($con($e)) {
+                if ($con($e)) {
                     return true;
                 }
             }
