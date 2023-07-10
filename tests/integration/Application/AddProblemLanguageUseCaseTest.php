@@ -54,7 +54,7 @@ class AddProblemLanguageUseCaseTest extends TestCase
             }
             return false;
         };
-        $same_language = fn ($e) =>$e->getLanguage()==Language::CPP;
+        $same_language = fn ($e) => $e->getLanguage() == Language::CPP;
         $this->assertTrue($array_some($response->Problem->getCompileRules(), $same_language));
         $this->assertTrue($array_some($response->Problem->getTestCases()[0]->getExecutionRules(), $same_language));
         $this->assertTrue($array_some($response->Problem->getTestCases()[1]->getExecutionRules(), $same_language));
