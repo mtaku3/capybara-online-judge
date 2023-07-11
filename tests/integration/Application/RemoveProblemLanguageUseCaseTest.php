@@ -12,8 +12,6 @@ use PHPUnit\Framework\TestCase;
 use App\Domain\Common\ValueObject\Language;
 use Test\Infrastructure\Problem\MockProblemRepository;
 
-// TODO: This should be deleted because of redundancy
-
 class RemoveProblemLanguageUseCaseTest extends TestCase
 {
     protected RemoveProblemLanguagesUseCase $removeProblemLanguagesUseCase;
@@ -24,7 +22,6 @@ class RemoveProblemLanguageUseCaseTest extends TestCase
         $this->mockProblemRepository = new MockProblemRepository();
         $this->removeProblemLanguagesUseCase = new RemoveProblemLanguagesUseCase($this->mockProblemRepository);
     }
-
 
     public function test_removeProblemLanguageUseCase(): void
     {
@@ -47,8 +44,9 @@ class RemoveProblemLanguageUseCaseTest extends TestCase
         $response = $this->removeProblemLanguagesUseCase->handle($request);
         $problem = $response->Problem;
 
-        foreach($problem->getCompileRules() as $compileRule) {
-            $this->assertEquals($compileRule->getLanguage(), Language::CPP);
-        }
+        $this->assertEquals(count($problem->getCompileRules()), 1);
+        $this->assertEquals($problem->getCompileRules()[0]->getLanguage(), Language::CPP);
+        $this->assertEquals(count($problem->getExecutionRules()), 1);
+        $this->assertEquals($problem->getExecutionRules()[0]->getLanguage(), Language::CPP);
     }
 }
