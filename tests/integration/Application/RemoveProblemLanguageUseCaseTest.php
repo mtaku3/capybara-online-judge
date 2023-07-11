@@ -45,8 +45,8 @@ class RemoveProblemLanguageUseCaseTest extends TestCase
         $problem = $response->Problem;
 
         $this->assertEquals(count($problem->getCompileRules()), 1);
-        $this->assertEquals($problem->getCompileRules()[0]->getLanguage(), Language::CPP);
-        $this->assertEquals(count($problem->getExecutionRules()), 1);
-        $this->assertEquals($problem->getExecutionRules()[0]->getLanguage(), Language::CPP);
+        $this->assertEquals(current($problem->getCompileRules())->getLanguage(), Language::CPP);
+        $this->assertEquals(count($problem->getTestCases()[0]->getExecutionRules()), 1);
+        $this->assertEquals(current($problem->getTestCases()[0]->getExecutionRules())->getLanguage(), Language::CPP);
     }
 }
