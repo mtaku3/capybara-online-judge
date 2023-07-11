@@ -38,6 +38,7 @@
                 extraKeys: {
                     "Ctrl-Space": "autocomplete"
                 }
+
             });
             editor.setSize("100%", "100%");
         }
@@ -45,10 +46,10 @@
 {% endblock head %}
 {% block body %}
     {% include "Component/NavBar.twig" %}
-    <div class="w-full h-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
+    <div class="w-full h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex">
         <div class="w-full h-full">
             <a href="#" class="w-full">
-                <div class="w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  display: flex">
+                <div class="w-full h-full p-6 bg-white  rounded-lg  dark:bg-gray-800 dark:border-gray-700  display: flex">
                     <div class="w-full">
                         <div class="w-full flex justify-evenly">
                             <div>
@@ -60,9 +61,9 @@
                                     <!-- Modal toggle -->
                                     <button data-modal-target="extralarge-modal"
                                             data-modal-toggle="extralarge-modal"
-                                            class="block w-3/4 md:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                            class="block w-3/4 md:w-auto text-blue-500 border border-blue-500 bg-white hover:bg-blue-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                             type="button">
-                                        <svg class="w-6 h-6 text-white  dark:text-white"
+                                        <svg class="w-6 h-6 text-blue-500 dark:text-blue"
                                              aria-hidden="true"
                                              xmlns="http://www.w3.org/2000/svg"
                                              fill="currentColor"
@@ -144,10 +145,10 @@
                 </div>
             </a>
         </div>
-        <div class="w-full h-full">
+        <div class="w-full h-full my-auto">
             {% if user %}
                 {#ログイン時#}
-                <div class="w-full bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="mx-auto my-auto w-11/12 h-11/12 bg-slate-200 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <ul class="w-full flex h-full flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 "
                         id="defaultTab"
                         data-tabs-toggle="#defaultTabContent"
@@ -192,7 +193,11 @@
                                            id="submissionType"
                                            name="submissionType"
                                            value="SourceCode">
-                                    <textarea id="code" name="code">ここを書き換えてください</textarea>
+                                    <textarea id="code" name="code">#include <stdio.h>
+main()
+{
+  printf("Hello World\n");
+}</textarea>
                                     <input id="language" type="hidden">
                                     <button type="submit"
                                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -219,8 +224,8 @@
                 </form>
             {% else %}
                 {#未ログイン時#}
-                <div class="w-full  place-self-center ">
-                    <div class="w-full p-6 obj place-self-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <a href="#" class="w-full">
+                    <div class="my-auto mx-auto w-3/4 p-6 obj place-self-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <p class="mb-3 font-normal　text-center　text-gray-700 dark:text-gray-400">プログラムを提出するにはログインしてください</p>
                         <a href="/auth/login"
                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -247,7 +252,7 @@
                             </svg>
                         </a>
                     </div>
-                </div>
+                </a>
             {% endif %}
         </div>
     </div>
