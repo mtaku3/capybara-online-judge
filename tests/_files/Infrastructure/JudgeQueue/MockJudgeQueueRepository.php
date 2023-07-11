@@ -14,16 +14,14 @@ class MockJudgeQueueRepository implements IJudgeQueueRepository
     * @var  SubmissionId[]
     */
     private array $records = [];
-    private int   $head=0;
-    private int   $tail=0;
+
     /**
      * @param Submission $submission
      * @return void
      */
     public function enqueue(Submission $submission): void
     {
-        $this->records[$this->tail]=$submission->getId();
-        $this->tail++;
+        array_push($this->records, $submission->getId());
     }
 
     /**
@@ -31,6 +29,6 @@ class MockJudgeQueueRepository implements IJudgeQueueRepository
      */
     public function dequeue(): SubmissionId
     {
-        return $this->records[$this->head];
+        return array_shift($this->records);
     }
 }
