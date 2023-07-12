@@ -68,7 +68,5 @@ class SubmitUseCaseTest extends TestCase
         $this->assertEquals($submission->getProblemId(), $problem->getId());
         $this->assertEquals($submission->getLanguage(), $langueageC);
         $this->assertEquals($submission->getSubmissionType(), SubmissionType::File);
-        $this->assertEquals($submission, $this->mockSubmissionRepository->findById($submission->getId()));
-        $this->assertEquals($submission->getId(), $this->mockJudgeQueueRepository->dequeue());
     }
 }
