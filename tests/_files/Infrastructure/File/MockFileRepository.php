@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Infrastructure\File;
 
-use App\Domain\file\IFileRepository;
-use App\Domain\file\Entity\file;
+use App\Domain\File\IFileRepository;
+use App\Domain\File\Entity\File;
 use App\Domain\Problem\Entity\TestCase;
 use App\Domain\Submission\Entity\SourceFile;
 use App\Domain\Submission\Entity\Submission;
@@ -25,7 +25,6 @@ class MockFileRepository implements IFileRepository
      */
     public function moveSourceCode(string $src, Submission $submission): void
     {
-        
     }
 
     /**
@@ -34,8 +33,7 @@ class MockFileRepository implements IFileRepository
      * @return void
      */
     public function moveInputFile(string $src, TestCase $testCase): void
-    {  
-        
+    {
     }
 
     /**
@@ -45,7 +43,6 @@ class MockFileRepository implements IFileRepository
      */
     public function moveOutputFile(string $src, TestCase $testCase): void
     {
-        
     }
 
     /**
@@ -54,7 +51,6 @@ class MockFileRepository implements IFileRepository
      */
     public static function ValidateTarball(string $src): void
     {
-
     }
 
     /**
@@ -72,6 +68,5 @@ class MockFileRepository implements IFileRepository
      */
     public function deleteSourceFile(SourceFile $sourceFile): void
     {
-
     }
 }

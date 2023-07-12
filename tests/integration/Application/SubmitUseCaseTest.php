@@ -52,16 +52,23 @@ class SubmitUseCaseTest extends TestCase
             new ExecutionRuleFactoryDTO($langueageCPP, 'right', 'right', 'right', 'right'),
         );
         $testCaseDTOs = array(new TestCaseFactoryDTO('rightComand', $ExecutionRuleDTOs));
-        $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
 
+        $problem = Problem::Create('rightTitle', 'rightBoby', 1, 200, $compileRuleDTOs, $testCaseDTOs);
         $user = User::Create('aobuto', 'password', false);
+
         $this->mockProblemRepository->save($problem);
         $this->mockUserRepository->save($user);
 
-
         $request = new SubmitRequest($user->getId(), $problem->getId(), $langueageC, SubmissionType::File, 'aaaaaaaa');
         $response = $this->submitUseCase->handle($request);
-        $submissionId = $response->Submission->getId();
-        $this->assertTrue($response->Submission === $this->mockSubmissionRepository->findById($submissionId));
+
+        $submission = $response->Submission;
+
+        $this->assertEquals($submission->getUserId(), $user->getId());
+        $this->assertEquals($submission->getProblemId(), $problem->getId());
+        $this->assertEquals($submission->getLanguage(), $langueageC);
+        $this->assertEquals($submission->getSubmissionType(), SubmissionType::File);
+        $this->assertEquals($submission, $this->mockSubmissionRepository->findById($submission->getId()));
+        $this->assertEquals($submission->getId(), $this->mockJudgeQueueRepository->dequeue());
     }
 }
