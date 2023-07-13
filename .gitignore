@@ -142,3 +142,7 @@ dist/flowbite.min.js
 dist/filepond.min.js
 dist/filepond.min.css
 dist/tarball.min.js
+
+# phpunit
+.phpunit.cache
+.phpunit.result.cache

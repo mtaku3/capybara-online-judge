@@ -8,10 +8,15 @@ use App\Domain\File\IFileRepository;
 use App\Domain\Submission\Entity\Submission;
 use App\Domain\Problem\Entity\TestCase;
 use App\Domain\Common\ValueObject\Language;
+use App\Domain\Submission\Entity\SourceFile;
 use App\Domain\Submission\ValueObject\SubmissionType;
 use App\Infrastructure\Repository\File\Exception\FileMustBeArchivedAsTarballException;
+use Exception;
+use Phar;
 use PharData;
 use RecursiveIteratorIterator;
+use RuntimeException;
+use Throwable;
 
 class FileRepository implements IFileRepository
 {
@@ -33,9 +38,14 @@ class FileRepository implements IFileRepository
 
             $tar->addFile($src, self::RetrievePreferedFileNameFromLanguage($submission->getLanguage()));
         } else {
+            if (rename($src, $src . ".tar") === false) {
+                throw new RuntimeException();
+            }
+            $src = $src . ".tar";
+
             self::ValidateTarball($src);
 
-            move_uploaded_file($src, $dest);
+            rename($src, $dest);
         }
     }
 
@@ -47,9 +57,14 @@ class FileRepository implements IFileRepository
             mkdir($dest, recursive: true);
         }
 
+        if (rename($src, $src . ".tar") === false) {
+            throw new RuntimeException();
+        }
+        $src = $src . ".tar";
+
         self::ValidateTarball($src);
 
-        move_uploaded_file($src, $dest);
+        rename($src, $dest);
     }
 
     public function moveOutputFile(string $src, TestCase $testCase): void
@@ -60,9 +75,14 @@ class FileRepository implements IFileRepository
             mkdir($dest, recursive: true);
         }
 
+        if (rename($src, $src . ".tar") === false) {
+            throw new RuntimeException();
+        }
+        $src = $src . ".tar";
+
         self::ValidateTarball($src);
 
-        move_uploaded_file($src, $dest);
+        rename($src, $dest);
     }
 
     /**
@@ -87,10 +107,10 @@ class FileRepository implements IFileRepository
      */
     public static function ValidateTarball(string $src): void
     {
-        $tar = new PharData($src);
-
-        if ($tar->getExtension() !== "tar") {
-            throw new FileMustBeArchivedAsTarballException();
+        try {
+            new PharData($src, format: Phar::TAR);
+        } catch (Throwable $e) {
+            throw new FileMustBeArchivedAsTarballException(previous: $e);
         }
     }
 
@@ -100,7 +120,7 @@ class FileRepository implements IFileRepository
      */
     public static function SumContentLengthsUp(string $src): int
     {
-        $tar = new PharData($src);
+        $tar = new PharData($src, format: Phar::TAR);
 
         $length = 0;
         foreach (new RecursiveIteratorIterator($tar) as $file) {
@@ -108,5 +128,18 @@ class FileRepository implements IFileRepository
         }
 
         return $length;
+    }
+
+    /**
+     * @param SourceFile $sourceFile
+     * @return void
+     */
+    public function deleteSourceFile(SourceFile $sourceFile): void
+    {
+        $path = $sourceFile->getPath();
+
+        if (file_exists($path)) {
+            unlink($path);
+        }
     }
 }

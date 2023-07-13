@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\AddProblemLanguages;
 
+use App\Domain\Problem\Factory\CompileRuleFactoryDTO;
+use App\Domain\Problem\Factory\ExecutionRuleFactoryDTOWithTestCaseId;
 use App\Domain\Problem\IProblemRepository;
 
 class AddProblemLanguagesUseCase
@@ -28,6 +30,31 @@ class AddProblemLanguagesUseCase
      */
     public function handle(AddProblemLanguagesRequest $request): AddProblemLanguagesResponse
     {
-        // TODO
+        $problem = $this->ProblemRepository->findById($request->ProblemId);
+
+        $compileRules = [];
+        foreach ($request->CompileRuleDTOs as $compileRuleDTO) {
+            $language = $compileRuleDTO->Language;
+            $sourceCodeCompileCommand = $compileRuleDTO->SourceCodeCompileCommand;
+            $fileCompileCommand = $compileRuleDTO->FileCompileCommand;
+            $compileRules[] = new CompileRuleFactoryDTO($language, $sourceCodeCompileCommand, $fileCompileCommand);
+        }
+
+        $executionRules =[];
+        foreach ($request->ExecutionRuleDTOs as $executionRuleDTO) {
+            $testCaseId = $executionRuleDTO->TestCaseId;
+            $language = $executionRuleDTO->Language;
+            $sourceCodeExecutionCommand = $executionRuleDTO->SourceCodeExecutionCommand;
+            $sourceCodeCompareCommand = $executionRuleDTO->SourceCodeCompareCommand;
+            $fileExcutionCommand = $executionRuleDTO->FileExecutionCommand;
+            $fileCompareCommand = $executionRuleDTO->FileCompareCommand;
+            $executionRules[] = new ExecutionRuleFactoryDTOWithTestCaseId($testCaseId, $language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExcutionCommand, $fileCompareCommand);
+        }
+
+        $problem->createCompileRules($compileRules, $executionRules);
+
+        $this->ProblemRepository->save($problem);
+
+        return new AddProblemLanguagesResponse($problem);
     }
 }

@@ -17,9 +17,12 @@ use App\Application\GetSubmissionById\GetSubmissionByIdUseCase;
 use App\Application\GetSubmissionsByProblemId\GetSubmissionsByProblemIdUseCase;
 use App\Application\GetSubmissionsByProblemIdAndUserId\GetSubmissionsByProblemIdAndUserIdUseCase;
 use App\Application\GetSubmissionsByUserId\GetSubmissionsByUserIdUseCase;
+use App\Application\GetUserById\GetUserByIdUseCase;
+use App\Application\PurgeSessions\PurgeSessionsUseCase;
 use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesUseCase;
 use App\Application\Session\Entity\Session;
 use App\Application\Submit\SubmitUseCase;
+use App\Application\UpdateCompileRule\UpdateCompileRuleUseCase;
 use App\Application\UpdateProblemTitleAndBody\UpdateProblemTitleAndBodyUseCase;
 use App\Application\UpdateTestCase\UpdateTestCaseUseCase;
 use App\Application\ValidateSession\ValidateSessionUseCase;
@@ -35,6 +38,7 @@ use App\Infrastructure\Repository\User\UserRepository;
 use App\Presentation\Controller\LoginController;
 use App\Presentation\Controller\ProblemController;
 use App\Presentation\Controller\ProblemListController;
+use App\Presentation\Controller\RegisterController;
 use App\Presentation\Controller\SubmissionController;
 use App\Presentation\Controller\TestCaseController;
 use Cycle\Database;
@@ -136,7 +140,7 @@ $containerBuilder->addDefinitions([
         return $twig;
     },
     "LoginController" => function (ContainerInterface $c) {
-        return new LoginController($c->get("Twig"), $c->get("AuthorizeUseCase"));
+        return new LoginController($c->get("Twig"), $c->get("AuthorizeUseCase"), $c->get("PurgeSessionsUseCase"));
     },
     "ProblemController" => function (ContainerInterface $c) {
         return new ProblemController(
@@ -151,6 +155,9 @@ $containerBuilder->addDefinitions([
     "ProblemListController" => function (ContainerInterface $c) {
         return new ProblemListController($c->get("Twig"));
     },
+    "RegisterController" => function (ContainerInterface $c) {
+        return new RegisterController($c->get("Twig"), $c->get("CreateUserUseCase"), $c->get("AuthorizeUseCase"));
+    },
     "SubmissionController" => function (ContainerInterface $c) {
         return new SubmissionController(
             $c->get("Twig"),
@@ -159,7 +166,8 @@ $containerBuilder->addDefinitions([
             $c->get("GetSubmissionsByUserIdUseCase"),
             $c->get("GetSubmissionByIdUseCase"),
             $c->get("GetProblemByIdUseCase"),
-            $c->get("DeleteSubmissionUseCase")
+            $c->get("DeleteSubmissionUseCase"),
+            $c->get("GetUserByIdUseCase")
         );
     },
     "TestCaseController" => function (ContainerInterface $c) {
@@ -171,7 +179,8 @@ $containerBuilder->addDefinitions([
             $c->get("UpdateTestCaseUseCase"),
             $c->get("CreateTestCaseUseCase"),
             $c->get("EnableTestCaseUseCase"),
-            $c->get("DisableTestCaseUseCase")
+            $c->get("DisableTestCaseUseCase"),
+            $c->get("UpdateCompileRuleUseCase")
         );
     },
 
@@ -195,7 +204,7 @@ $containerBuilder->addDefinitions([
         return new DeleteProblemUseCase($c->get("ProblemRepository"));
     },
     "DeleteSubmissionUseCase" => function (ContainerInterface $c) {
-        return new DeleteSubmissionUseCase($c->get("SubmissionRepository"));
+        return new DeleteSubmissionUseCase($c->get("SubmissionRepository"), $c->get("FileRepository"));
     },
     "DisableTestCaseUseCase" => function (ContainerInterface $c) {
         return new DisableTestCaseUseCase($c->get("ProblemRepository"));
@@ -212,6 +221,9 @@ $containerBuilder->addDefinitions([
     "GetSubmissionByIdUseCase" => function (ContainerInterface $c) {
         return new GetSubmissionByIdUseCase($c->get("SubmissionRepository"));
     },
+    "GetUserByIdUseCase" => function (ContainerInterface $c) {
+        return new GetUserByIdUseCase($c->get("UserRepository"));
+    },
     "GetSubmissionsByProblemIdUseCase" => function (ContainerInterface $c) {
         return new GetSubmissionsByProblemIdUseCase($c->get("SubmissionRepository"), $c->get("ProblemRepository"));
     },
@@ -221,11 +233,17 @@ $containerBuilder->addDefinitions([
     "GetSubmissionsByUserIdUseCase" => function (ContainerInterface $c) {
         return new GetSubmissionsByUserIdUseCase($c->get("SubmissionRepository"), $c->get("UserRepository"));
     },
+    "PurgeSessionsUseCase" => function (ContainerInterface $c) {
+        return new PurgeSessionsUseCase($c->get("SessionRepository"));
+    },
     "RemoveProblemLanguagesUseCase" => function (ContainerInterface $c) {
         return new RemoveProblemLanguagesUseCase($c->get("ProblemRepository"));
     },
     "SubmitUseCase" => function (ContainerInterface $c) {
         return new SubmitUseCase($c->get("UserRepository"), $c->get("ProblemRepository"), $c->get("FileRepository"), $c->get("SubmissionRepository"), $c->get("JudgeQueueRepository"));
+    },
+    "UpdateCompileRuleUseCase" => function (ContainerInterface $c) {
+        return new UpdateCompileRuleUseCase($c->get("ProblemRepository"));
     },
     "UpdateProblemTitleAndBodyUseCase" => function (ContainerInterface $c) {
         return new UpdateProblemTitleAndBodyUseCase($c->get("ProblemRepository"));

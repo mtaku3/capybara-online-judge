@@ -1,0 +1,27 @@
+{% macro codemirror() %}
+    <link rel=stylesheet href="/codemirror/lib/codemirror.css">
+    <script src="/codemirror/lib/codemirror.js"></script>
+    <script src="/codemirror/mode/clike/clike.js"></script>
+    <style>
+    .CodeMirror {
+        font-family: Consolas, Monaco, 'Courier New', Courier, monospace !important;
+        font-size: 12px;
+    }
+    </style>
+{% endmacro codemirror %}
+{% macro filepond() %}
+    <link rel=stylesheet href="/filepond.min.css">
+    <script src="/filepond.min.js"></script>
+    <script src="/tarball.min.js"></script>
+    <script>FilePond.registerPlugin(FilePondPluginTarball(true, true));</script>
+{% endmacro filepond %}
+{% macro texme() %}
+    <script>
+    window.texme = {
+        markdownURL: "/marked/marked.min.js",
+        MathJaxURL: "/mathjax/es5/tex-mml-chtml.js",
+        renderOnLoad: false
+    }
+    </script>
+    <script src="/texme/texme.min.js"></script>
+{% endmacro texme %}

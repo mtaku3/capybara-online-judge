@@ -16,12 +16,15 @@ use App\Application\GetProblemById\GetProblemByIdRequest;
 use App\Application\GetProblemById\GetProblemByIdUseCase;
 use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesRequest;
 use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesUseCase;
+use App\Application\UpdateCompileRule\UpdateCompileRuleRequest;
+use App\Application\UpdateCompileRule\UpdateCompileRuleUseCase;
 use App\Application\UpdateTestCase\UpdateTestCaseRequest;
 use App\Application\UpdateTestCase\UpdateTestCaseUseCase;
 use App\Domain\Common\Exception\CorruptedEntityException;
 use App\Domain\Common\Exception\EntityNotFoundException;
 use App\Domain\Common\ValueObject\Language;
 use App\Domain\Problem\Exception\AtLeastOneEnabledTestCaseRequiredException;
+use App\Domain\Problem\ValueObject\CompileRuleId;
 use App\Domain\Problem\ValueObject\ExecutionRuleId;
 use App\Domain\Problem\ValueObject\ProblemId;
 use App\Domain\Problem\ValueObject\TestCaseId;
@@ -31,7 +34,6 @@ use App\Presentation\Router\Exceptions\LockedResponseException;
 use App\Presentation\Router\Response;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
 use App\Presentation\Router\Request;
-use Exception;
 use InvalidArgumentException;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -81,6 +83,11 @@ class TestCaseController
     private readonly DisableTestCaseUseCase $DisableTestCaseUseCase;
 
     /**
+     * @var UpdateCompileRuleUseCase
+     */
+    private readonly UpdateCompileRuleUseCase $UpdateCompileRuleUseCase;
+
+    /**
      * @param Environment $twig
      * @param GetProblemByIdUseCase $getProblemByIdUseCase
      * @param AddProblemLanguagesUseCase $addProblemLanguagesUseCase
@@ -89,9 +96,10 @@ class TestCaseController
      * @param CreateTestCaseUseCase $createTestCaseUseCase
      * @param EnableTestCaseUseCase $enableTestCaseUseCase
      * @param DisableTestCaseUseCase $disableTestCaseUseCase
+     * @param UpdateCompileRuleUseCase $updateCompileRuleUseCase
      * @return void
      */
-    public function __construct(Environment $twig, GetProblemByIdUseCase $getProblemByIdUseCase, AddProblemLanguagesUseCase $addProblemLanguagesUseCase, RemoveProblemLanguagesUseCase $removeProblemLanguagesUseCase, UpdateTestCaseUseCase $updateTestCaseUseCase, CreateTestCaseUseCase $createTestCaseUseCase, EnableTestCaseUseCase $enableTestCaseUseCase, DisableTestCaseUseCase $disableTestCaseUseCase)
+    public function __construct(Environment $twig, GetProblemByIdUseCase $getProblemByIdUseCase, AddProblemLanguagesUseCase $addProblemLanguagesUseCase, RemoveProblemLanguagesUseCase $removeProblemLanguagesUseCase, UpdateTestCaseUseCase $updateTestCaseUseCase, CreateTestCaseUseCase $createTestCaseUseCase, EnableTestCaseUseCase $enableTestCaseUseCase, DisableTestCaseUseCase $disableTestCaseUseCase, UpdateCompileRuleUseCase $updateCompileRuleUseCase)
     {
         $this->Twig = $twig;
         $this->GetProblemByIdUseCase = $getProblemByIdUseCase;
@@ -101,6 +109,7 @@ class TestCaseController
         $this->CreateTestCaseUseCase = $createTestCaseUseCase;
         $this->EnableTestCaseUseCase = $enableTestCaseUseCase;
         $this->DisableTestCaseUseCase = $disableTestCaseUseCase;
+        $this->UpdateCompileRuleUseCase = $updateCompileRuleUseCase;
     }
 
     /**
@@ -122,10 +131,12 @@ class TestCaseController
                 throw HttpException::createFromCode(401);
             }
 
-            $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest(new ProblemId($req->problemId)));
+            $problemId = new ProblemId($req->problemId);
+            $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($problemId));
 
             $res->body(
                 $this->Twig->render("TestCases.twig", [
+                    "problem" => $getProblemByIdResponse->Problem,
                     "testCases" => $getProblemByIdResponse->Problem->getTestCases()
                 ])
             );
@@ -156,10 +167,17 @@ class TestCaseController
 
             $compileRuleDTOs = [];
             foreach ($req->compileRules as $compileRule) {
-                $language = Language::from($compileRule["language"]);
                 $sourceCodeCompileCommand = $compileRule["sourceCodeCompileCommand"];
                 $fileCompileCommand = $compileRule["fileCompileCommand"];
-                $compileRuleDTOs[] = new \App\Application\AddProblemLanguages\DTO\CompileRuleDTO($language, $sourceCodeCompileCommand, $fileCompileCommand);
+
+                if (isset($compileRule["compileRuleId"])) {
+                    $compileRuleId = new CompileRuleId($compileRule["compileRuleId"]);
+                    $updateCompileRuleRequest = new UpdateCompileRuleRequest($problemId, $compileRuleId, $sourceCodeCompileCommand, $fileCompileCommand);
+                    $this->UpdateCompileRuleUseCase->handle($updateCompileRuleRequest);
+                } else {
+                    $language = Language::from($compileRule["language"]);
+                    $compileRuleDTOs[] = new \App\Application\AddProblemLanguages\DTO\CompileRuleDTO($language, $sourceCodeCompileCommand, $fileCompileCommand);
+                }
             }
 
             $executionRuleDTOs = [];
@@ -173,11 +191,14 @@ class TestCaseController
                 $executionRuleDTOs[] = new \App\Application\AddProblemLanguages\DTO\ExecutionRuleDTO($testCaseId, $language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
             }
 
-            $this->AddProblemLanguagesUseCase->handle(new AddProblemLanguagesRequest($problemId, $compileRuleDTOs, $executionRuleDTOs));
+            if (!empty($compileRuleDTOs)) {
+                $this->AddProblemLanguagesUseCase->handle(new AddProblemLanguagesRequest($problemId, $compileRuleDTOs, $executionRuleDTOs));
+            }
 
-            $languagesToRemove = array_map(fn ($e) => Language::from($e), $req->languagesToRemove);
-
-            $this->RemoveProblemLanguagesUseCase->handle(new RemoveProblemLanguagesRequest($problemId, $languagesToRemove));
+            if (!empty($req->languagesToRemove)) {
+                $languagesToRemove = array_map(fn ($e) => Language::from($e), $req->languagesToRemove);
+                $this->RemoveProblemLanguagesUseCase->handle(new RemoveProblemLanguagesRequest($problemId, $languagesToRemove));
+            }
 
             $res->redirect("/problem/" . $problemId . "/testcases");
         } catch (ProblemNotFoundException) {
@@ -234,7 +255,7 @@ class TestCaseController
     {
         try {
             $user = $req->user;
-            if (!isset($use) || !$user->getIsAdmin()) {
+            if (!isset($user) || !$user->getIsAdmin()) {
                 throw HttpException::createFromCode(401);
             }
 
@@ -274,7 +295,7 @@ class TestCaseController
     {
         try {
             $user = $req->user;
-            if (!isset($use) || !$user->getIsAdmin()) {
+            if (!isset($user) || !$user->getIsAdmin()) {
                 throw HttpException::createFromCode(401);
             }
 
@@ -300,7 +321,7 @@ class TestCaseController
     {
         try {
             $user = $req->user;
-            if (!isset($use) || !$user->getIsAdmin()) {
+            if (!isset($user) || !$user->getIsAdmin()) {
                 throw HttpException::createFromCode(401);
             }
 
@@ -332,17 +353,18 @@ class TestCaseController
             }
 
             $problemId = new ProblemId($req->problemId);
+            $testCaseId = new TestCaseId($req->testCaseId);
 
             $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($problemId));
             $problem = $getProblemByIdResponse->Problem;
 
-            $testCase = current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($problemId)));
+            $testCase = current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($testCaseId)));
             if ($testCase === false) {
                 throw HttpException::createFromCode(404);
             }
 
             $inputFilePath = $testCase->getInputFile()->getPath();
-            if (file_exists($inputFilePath)) {
+            if (!file_exists($inputFilePath)) {
                 throw HttpException::createFromCode(500);
             }
 
@@ -369,17 +391,18 @@ class TestCaseController
             }
 
             $problemId = new ProblemId($req->problemId);
+            $testCaseId = new TestCaseId($req->testCaseId);
 
             $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($problemId));
             $problem = $getProblemByIdResponse->Problem;
 
-            $testCase = current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($problemId)));
+            $testCase = current(array_filter($problem->getTestCases(), fn ($e) => $e->getId()->equals($testCaseId)));
             if ($testCase === false) {
                 throw HttpException::createFromCode(404);
             }
 
             $outputFilePath = $testCase->getOutputFile()->getPath();
-            if (file_exists($outputFilePath)) {
+            if (!file_exists($outputFilePath)) {
                 throw HttpException::createFromCode(500);
             }
 

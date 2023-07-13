@@ -36,7 +36,7 @@ class InputFile implements IFile
      */
     public static function _create(TestCaseId $testCaseId): InputFile
     {
-        return new InputFile(InputFileId::NextIdentity(), "/data/InputFiles" . (string)$testCaseId . ".tar");
+        return new InputFile(InputFileId::NextIdentity(), "/data/InputFiles/" . (string)$testCaseId . ".tar");
     }
 
     /** @return InputFileId  */

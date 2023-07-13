@@ -28,6 +28,10 @@ class EnableTestCaseUseCase
      */
     public function handle(EnableTestCaseRequest $request): EnableTestCaseResponse
     {
-        // TODO
+        $problem = $this->ProblemRepository->findById($request->ProblemId);
+        $problem->enableTestCase($request->TestCaseId);
+        $this->ProblemRepository->save($problem);
+
+        return new EnableTestCaseResponse($problem);
     }
 }

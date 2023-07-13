@@ -16,6 +16,8 @@ use App\Application\GetSubmissionsByProblemIdAndUserId\GetSubmissionsByProblemId
 use App\Application\GetSubmissionsByProblemIdAndUserId\GetSubmissionsByProblemIdAndUserIdUseCase;
 use App\Application\GetSubmissionsByUserId\GetSubmissionsByUserIdRequest;
 use App\Application\GetSubmissionsByUserId\GetSubmissionsByUserIdUseCase;
+use App\Application\GetUserById\GetUserByIdRequest;
+use App\Application\GetUserById\GetUserByIdUseCase;
 use App\Domain\Problem\ValueObject\ProblemId;
 use App\Domain\Submission\ValueObject\SubmissionId;
 use App\Domain\User\ValueObject\UserId;
@@ -71,6 +73,11 @@ class SubmissionController
     private readonly DeleteSubmissionUseCase $DeleteSubmissionUseCase;
 
     /**
+     * @var GetUserByIdUseCase
+     */
+    private readonly GetUserByIdUseCase $GetUserByIdUseCase;
+
+    /**
      * @param Environment $twig
      * @param GetSubmissionsByProblemIdUseCase $getSubmissionsByProblemIdUseCase
      * @param GetSubmissionsByProblemIdAndUserIdUseCase $getSubmissionsByProblemIdAndUserIdUseCase
@@ -78,9 +85,10 @@ class SubmissionController
      * @param GetSubmissionByIdUseCase $getSubmissionByIdUseCase
      * @param GetProblemByIdUseCase $getProblemByIdUseCase
      * @param DeleteSubmissionUseCase $deleteSubmissionUseCase
+     * @param GetUserByIdUseCase $getUserByIdUseCase
      * @return void
      */
-    public function __construct(Environment $twig, GetSubmissionsByProblemIdUseCase $getSubmissionsByProblemIdUseCase, GetSubmissionsByProblemIdAndUserIdUseCase $getSubmissionsByProblemIdAndUserIdUseCase, GetSubmissionsByUserIdUseCase $getSubmissionsByUserIdUseCase, GetSubmissionByIdUseCase $getSubmissionByIdUseCase, GetProblemByIdUseCase $getProblemByIdUseCase, DeleteSubmissionUseCase $deleteSubmissionUseCase)
+    public function __construct(Environment $twig, GetSubmissionsByProblemIdUseCase $getSubmissionsByProblemIdUseCase, GetSubmissionsByProblemIdAndUserIdUseCase $getSubmissionsByProblemIdAndUserIdUseCase, GetSubmissionsByUserIdUseCase $getSubmissionsByUserIdUseCase, GetSubmissionByIdUseCase $getSubmissionByIdUseCase, GetProblemByIdUseCase $getProblemByIdUseCase, DeleteSubmissionUseCase $deleteSubmissionUseCase, GetUserByIdUseCase $getUserByIdUseCase)
     {
         $this->Twig = $twig;
         $this->GetSubmissionsByProblemIdUseCase = $getSubmissionsByProblemIdUseCase;
@@ -89,6 +97,7 @@ class SubmissionController
         $this->GetSubmissionByIdUseCase = $getSubmissionByIdUseCase;
         $this->GetProblemByIdUseCase = $getProblemByIdUseCase;
         $this->DeleteSubmissionUseCase = $deleteSubmissionUseCase;
+        $this->GetUserByIdUseCase = $getUserByIdUseCase;
     }
 
     /**
@@ -140,7 +149,6 @@ class SubmissionController
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LockedResponseException
-     * @throws ResponseAlreadySentException
      */
     public function getByProblem(Request $req, Response $res)
     {
@@ -149,10 +157,15 @@ class SubmissionController
             throw HttpException::createFromCode(401);
         }
 
+        $users = [];
         if ($user->getIsAdmin()) {
             $getSubmissionsByProblemIdResponse = $this->GetSubmissionsByProblemIdUseCase->handle(new GetSubmissionsByProblemIdRequest(new ProblemId($req->problemId), intval($req->param("page", 1)), self::LimitPerPage));
             $submissions = $getSubmissionsByProblemIdResponse->Submissions;
             $count = $getSubmissionsByProblemIdResponse->Count;
+
+            foreach ($submissions as $submission) {
+                $users[] = $this->GetUserByIdUseCase->handle(new GetUserByIdRequest($submission->getUserId()));
+            }
         } else {
             $getSubmissionsByProblemIdAndUserIdResponse = $this->GetSubmissionsByProblemIdAndUserIdUseCase->handle(new GetSubmissionsByProblemIdAndUserIdRequest(new ProblemId($req->problemId), $user->getId(), intval($req->param("page", 1)), self::LimitPerPage));
             $submissions = $getSubmissionsByProblemIdAndUserIdResponse->Submissions;
@@ -165,7 +178,8 @@ class SubmissionController
                 "page" => intval($req->param("page", 1)),
                 "totalNumberOfSubmissions" => $count,
                 "totalNumberOfPages" => intval(ceil($count / self::LimitPerPage)),
-                "limitPerPage" => self::LimitPerPage
+                "limitPerPage" => self::LimitPerPage,
+                "users" => $users
             ])
         );
     }
@@ -197,10 +211,23 @@ class SubmissionController
         $getSubmissionsByUserIdResponse = $this->GetSubmissionsByUserIdUseCase->handle(new GetSubmissionsByUserIdRequest($requestedUserId, intval($req->param("page", 1)), self::LimitPerPage));
         $count = $getSubmissionsByUserIdResponse->Count;
 
+        $submissions = $getSubmissionsByUserIdResponse->Submissions;
+        $problems = [];
+        foreach (array_reduce($submissions, function ($c, $e) {
+            if (array_search($e->getProblemId(), $c) === false) {
+                $c[] = $e->getProblemId();
+            }
+            return $c;
+        }, []) as $problemId) {
+            $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($problemId));
+            $problems[] = $getProblemByIdResponse->Problem;
+        }
+
         $res->body(
             $this->Twig->render("User/Submissions.twig", [
                 "requestedUser" => $getSubmissionsByUserIdResponse->User,
-                "submissions" => $getSubmissionsByUserIdResponse->Submissions,
+                "submissions" => $submissions,
+                "problems" => $problems,
                 "page" => intval($req->param("page", 1)),
                 "totalNumberOfSubmissions" => $count,
                 "totalNumberOfPages" => intval(ceil($count / self::LimitPerPage)),

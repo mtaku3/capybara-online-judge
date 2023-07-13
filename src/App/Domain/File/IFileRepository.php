@@ -6,6 +6,7 @@ namespace App\Domain\File;
 
 use App\Domain\Common\ValueObject\Language;
 use App\Domain\Problem\Entity\TestCase;
+use App\Domain\Submission\Entity\SourceFile;
 use App\Domain\Submission\Entity\Submission;
 
 interface IFileRepository
@@ -42,4 +43,10 @@ interface IFileRepository
      * @return int
      */
     public static function SumContentLengthsUp(string $src): int;
+
+    /**
+     * @param SourceFile $sourceFile
+     * @return void
+     */
+    public function deleteSourceFile(SourceFile $sourceFile): void;
 }

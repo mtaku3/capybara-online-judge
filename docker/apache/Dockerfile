@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/php:8 AS base
+FROM mcr.microsoft.com/devcontainers/php:8-bullseye AS base
 
 # Configure apache2
 
@@ -63,6 +63,10 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   # smoke tests
   && node --version \
   && npm --version
+
+# Configure ownership of data directory to save all files uploaded to COJ
+WORKDIR /data
+RUN chown -R www-data:www-data /data
 
 
 FROM base as development
