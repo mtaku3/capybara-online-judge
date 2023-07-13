@@ -193,7 +193,7 @@ class Submission
         return $this->ExecutionTime;
     }
 
-    /** @return null|int */
+    /** @return null|int  */
     public function getConsumedMemory(): ?int
     {
         return $this->ConsumedMemory;
