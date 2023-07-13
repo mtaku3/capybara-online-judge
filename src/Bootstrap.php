@@ -41,12 +41,14 @@ use App\Presentation\Controller\ProblemListController;
 use App\Presentation\Controller\RegisterController;
 use App\Presentation\Controller\SubmissionController;
 use App\Presentation\Controller\TestCaseController;
+use App\Presentation\CustomTwigFunction;
 use Cycle\Database;
 use Cycle\Database\Config;
 use Cycle\ORM;
 use Cycle\ORM\EntityManager;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
+use Twig\TwigFunction;
 
 /** Load .env */
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
@@ -132,6 +134,11 @@ $containerBuilder->addDefinitions([
         }
 
         $twig = new \Twig\Environment($loader, $options);
+
+        $customTwigFunction = new CustomTwigFunction();
+        foreach ($customTwigFunction->functions as $function) {
+            $twig->addFunction($function);
+        }
 
         if ($_ENV["ISDEV"]) {
             $twig->addExtension(new \Twig\Extension\DebugExtension());
