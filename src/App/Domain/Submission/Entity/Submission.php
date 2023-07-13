@@ -187,14 +187,14 @@ class Submission
         }
     }
 
-    /** @return int  */
-    public function getExecutionTime(): int
+    /** @return null|int  */
+    public function getExecutionTime(): ?int
     {
         return $this->ExecutionTime;
     }
 
-    /** @return int  */
-    public function getConsumedMemory(): int
+    /** @return null|int  */
+    public function getConsumedMemory(): ?int
     {
         return $this->ConsumedMemory;
     }
