@@ -185,7 +185,7 @@
                         </select>
                         <div id="defaultTabContent" class="w-full h-full">
                             {#ソースコード選択時#}
-                            <form method="post" action="/problem/{{ problemId }}/submissions">
+                            <form method="post" action="/problem/{{ problemId }}/submit">
                                 <div class="w-full h-full  p-6 obj text-left bg-white border border-gray-200 rounded-none shadow dark:bg-gray-800 dark:border-gray-700"
                                      id="source">
                                     <input class="hidden" name="language" id="sourceCodeTabLanguage" value="C" />
@@ -193,7 +193,7 @@
                                            id="submissionType"
                                            name="submissionType"
                                            value="SourceCode">
-                                    <textarea id="code" name="code">#include <stdio.h>
+                                    <textarea id="code" name="sourceCode">#include <stdio.h>
 main()
 {
   printf("Hello World\n");
@@ -206,7 +206,7 @@ main()
                                 </div>
                             </form>
                             {#ファイル提出選択時#}
-                            <form method="post" action="/problem/{{ problemId }}/submissions">
+                            <form method="post" action="/problem/{{ problemId }}/submit">
                                 <div class="bg-white hidden items-center justify-center w-full h-full"
                                      id="file">
                                     <input class="hidden" name="language" id="FileTabLanguage" value="C" />
