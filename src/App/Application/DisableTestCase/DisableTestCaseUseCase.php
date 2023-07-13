@@ -28,6 +28,10 @@ class DisableTestCaseUseCase
      */
     public function handle(DisableTestCaseRequest $request): DisableTestCaseResponse
     {
-        // TODO
+        $problem = $this->ProblemRepository->findById($request->ProblemId);
+        $problem->disableTestCase($request->TestCaseId);
+        $this->ProblemRepository->save($problem);
+
+        return new DisableTestCaseResponse($problem);
     }
 }

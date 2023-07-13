@@ -187,7 +187,7 @@ class Submission
         }
     }
 
-    /** @return null|int  */
+    /** @return null|int */
     public function getExecutionTime(): ?int
     {
         return $this->ExecutionTime;
@@ -244,6 +244,7 @@ class Submission
 
 
         $testResult = TestResult::_create($this->Id, $testCaseId, $judgeResult, $executionTime, $consumedMemory);
+        $this->TestResults; // required to retrieve the array before appending : CycleORM Proxy limitation
         $this->TestResults[] = $testResult;
     }
 
