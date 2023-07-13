@@ -42,7 +42,8 @@ while (1) {
                     "HostConfig" => [
                         "Memory" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
                         "MemorySwap" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
-                        "NetworkMode" => "none"
+                        "NetworkMode" => "none",
+                        "Runtime" => "runsc"
                     ]
                 ]
             ]);
@@ -248,7 +249,7 @@ while (1) {
                 throw new Exception("Failed to remove container:" . (string)$res->getBody());
             }
         }
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         echo $e;
     }
 }

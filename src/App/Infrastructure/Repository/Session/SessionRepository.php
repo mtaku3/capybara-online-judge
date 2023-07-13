@@ -6,10 +6,12 @@ namespace App\Infrastructure\Repository\Session;
 
 use App\Application\Session\Entity\Session;
 use App\Application\Session\ISessionRepository;
-use App\Domain\User\Entity\User;
 use App\Application\Session\ValueObject\RefreshToken;
+use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Repository\Session\Exception\SessionNotFoundException;
 use Cycle\ORM\EntityManagerInterface;
+use Cycle\ORM\Exception\ParserException;
+use Cycle\ORM\Exception\LoaderException;
 use Cycle\ORM\Select\Repository;
 
 class SessionRepository implements ISessionRepository
@@ -35,15 +37,15 @@ class SessionRepository implements ISessionRepository
     }
 
     /**
-     * @param User $user
+     * @param UserId $userId
      * @param RefreshToken $refreshToken
      * @return Session
      * @throws SessionNotFoundException
      */
-    public function findByUserAndRefreshToken(User $user, RefreshToken $refreshToken): Session
+    public function findByUserIdAndRefreshToken(UserId $userId, RefreshToken $refreshToken): Session
     {
         $session = $this->SessionRepository->findOne([
-            "UserId" => $user->getId(),
+            "UserId" => $userId,
             "RefreshToken" => $refreshToken
         ]);
 
@@ -55,12 +57,33 @@ class SessionRepository implements ISessionRepository
     }
 
     /**
+     * @param UserId $userId
+     * @return Session[]
+     * @throws ParserException
+     * @throws LoaderException
+     */
+    public function findByUserId(UserId $userId): array
+    {
+        return iterator_to_array($this->SessionRepository->findAll(["UserId" => $userId]));
+    }
+
+    /**
      * @param Session $session
      * @return void
      */
     public function save(Session $session): void
     {
         $this->EntityManager->persist($session);
+        $this->EntityManager->run();
+    }
+
+    /**
+     * @param Session $session
+     * @return void
+     */
+    public function delete(Session $session): void
+    {
+        $this->EntityManager->delete($session);
         $this->EntityManager->run();
     }
 }
