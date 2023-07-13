@@ -17,6 +17,7 @@ use App\Application\GetSubmissionById\GetSubmissionByIdUseCase;
 use App\Application\GetSubmissionsByProblemId\GetSubmissionsByProblemIdUseCase;
 use App\Application\GetSubmissionsByProblemIdAndUserId\GetSubmissionsByProblemIdAndUserIdUseCase;
 use App\Application\GetSubmissionsByUserId\GetSubmissionsByUserIdUseCase;
+use App\Application\GetUserById\GetUserByIdUseCase;
 use App\Application\PurgeSessions\PurgeSessionsUseCase;
 use App\Application\RemoveProblemLanguages\RemoveProblemLanguagesUseCase;
 use App\Application\Session\Entity\Session;
@@ -165,7 +166,8 @@ $containerBuilder->addDefinitions([
             $c->get("GetSubmissionsByUserIdUseCase"),
             $c->get("GetSubmissionByIdUseCase"),
             $c->get("GetProblemByIdUseCase"),
-            $c->get("DeleteSubmissionUseCase")
+            $c->get("DeleteSubmissionUseCase"),
+            $c->get("GetUserByIdUseCase")
         );
     },
     "TestCaseController" => function (ContainerInterface $c) {
@@ -218,6 +220,9 @@ $containerBuilder->addDefinitions([
     },
     "GetSubmissionByIdUseCase" => function (ContainerInterface $c) {
         return new GetSubmissionByIdUseCase($c->get("SubmissionRepository"));
+    },
+    "GetUserByIdUseCase" => function (ContainerInterface $c) {
+        return new GetUserByIdUseCase($c->get("UserRepository"));
     },
     "GetSubmissionsByProblemIdUseCase" => function (ContainerInterface $c) {
         return new GetSubmissionsByProblemIdUseCase($c->get("SubmissionRepository"), $c->get("ProblemRepository"));
