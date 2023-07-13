@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="h-full">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block head %}
+        {% endblock head %}
         <link href="/tailwind.css" rel="stylesheet">
         <script src="/flowbite.min.js"></script>
         <script>
@@ -14,10 +16,8 @@
             }
         </script>
         <script src="/jquery.min.js"></script>
-        {% block head %}
-        {% endblock head %}
     </head>
-    <body>
+    <body class="h-full">
         {% block body %}
         {% endblock body %}
     </body>
