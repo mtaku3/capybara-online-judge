@@ -30,7 +30,7 @@ class FileRepository implements IFileRepository
         $dest = $submission->getSourceFile()->getPath();
 
         if (!file_exists(dirname($dest))) {
-            mkdir($dest, recursive: true);
+            mkdir(dirname($dest), recursive: true);
         }
 
         if ($submission->getSubmissionType() === SubmissionType::SourceCode) {
@@ -54,7 +54,7 @@ class FileRepository implements IFileRepository
         $dest = $testCase->getInputFile()->getPath();
 
         if (!file_exists(dirname($dest))) {
-            mkdir($dest, recursive: true);
+            mkdir(dirname($dest), recursive: true);
         }
 
         if (rename($src, $src . ".tar") === false) {
@@ -72,7 +72,7 @@ class FileRepository implements IFileRepository
         $dest = $testCase->getOutputFile()->getPath();
 
         if (!file_exists(dirname($dest))) {
-            mkdir($dest, recursive: true);
+            mkdir(dirname($dest), recursive: true);
         }
 
         if (rename($src, $src . ".tar") === false) {
