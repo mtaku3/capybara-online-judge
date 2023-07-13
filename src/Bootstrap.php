@@ -41,6 +41,7 @@ use App\Presentation\Controller\ProblemListController;
 use App\Presentation\Controller\RegisterController;
 use App\Presentation\Controller\SubmissionController;
 use App\Presentation\Controller\TestCaseController;
+use App\Presentation\CustomTwigFilter;
 use App\Presentation\CustomTwigFunction;
 use Cycle\Database;
 use Cycle\Database\Config;
@@ -138,6 +139,11 @@ $containerBuilder->addDefinitions([
         $customTwigFunction = new CustomTwigFunction();
         foreach ($customTwigFunction->functions as $function) {
             $twig->addFunction($function);
+        }
+
+        $customTwigFilter = new CustomTwigFilter();
+        foreach ($customTwigFilter->filters as $filter) {
+            $twig->addFilter($filter);
         }
 
         if ($_ENV["ISDEV"]) {
