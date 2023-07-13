@@ -194,6 +194,7 @@
                                  id="file">
                                 <form method="post"
                                       action="/problem/{{ problemId }}/submit"
+                                      enctype="multipart/form-data"
                                       class="flex flex-col w-full h-full gap-y-2">
                                     <input class="hidden" name="language" id="FileTabLanguage" value="C" />
                                     <input type="hidden" id="submissionType" name="submissionType" value="File">
