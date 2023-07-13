@@ -12,10 +12,10 @@
                                     <th scope="col" class="px-6 py-3 text-center">提出日時</th>
                                     {% if user.getIsAdmin %}<th scope="col" class="px-6 py-3 text-center">ユーザ</th>{% endif %}
                                     <th scope="col" class="px-6 py-3 text-center">言語</th>
-                                    <th scope="col" class="px-6 py-3 text-center">コード長</th>
+                                    <th scope="col" class="px-6 py-3 text-end">コード長</th>
                                     <th scope="col" class="px-6 py-3 text-center">結果</th>
-                                    <th scope="col" class="px-6 py-3 text-center">実行時間</th>
-                                    <th scope="col" class="px-6 py-3 text-center">メモリ</th>
+                                    <th scope="col" class="px-6 py-3 text-end">実行時間</th>
+                                    <th scope="col" class="px-6 py-3 text-end">メモリ</th>
                                     <th scope="col" class="px-6 py-3 text-center">
                                         <span class="sr-only">詳細</span>
                                     </th>
@@ -29,19 +29,16 @@
                             <tbody>
                                 {% for submission in submissions %}
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th scope="row"
-                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                            {{ submission.getSubmittedAt|date("Y-m-d g:i:s") }}
-                                        </th>
+                                        <td scope="row" class="px-6 py-3 text-black text-center">{{ submission.getSubmittedAt|date("Y-m-d g:i:s") }}</td>
                                         {% if user.getIsAdmin %}
-                                            <td class="px-6 py-4 text-center">
+                                            <td class="px-6 py-3 text-center">
                                                 <a href="/user/{{ submission.getUserId }}/submissions"
                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ (users|filter(e => e.getId.equals(submission.getUserId) )|first).getUsername }}</a>
                                             </td>
                                         {% endif %}
-                                        <td class="px-6 py-4 text-center">{{ submission.getLanguage.value }}</td>
-                                        <td class="px-6 py-4 text-center">{{ submission.getCodeLength }}</td>
-                                        <td class="px-6 py-4 text-center">
+                                        <td class="px-6 py-3 text-center">{{ submission.getLanguage.value }}</td>
+                                        <td class="px-6 py-3 text-end">{{ submission.getCodeLength }} bytes</td>
+                                        <td class="px-6 py-3 text-center">
                                             {% if submission.getJudgeResult.value == "WJ" %}
                                                 <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">{{ submission.getJudgeResult.value }}</span>
                                             {% elseif submission.getJudgeResult.value == "AC" %}
@@ -50,14 +47,14 @@
                                                 <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{ submission.getJudgeResult.value }}</span>
                                             {% endif %}
                                         </td>
-                                        <td class="px-6 py-4 text-center">{{ submission.getExecutionTime }}</td>
-                                        <td class="px-6 py-4 text-center">{{ submission.getConsumedMemory }}</td>
-                                        <td class="px-6 py-4 text-center">
+                                        <td class="px-6 py-3 text-end">{{ submission.getExecutionTime ? "#{submission.getExecutionTime} ms" : "" }}</td>
+                                        <td class="px-6 py-3 text-end">{{ submission.getConsumedMemory ? "#{submission.getConsumedMemory} KB" : "" }}</td>
+                                        <td class="px-6 py-3 text-center">
                                             <a href="/submission/{{ submission.getId }}"
                                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">詳細</a>
                                         </td>
                                         {% if user.getIsAdmin %}
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-3">
                                                 <button onclick="submissionId = '{{ submission.getId }}'"
                                                         data-modal-target="popup-modal"
                                                         data-modal-toggle="popup-modal"
