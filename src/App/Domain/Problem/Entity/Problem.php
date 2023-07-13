@@ -99,11 +99,11 @@ class Problem
      */
     public static function Create(string $title, string $body, int $timeConstraint, int $memoryConstraint, array $compileRuleDTOs, array $testCaseDTOs): Problem
     {
-        if ($timeConstraint <= 0 && self::MaxTimeConstraint < $timeConstraint) {
+        if ($timeConstraint <= 0 || self::MaxTimeConstraint < $timeConstraint) {
             throw new InvalidTimeConstraintException();
         }
 
-        if ($memoryConstraint <= 0 && self::MaxMemoryConstraint < $memoryConstraint) {
+        if ($memoryConstraint <= 0 || self::MaxMemoryConstraint < $memoryConstraint) {
             throw new InvalidMemoryConstraintException();
         }
 
@@ -255,7 +255,7 @@ class Problem
             $requiredLanguages = $newlyAddedLanguages;
             $executionRules = $testCase->getExecutionRules();
             foreach ($executionRuleDTOsForTestCase as $executionRuleDTO) {
-                if (array_filter($requiredLanguages, fn ($e) => $e === $executionRuleDTO->Language) === false) {
+                if (current(array_filter($requiredLanguages, fn ($e) => $e === $executionRuleDTO->Language)) === false) {
                     throw new InvalidDTOException();
                 }
 
@@ -281,14 +281,14 @@ class Problem
     /**
      * @param CompileRuleId $compileRuleId
      * @return void
-     * @throws AtLeastOneEnabledTestCaseRequiredException
+     * @throws AtLeastOneCompileRuleRequiredException
      * @throws InvalidArgumentException
      * @throws CorruptedEntityException
      */
     public function removeCompileRule(CompileRuleId $compileRuleId): void
     {
         if (count($this->CompileRules) === 1) {
-            throw new AtLeastOneEnabledTestCaseRequiredException();
+            throw new AtLeastOneCompileRuleRequiredException();
         }
 
         $compileRule = current(array_filter($this->CompileRules, fn ($e) => $e->getId()->equals($compileRuleId)));
@@ -379,6 +379,7 @@ class Problem
             );
         }
 
+        $this->TestCases; // required to retrieve the array before appending : CycleORM Proxy limitation
         $this->TestCases[] = TestCase::_create($title, false, $executionRules);
     }
 
@@ -418,6 +419,10 @@ class Problem
      */
     public function disableTestCase(TestCaseId $testCaseId): void
     {
+        if (count(array_filter($this->TestCases, fn ($e) => !$e->getIsDisabled())) === 1) {
+            throw new AtLeastOneEnabledTestCaseRequiredException();
+        }
+
         if ($testCase = current(array_filter($this->TestCases, fn ($e) => $e->getId()->equals($testCaseId)))) {
             $testCase->_disable();
         } else {

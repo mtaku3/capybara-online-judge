@@ -45,6 +45,11 @@ $options = [
 $generator = new ShortGraphVizGenerator(new GraphViz());
 $renderer = new ClassDiagramRenderer();
 
+$dstFolder = "tools/DomainUML";
+if (!file_exists($dstFolder)) {
+    mkdir($dstFolder);
+}
+
 $dataSource = __DIR__ . '/../src/App/Domain';
 $finder = new Finder();
 foreach ($finder->in($dataSource)->depth('== 0')->directories() as $path) {
@@ -54,6 +59,7 @@ foreach ($finder->in($dataSource)->depth('== 0')->directories() as $path) {
     $script = $renderer($aggregateFinder, $generator, $options);
 
     $graph = $renderer->getGraph();
-    $target = $generator->createImageFile($graph, "%E -T%F %t -o " . basename($path) . ".png");
+    $filename = basename($path);
+    $target = $generator->createImageFile($graph, "%E -T%F %t -o {$dstFolder}/{$filename}.png");
     echo(empty($target) ? 'no' : $target) . ' file generated' . PHP_EOL;
 }

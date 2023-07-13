@@ -6,6 +6,11 @@
       "App\\": "src/App/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests/_files/"
+    }
+  },
   "authors": [
     {
       "name": "mtaku3",
@@ -30,6 +35,7 @@
     }
   },
   "require-dev": {
-    "bartlett/umlwriter": "^3"
+    "bartlett/umlwriter": "^3",
+    "phpunit/phpunit": "^10"
   }
 }

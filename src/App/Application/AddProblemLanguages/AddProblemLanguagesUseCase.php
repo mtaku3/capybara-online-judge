@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Application\AddProblemLanguages;
 
 use App\Domain\Problem\Factory\CompileRuleFactoryDTO;
-use App\Domain\Problem\Factory\ExecutionRuleFactoryDTO;
 use App\Domain\Problem\Factory\ExecutionRuleFactoryDTOWithTestCaseId;
 use App\Domain\Problem\IProblemRepository;
 
@@ -41,8 +40,8 @@ class AddProblemLanguagesUseCase
             $compileRules[] = new CompileRuleFactoryDTO($language, $sourceCodeCompileCommand, $fileCompileCommand);
         }
 
-        $execusionRules =[];
-        foreach($request->ExecutionRuleDTOs as $executionRuleDTO) {
+        $executionRules =[];
+        foreach ($request->ExecutionRuleDTOs as $executionRuleDTO) {
             $testCaseId = $executionRuleDTO->TestCaseId;
             $language = $executionRuleDTO->Language;
             $sourceCodeExecutionCommand = $executionRuleDTO->SourceCodeExecutionCommand;

@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use App\Application\ValidateSession\ValidateSessionRequest;
+use App\Domain\Problem\ValueObject\ProblemId;
+use App\Domain\Problem\ValueObject\TestCaseId;
+use App\Domain\Submission\ValueObject\SubmissionId;
 use App\Domain\User\ValueObject\UserId;
 use App\Presentation\Router\HttpStatus;
 use App\Presentation\Router\Response;
@@ -96,55 +99,73 @@ $router->post("/problem", function (Request $req, Response $res) use ($container
     $container->get("ProblemController")->handleCreate($req, $res);
 });
 
-$router->get("/problem/[s:problemId]", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
     $container->get("ProblemController")->get($req, $res);
 });
 
-$router->post("/problem/[s:problemId]/update", function (Request $req, Response $res) use ($container) {
+$router->post("/problem/[s:problemId]/update", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
     $container->get("ProblemController")->handleUpdate($req, $res);
 });
 
-$router->get("/problem/[s:problemId]/delete", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/delete", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
     $container->get("ProblemController")->handleDelete($req, $res);
 });
 
-$router->post("/problem/[s:problemId]/submit", function (Request $req, Response $res) use ($container) {
+$router->post("/problem/[s:problemId]/submit", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
     $container->get("ProblemController")->handleSubmit($req, $res);
 });
 
-$router->get("/problem/[s:problemId]/submissions", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/submissions", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
     $container->get("SubmissionController")->getByProblem($req, $res);
 });
 
-$router->get("/problem/[s:problemId]/testcases", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/testcases", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
     $container->get("TestCaseController")->get($req, $res);
 });
 
-$router->post("/problem/[s:problemId]/testcases/update", function (Request $req, Response $res) use ($container) {
+$router->post("/problem/[s:problemId]/testcases/update", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
     $container->get("TestCaseController")->handleLanguageChanges($req, $res);
 });
 
-$router->post("/problem/[s:problemId]/testcase", function (Request $req, Response $res) use ($container) {
+$router->post("/problem/[s:problemId]/testcase", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
     $container->get("TestCaseController")->handleCreate($req, $res);
 });
 
-$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/inputfile/download", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/inputfile/download", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
+    $twig->addGlobal("testCaseId", new TestCaseId($req->testCaseId));
     $container->get("TestCaseController")->handleDownloadInputFile($req, $res);
 });
 
-$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/outputfile/download", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/outputfile/download", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
+    $twig->addGlobal("testCaseId", new TestCaseId($req->testCaseId));
     $container->get("TestCaseController")->handleDownloadOutputFile($req, $res);
 });
 
-$router->post("/problem/[s:problemId]/testcase/[s:testCaseId]/update", function (Request $req, Response $res) use ($container) {
+$router->post("/problem/[s:problemId]/testcase/[s:testCaseId]/update", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
+    $twig->addGlobal("testCaseId", new TestCaseId($req->testCaseId));
     $container->get("TestCaseController")->handleUpdate($req, $res);
 });
 
-$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/enable", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/enable", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
+    $twig->addGlobal("testCaseId", new TestCaseId($req->testCaseId));
     $container->get("TestCaseController")->handleEnable($req, $res);
 });
 
-$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/disable", function (Request $req, Response $res) use ($container) {
+$router->get("/problem/[s:problemId]/testcase/[s:testCaseId]/disable", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("problemId", new ProblemId($req->problemId));
+    $twig->addGlobal("testCaseId", new TestCaseId($req->testCaseId));
     $container->get("TestCaseController")->handleDisable($req, $res);
 });
 
@@ -152,15 +173,18 @@ $router->get("/user/[s:userId]/submissions", function (Request $req, Response $r
     $container->get("SubmissionController")->getByUser($req, $res);
 });
 
-$router->get("/submission/[s:submissionId]", function (Request $req, Response $res) use ($container) {
+$router->get("/submission/[s:submissionId]", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("submissionId", new SubmissionId($req->submissionId));
     $container->get("SubmissionController")->get($req, $res);
 });
 
-$router->get("/submission/[s:submissionId]/download", function (Request $req, Response $res) use ($container) {
+$router->get("/submission/[s:submissionId]/download", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("submissionId", new SubmissionId($req->submissionId));
     $container->get("SubmissionController")->handleDownload($req, $res);
 });
 
-$router->get("/submission/[s:submissionId]/delete", function (Request $req, Response $res) use ($container) {
+$router->get("/submission/[s:submissionId]/delete", function (Request $req, Response $res) use ($container, $twig) {
+    $twig->addGlobal("submissionId", new SubmissionId($req->submissionId));
     $container->get("SubmissionController")->handleDelete($req, $res);
 });
 

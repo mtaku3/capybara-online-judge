@@ -99,7 +99,6 @@ class ProblemController
             $submittableLanguages = array_map(fn ($e) => $e->getLanguage(), $problem->getCompileRules());
             $res->body(
                 $this->Twig->render("Problem.twig", [
-                    "problemId" => new ProblemId($req->problemId),
                     "problemTitle" => $problem->getTitle(),
                     "problemTimeConstraint" => $problem->getTimeConstraint(),
                     "problemMemoryConstraint" => $problem->getMemoryConstraint(),

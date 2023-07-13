@@ -5,7 +5,8 @@
   "workspaceFolder": "/workspace",
   "forwardPorts": [80, 5432, 6379],
   "remoteEnv": {
-    "PHP_CS_FIXER_IGNORE_ENV": "1"
+    "PHP_CS_FIXER_IGNORE_ENV": "1",
+    "PATH": "${containerEnv:PATH}:/workspace/vendor/phpunit/phpunit"
   },
   "customizations": {
     "vscode": {
@@ -26,8 +27,8 @@
         "[php]": {
           "editor.defaultFormatter": "junstyle.php-cs-fixer"
         },
-        "djlint.formatJs": true,
-        "djlint.formatCss": true,
+        "djlint.formatJs": false,
+        "djlint.formatCss": false,
         "php-cs-fixer.executablePath": "${extensionPath}/php-cs-fixer.phar",
         "intelephense.stubs": [
           "apache",

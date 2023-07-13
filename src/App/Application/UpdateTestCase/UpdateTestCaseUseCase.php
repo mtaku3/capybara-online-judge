@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\UpdateTestCase;
 
-
 use App\Domain\Problem\IProblemRepository;
 
 class UpdateTestCaseUseCase
@@ -27,7 +26,7 @@ class UpdateTestCaseUseCase
     {
         $problem = $this->ProblemRepository->findById($request->ProblemId);
 
-        $problem->setTitle($request->Title);
+        $problem->setTestCaseTitle($request->TestCaseId, $request->Title);
 
         foreach ($request->ExecutionRuleDTOs as $executionRuleDTO) {
             $problem->setExecutionRuleSourceCodeExecutionCommand($request->TestCaseId, $executionRuleDTO->ExecutionRuleId, $executionRuleDTO->SourceCodeExecutionCommand);
