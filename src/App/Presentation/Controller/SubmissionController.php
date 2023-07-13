@@ -164,7 +164,7 @@ class SubmissionController
             $count = $getSubmissionsByProblemIdResponse->Count;
 
             foreach ($submissions as $submission) {
-                $users[] = $this->GetUserByIdUseCase->handle(new GetUserByIdRequest($submission->getUserId()));
+                $users[] = $this->GetUserByIdUseCase->handle(new GetUserByIdRequest($submission->getUserId()))->User;
             }
         } else {
             $getSubmissionsByProblemIdAndUserIdResponse = $this->GetSubmissionsByProblemIdAndUserIdUseCase->handle(new GetSubmissionsByProblemIdAndUserIdRequest(new ProblemId($req->problemId), $user->getId(), intval($req->param("page", 1)), self::LimitPerPage));
