@@ -8,7 +8,7 @@
             <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-center">提出日時</th>
                             <th scope="col" class="px-6 py-3 text-center">問題</th>
@@ -24,9 +24,10 @@
                     <tbody>
                         {% for submission in submissions %}
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <td scope="row" class="px-6 py-3 text-black text-center">{{ submission.getSubmittedAt|date("Y-m-d g:i:s") }}</td>
-                                <td scope="row"
-                                    class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                <td class="px-6 py-3 text-gray-900 dark:text-white text-center">
+                                    {{ submission.getSubmittedAt|date("Y-m-d g:i:s") }}
+                                </td>
+                                <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                     <a href="/problem/{{ submission.getProblemId }}"
                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ (problems|filter(e => e.getId.equals(submission.getProblemId) )|first).getTitle }}</a>
                                 </td>
@@ -34,15 +35,15 @@
                                 <td class="px-6 py-3 text-end">{{ submission.getCodeLength }} bytes</td>
                                 <td class="px-6 py-3 text-center">
                                     {% if submission.getJudgeResult.value == "WJ" %}
-                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                                             {{ submission.getJudgeResult.value }}
                                         </span>
                                     {% elseif submission.getJudgeResult.value == "AC" %}
-                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                                             {{ submission.getJudgeResult.value }}
                                         </span>
                                     {% else %}
-                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                                             {{ submission.getJudgeResult.value }}
                                         </span>
                                     {% endif %}
