@@ -61,15 +61,19 @@ class SubmitUseCase
         $user = $this->UserRepository->findById($request->UserId);
         $problem = $this->ProblemRepository->findById($request->ProblemId);
 
+        $uploadedFilePath = $request->UploadedFilePath;
         if ($request->SubmissionType === SubmissionType::SourceCode) {
-            $contentLength = filesize($request->UploadedFilePath);
+            $contentLength = filesize($uploadedFilePath);
         } else {
-            $contentLength = $this->FileRepository->SumContentLengthsUp($request->UploadedFilePath);
+            rename($uploadedFilePath, $uploadedFilePath . ".tar");
+            $uploadedFilePath .= ".tar";
+
+            $contentLength = $this->FileRepository->SumContentLengthsUp($uploadedFilePath);
         }
 
         $submission = Submission::Create($user, $problem, $request->Language, $request->SubmissionType, $contentLength);
 
-        $this->FileRepository->moveSourceCode($request->UploadedFilePath, $submission);
+        $this->FileRepository->moveSourceCode($uploadedFilePath, $submission);
         $this->SubmissionRepository->save($submission);
 
         $this->JudgeQueueRepository->enqueue($submission);

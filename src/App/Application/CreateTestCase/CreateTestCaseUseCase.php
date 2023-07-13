@@ -55,8 +55,16 @@ class CreateTestCaseUseCase
             throw new RuntimeException();
         }
 
-        $this->FileRepository->moveInputFile($request->UploadedInputFilePath, $testCase);
-        $this->FileRepository->moveOutputFile($request->UploadedOutputFilePath, $testCase);
+        $uploadedInputFilePath = $request->UploadedInputFilePath;
+        rename($uploadedInputFilePath, $uploadedInputFilePath . '.tar');
+        $uploadedInputFilePath .= '.tar';
+
+        $uploadedOutputFilePath = $request->UploadedOutputFilePath;
+        rename($uploadedOutputFilePath, $uploadedOutputFilePath . '.tar');
+        $uploadedOutputFilePath .= '.tar';
+
+        $this->FileRepository->moveInputFile($uploadedInputFilePath, $testCase);
+        $this->FileRepository->moveOutputFile($uploadedOutputFilePath, $testCase);
 
         $this->ProblemRepository->save($problem);
 

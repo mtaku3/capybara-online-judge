@@ -38,11 +38,6 @@ class FileRepository implements IFileRepository
 
             $tar->addFile($src, self::RetrievePreferedFileNameFromLanguage($submission->getLanguage()));
         } else {
-            if (rename($src, $src . ".tar") === false) {
-                throw new RuntimeException();
-            }
-            $src = $src . ".tar";
-
             self::ValidateTarball($src);
 
             rename($src, $dest);
@@ -57,11 +52,6 @@ class FileRepository implements IFileRepository
             mkdir(dirname($dest), recursive: true);
         }
 
-        if (rename($src, $src . ".tar") === false) {
-            throw new RuntimeException();
-        }
-        $src = $src . ".tar";
-
         self::ValidateTarball($src);
 
         rename($src, $dest);
@@ -74,11 +64,6 @@ class FileRepository implements IFileRepository
         if (!file_exists(dirname($dest))) {
             mkdir(dirname($dest), recursive: true);
         }
-
-        if (rename($src, $src . ".tar") === false) {
-            throw new RuntimeException();
-        }
-        $src = $src . ".tar";
 
         self::ValidateTarball($src);
 

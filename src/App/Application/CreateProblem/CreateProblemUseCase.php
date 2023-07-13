@@ -66,6 +66,15 @@ class CreateProblemUseCase
 
         foreach ($request->TestCaseDTOs as $idx => $testCaseDTO) {
             $testCase = $problem->getTestCases()[$idx];
+
+            $uploadedInputFilePath = $testCaseDTO->UploadedInputFilePath;
+            rename($uploadedInputFilePath, $uploadedInputFilePath . '.tar');
+            $uploadedInputFilePath .= '.tar';
+    
+            $uploadedOutputFilePath = $testCaseDTO->UploadedOutputFilePath;
+            rename($uploadedOutputFilePath, $uploadedOutputFilePath . '.tar');
+            $uploadedOutputFilePath .= '.tar';
+
             $this->FileRepository->moveInputFile($testCaseDTO->UploadedInputFilePath, $testCase);
             $this->FileRepository->moveOutputFile($testCaseDTO->UploadedOutputFilePath, $testCase);
         }
