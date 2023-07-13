@@ -33,7 +33,7 @@
                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ (problems|filter(e => e.getId.equals(submission.getProblemId) )|first).getTitle }}</a>
                                 </td>
                                 <td class="px-6 py-3 text-center">{{ submission.getLanguage.value }}</td>
-                                <td class="px-6 py-3 text-end">{{ submission.getCodeLength }} bytes</td>
+                                <td class="px-6 py-3 text-end">{{ submission.getCodeLength|format_bytes }}</td>
                                 <td class="px-6 py-3 text-center">
                                     {% if submission.getJudgeResult.value == "WJ" %}
                                         <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
@@ -49,8 +49,12 @@
                                         </span>
                                     {% endif %}
                                 </td>
-                                <td class="px-6 py-3 text-end">{{ submission.getExecutionTime ? "#{submission.getExecutionTime} ms" : "" }}</td>
-                                <td class="px-6 py-3 text-end">{{ submission.getConsumedMemory ? "#{submission.getConsumedMemory} KB" : "" }}</td>
+                                <td class="px-6 py-3 text-end">
+                                    {{ submission.getExecutionTime is not null ? submission.getExecutionTime|format_miliseconds : "" }}
+                                </td>
+                                <td class="px-6 py-3 text-end">
+                                    {{ submission.getConsumedMemory is not null ? submission.getConsumedMemory|format_kilobytes : "" }}
+                                </td>
                                 <td class="px-6 py-3 text-center">
                                     <a href="/submission/{{ submission.getId }}"
                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">詳細</a>
