@@ -6,6 +6,7 @@ namespace App\Presentation\Controller;
 
 use App\Application\GetProblems\GetProblemsRequest;
 use App\Application\GetProblems\GetProblemsUseCase;
+use App\Domain\Common\ValueObject\Language;
 use App\Presentation\Router\Response;
 use App\Presentation\Router\Exceptions\LockedResponseException;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
@@ -59,7 +60,8 @@ class ProblemListController
             "page" => intval($req->param("page", 1)),
             "totalNumberOfProblems" => $getProblemsResponse->Count,
             "totalNumberOfPages" => intval(ceil($getProblemsResponse->Count / self::LimitPerPage)),
-            "limitPerPage" => self::LimitPerPage
+            "limitPerPage" => self::LimitPerPage,
+            "availableLanguages" => Language::cases()
         ]));
     }
 }
