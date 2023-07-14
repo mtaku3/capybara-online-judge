@@ -166,7 +166,7 @@ $containerBuilder->addDefinitions([
         );
     },
     "ProblemListController" => function (ContainerInterface $c) {
-        return new ProblemListController($c->get("Twig"));
+        return new ProblemListController($c->get("Twig"), $c->get("GetProblemsUseCase"));
     },
     "RegisterController" => function (ContainerInterface $c) {
         return new RegisterController($c->get("Twig"), $c->get("CreateUserUseCase"), $c->get("AuthorizeUseCase"));

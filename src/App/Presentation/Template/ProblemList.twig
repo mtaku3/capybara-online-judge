@@ -1,5 +1,1077 @@
 {% from "Component/NavBar.twig" import NavBar %}
+{% import "Component/Libraries.twig" as libraries %}
+{% from "Component/Pagination.twig" import Pagination %}
 {% extends "Template.twig" %}
+{% block head %}
+    {{ libraries.texme() }}
+    {{ libraries.filepond() }}
+{% endblock head %}
 {% block body %}
-    {{ NavBar(user, false) }}
+    <div class="flex flex-col min-h-full !h-auto w-full gap-y-4 bg-white dark:bg-gray-900">
+        {{ NavBar(user, false) }}
+        <div class="flex flex-col flex-grow w-4/5 mb-6 mx-auto bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                {% if user.getIsAdmin %}
+                    <div class="flex items-center justify-end p-4 space-y-3 md:space-y-0 md:space-x-4">
+                        <button type="button"
+                                data-modal-target="problem-create-modal"
+                                data-modal-toggle="problem-create-modal"
+                                class="px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <svg class="w-3 h-3 text-white mr-2"
+                                 aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 18 18">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                            </svg>
+                            新規作成
+                        </button>
+                    </div>
+                {% endif %}
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-4 py-3">タイトル</th>
+                            <th scope="col" class="px-4 py-3 text-end">時間</th>
+                            <th scope="col" class="px-4 py-3 text-end">メモリ</th>
+                            {% if user.getIsAdmin == true %}<th scope="col" class="px-4 py-3"></th>{% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for problem in problems %}
+                            <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <td class="px-4 py-2 text-gray-900 whitespace-nowrap dark:text-white">
+                                    <a href="/problem/{{ problem.getId }}"
+                                       class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ problem.getTitle }}</a>
+                                </td>
+                                <td class="px-4 py-2 text-gray-900 whitespace-nowrap dark:text-white text-end">
+                                    {{ problem.getTimeConstraint|format_miliseconds }}
+                                </td>
+                                <td class="px-4 py-2 text-gray-900 whitespace-nowrap dark:text-white text-end">
+                                    {{ problem.getMemoryConstraint|format_kilobytes }}
+                                </td>
+                                {% if user.getIsAdmin == true %}
+                                    <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                        <button type="button"
+                                                data-modal-target="problem-remove-confirmation-modal"
+                                                data-modal-toggle="problem-remove-confirmation-modal"
+                                                onclick="problemIdToDelete = `{{ problem.getId }}`"
+                                                class="ml-auto my-auto text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center mr-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800 dark:hover:bg-red-500">
+                                            <svg class="w-4 h-4"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 stroke-width="1.5"
+                                                 viewBox="0 0 24 24"
+                                                 xmlns="http://www.w3.org/2000/svg"
+                                                 aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0">
+                                                </path>
+                                            </svg>
+                                            <span class="sr-only">問題を削除する</span>
+                                        </button>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {{ Pagination(page, totalNumberOfProblems, limitPerPage, totalNumberOfPages) }}
+            </div>
+        </div>
+    </div>
+    <div id="problem-remove-confirmation-modal"
+         tabindex="-1"
+         class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button"
+                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                        data-modal-hide="problem-remove-confirmation-modal">
+                    <svg aria-hidden="true"
+                         class="w-5 h-5"
+                         fill="currentColor"
+                         viewBox="0 0 20 20"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd">
+                        </path>
+                    </svg>
+                    <span class="sr-only">モーダルを閉じる</span>
+                </button>
+                <div class="p-6 text-center">
+                    <svg aria-hidden="true"
+                         class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                        問題を削除するとテストケースと提出結果が全て削除され、元に戻せません。
+                        <br />
+                        本当に実行しますか？
+                    </h3>
+                    <button data-modal-hide="problem-remove-confirmation-modal"
+                            type="button"
+                            onclick='location.href = "/problem/{{ problemId }}/delete"'
+                            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                        削除
+                    </button>
+                    <button data-modal-hide="problem-remove-confirmation-modal"
+                            type="button"
+                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                        キャンセル
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="problem-create-modal"
+         tabindex="-1"
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full h-full max-h-full">
+            <div class="relative flex flex-col min-h-full bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="flex items-center p-5 border-b rounded-t dark:border-gray-600">
+                    <ol class="stepper flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base px-8">
+                        <li class="stepperNum flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700 whitespace-nowrap">
+                            <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+                                <svg class="stepperNumSelected w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2.5"
+                                     aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     fill="currentColor"
+                                     viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                <span class="stepperIndex mr-2 hidden">1</span>
+                                問題文入力
+                            </span>
+                        </li>
+                        <li class="stepperNum flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700 whitespace-nowrap">
+                            <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+                                <svg class="stepperNumSelected w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2.5 hidden"
+                                     aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     fill="currentColor"
+                                     viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                <span class="stepperIndex mr-2">2</span>
+                                コンパイルコマンド登録
+                            </span>
+                        </li>
+                        <li class="stepperNum flex items-center whitespace-nowrap">
+                            <svg class="stepperNumSelected w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2.5 hidden"
+                                 aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="currentColor"
+                                 viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                            </svg>
+                            <span class="stepperIndex mr-2">3</span>
+                            テストケース登録
+                        </li>
+                    </ol>
+                    <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="problem-create-modal">
+                        <svg class="w-3 h-3"
+                             aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <form method="post"
+                      action="/problem"
+                      enctype="multipart/form-data"
+                      class="bodyContainer flex-1 w-full flex">
+                    <div class="body flex-1 hidden flex-col p-6 gap-y-4">
+                        <div class="flex-1 flex flex-col gap-y-4">
+                            <div class="flex-initial w-full flex gap-x-4">
+                                <div class="flex-1">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">問題名</label>
+                                    <input type="text"
+                                           name="title"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">時間制限</label>
+                                    <input type="number"
+                                           min="0"
+                                           name="timeConstraint"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">メモリ制限</label>
+                                    <input type="number"
+                                           min="0"
+                                           name="memoryConstraint"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div class="flex-1 w-full flex gap-x-4">
+                                <div class="flex-none basis-1/2 flex flex-col">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">問題文</label>
+                                    <textarea name="body"
+                                              class="flex-grow block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                                </div>
+                                <div class="flex-none basis-1/2 flex flex-col min-h-full">
+                                    <div id="problem-create-modal-body-preivew" class="markdown"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700">
+                        <div class="flex-none flex items-center rounded-b">
+                            <button type="button"
+                                    onclick="problemCreateModal.changePage(2)"
+                                    class="ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                次へ
+                            </button>
+                        </div>
+                    </div>
+                    <div class="body flex-1 hidden flex-col p-6 gap-y-4">
+                        <div class="flex-1 flex flex-col gap-y-4">
+                            <div class="w-full flex-none flex text-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <ul class="w-48 text-sm font-medium text-gray-900 bg-white border-r border-gray-200 rounded-l-lg dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+                                    {% for language in availableLanguages %}
+                                        <li role="presentation"
+                                            language="{{ language.name }}"
+                                            class="compileRuleTab {{ loop.last ? "flex items-center w-full px-4 py-2 rounded-b-lg" : "flex items-center w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600" }}">
+                                            <input type="checkbox"
+                                                   onchange="problemCreateModal.toggleLanguage('{{ language.name }}', this.checked)"
+                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <button type="button"
+                                                    onclick="problemCreateModal.changeCompileRuleTab('{{ language.name }}')"
+                                                    class="mx-auto text-sm font-medium">{{ language.value }}</button>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="p-4 flex-1 flex flex-col justify-center text-left">
+                                    {% for language in availableLanguages %}
+                                        <div language="{{ language.name }}" class="compileRuleTabContent hidden">
+                                            <input type="text"
+                                                   hidden
+                                                   class="compileRuleLanguage"
+                                                   value="{{ language.name }}">
+                                            <div class="mb-4">
+                                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ソースコードで提出時のコンパイルコマンド</label>
+                                                <input type="text"
+                                                       class="compileRuleSourceCodeCompileCommand bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ファイルで提出時のコンパイルコマンド</label>
+                                                <input type="text"
+                                                       class="compileRuleFileCompileCommand bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700">
+                        <div class="flex-none flex items-center rounded-b">
+                            <button type="button"
+                                    onclick="problemCreateModal.changePage(1)"
+                                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                戻る
+                            </button>
+                            <button type="button"
+                                    onclick="problemCreateModal.changePage(3)"
+                                    class="ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                次へ
+                            </button>
+                        </div>
+                    </div>
+                    <div class="body flex-1 hidden flex-col p-6 gap-y-4">
+                        <div class="flex-1 flex flex-col gap-y-4">
+                            <div class="w-full flex-none flex justify-end">
+                                <button type="button"
+                                        class="testCaseCreateBtn px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-3 h-3 text-white mr-2"
+                                         aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         fill="none"
+                                         viewBox="0 0 18 18">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                                    </svg>
+                                    新規作成
+                                </button>
+                            </div>
+                            <div class="w-full flex-1 flex flex-col">
+                                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                    <table class="testCasesTable w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 w-full">ケース名</th>
+                                                <th scope="col" class="px-6 py-3"></th>
+                                                <th scope="col" class="px-6 py-3"></th>
+                                                <th scope="col" class="px-6 py-3"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700">
+                        <div class="flex-none flex items-center rounded-b">
+                            <button type="button"
+                                    onclick="problemCreateModal.changePage(2)"
+                                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                戻る
+                            </button>
+                            <button type="submit"
+                                    class="ml-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                保存
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+    var __assign = (this && this.__assign) || function () {
+        __assign = Object.assign || function(t) {
+            for (var s, i = 1, n = arguments.length; i < n; i++) {
+                s = arguments[i];
+                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                    t[p] = s[p];
+            }
+            return t;
+        };
+        return __assign.apply(this, arguments);
+    };
+    var Default = {
+        placement: 'center',
+        backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[60]',
+        backdrop: 'dynamic',
+        closable: true,
+        onHide: function () { },
+        onShow: function () { },
+        onToggle: function () { },
+    };
+    var Modal2 = /** @class */ (function () {
+        function Modal2(targetEl, options) {
+            if (targetEl === void 0) { targetEl = null; }
+            if (options === void 0) { options = Default; }
+            this._targetEl = targetEl;
+            this._options = __assign(__assign({}, Default), options);
+            this._isHidden = true;
+            this._backdropEl = null;
+            this._init();
+        }
+        Modal2.prototype._init = function () {
+            var _this = this;
+            if (this._targetEl) {
+                this._getPlacementClasses().map(function (c) {
+                    _this._targetEl.classList.add(c);
+                });
+            }
+        };
+        Modal2.prototype._createBackdrop = function () {
+            var _a;
+            if (this._isHidden) {
+                var backdropEl = document.createElement('div');
+                backdropEl.setAttribute('modal2-backdrop', '');
+                (_a = backdropEl.classList).add.apply(_a, this._options.backdropClasses.split(' '));
+                document.querySelector('body').append(backdropEl);
+                this._backdropEl = backdropEl;
+            }
+        };
+        Modal2.prototype._destroyBackdropEl = function () {
+            if (!this._isHidden) {
+                document.querySelector('[modal2-backdrop]').remove();
+            }
+        };
+        Modal2.prototype._setupModalCloseEventListeners = function () {
+            var _this = this;
+            if (this._options.backdrop === 'dynamic') {
+                this._clickOutsideEventListener = function (ev) {
+                    _this._handleOutsideClick(ev.target);
+                };
+                this._targetEl.addEventListener('click', this._clickOutsideEventListener, true);
+            }
+        };
+        Modal2.prototype._removeModalCloseEventListeners = function () {
+            if (this._options.backdrop === 'dynamic') {
+                this._targetEl.removeEventListener('click', this._clickOutsideEventListener, true);
+            }
+        };
+        Modal2.prototype._handleOutsideClick = function (target) {
+            if (target === this._targetEl ||
+                (target === this._backdropEl && this.isVisible())) {
+                this.hide();
+            }
+        };
+        Modal2.prototype._getPlacementClasses = function () {
+            switch (this._options.placement) {
+                // top
+                case 'top-left':
+                    return ['justify-start', 'items-start'];
+                case 'top-center':
+                    return ['justify-center', 'items-start'];
+                case 'top-right':
+                    return ['justify-end', 'items-start'];
+                // center
+                case 'center-left':
+                    return ['justify-start', 'items-center'];
+                case 'center':
+                    return ['justify-center', 'items-center'];
+                case 'center-right':
+                    return ['justify-end', 'items-center'];
+                // bottom
+                case 'bottom-left':
+                    return ['justify-start', 'items-end'];
+                case 'bottom-center':
+                    return ['justify-center', 'items-end'];
+                case 'bottom-right':
+                    return ['justify-end', 'items-end'];
+                default:
+                    return ['justify-center', 'items-center'];
+            }
+        };
+        Modal2.prototype.toggle = function () {
+            if (this._isHidden) {
+                this.show();
+            }
+            else {
+                this.hide();
+            }
+            // callback function
+            this._options.onToggle(this);
+        };
+        Modal2.prototype.show = function () {
+            if (this.isHidden) {
+                this._targetEl.classList.add('flex');
+                this._targetEl.classList.remove('hidden');
+                this._targetEl.setAttribute('aria-modal', 'true');
+                this._targetEl.setAttribute('role', 'dialog');
+                this._targetEl.removeAttribute('aria-hidden');
+                this._createBackdrop();
+                this._isHidden = false;
+                // prevent body scroll
+                document.body.classList.add('overflow-hidden');
+                // Add keyboard event listener to the document
+                if (this._options.closable) {
+                    this._setupModalCloseEventListeners();
+                }
+                // callback function
+                this._options.onShow(this);
+            }
+        };
+        Modal2.prototype.hide = function () {
+            if (this.isVisible) {
+                this._targetEl.classList.add('hidden');
+                this._targetEl.classList.remove('flex');
+                this._targetEl.setAttribute('aria-hidden', 'true');
+                this._targetEl.removeAttribute('aria-modal');
+                this._targetEl.removeAttribute('role');
+                this._destroyBackdropEl();
+                this._isHidden = true;
+                // re-apply body scroll
+                document.body.classList.remove('overflow-hidden');
+                if (this._options.closable) {
+                    this._removeModalCloseEventListeners();
+                }
+                // callback function
+                this._options.onHide(this);
+            }
+        };
+        Modal2.prototype.isVisible = function () {
+            return !this._isHidden;
+        };
+        Modal2.prototype.isHidden = function () {
+            return this._isHidden;
+        };
+        return Modal2;
+    }());
+    </script>
+    <script>
+    class TestCaseCreateModal {
+        constructor() {
+            this.nextId = 0;
+            this.modals = {};
+            this.templateElements = `
+<div id="$modalId"
+        tabindex="-1"
+        class="fixed top-0 left-0 right-0 z-[70] hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"> 
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">テストケースの新規作成</h3>
+                <button type="button"
+                        onclick="testCaseCreateModal.hide('$modalId')"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                    <svg aria-hidden="true"
+                            class="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd">
+                        </path>
+                    </svg>
+                    <span class="sr-only">テストケース作成モーダルを閉じる</span>
+                </button>
+            </div>
+            <div class="p-6 space-y-6 text-left">
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ケース名</label>
+                    <input type="text"
+                            class="testCaseTitle bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">入力データ</label>
+                    <input type="file"
+                           class="testCaseInputFile">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">出力データ</label>
+                    <input type="file"
+                           class="testCaseOutputFile">
+                </div>
+                <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <ul class="testCaseTab flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+                        <li class="mr-2 flex">
+                            <button class="testCaseSourceCodeBtn flex-grow inline-block px-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
+                                    onclick="testCaseCreateModal.changeTab('$modalId', 'sourceCode')">
+                                ソースコードで提出時
+                            </button>
+                        </li>
+                        <li class="mr-2 flex">
+                            <button class="testCaseFileBtn flex-grow inline-block px-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                    onclick="testCaseCreateModal.changeTab('$modalId', 'file')">
+                                ファイルで提出時
+                            </button>
+                        </li>
+                        <select onchange="testCaseCreateModal.changeLanguage('$modalId', this.value)"
+                                class="testCaseLanguageSelect bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-auto mr-2 my-2 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option hidden
+                                    value="DUMMY"></option>
+                            {% for language in availableLanguages %}
+                                <option hidden value="{{ language.name }}">
+                                    {{ language.value }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </ul>
+                    <div>
+                        {% for language in availableLanguages %}
+                        <div class="testCaseTabContent hidden p-4 rounded-lg bg-white dark:bg-gray-800"
+                             language="{{ language.value }}">
+                            <input type="text"
+                                   value="{{ language.value }}"
+                                   class="testCaseLanguage hidden">
+                            <div class="testCaseSourceCodeTab hidden">
+                                <div class="mb-4">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
+                                    <input type="text"
+                                        class="testCaseSourceCodeExecutionCommand bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行結果比較コマンド</label>
+                                    <input type="text"
+                                        class="testCaseSourceCodeCompareCommand bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div class="testCaseFileTab hidden">
+                                <div class="mb-4">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
+                                    <input type="text"
+                                        class="testCaseFileExecutionCommand bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行結果比較コマンド</label>
+                                    <input type="text"
+                                        class="testCaseFileCompareCommand bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button class="testCaseSaveBtn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+            `;
+        }
+
+        createNewModal(parent = document.body) {
+            const modalId = `testcase-create-modal-${this.nextId}`;
+            let elements = this.templateElements.replaceAll("$modalId", modalId);
+            parent.insertAdjacentHTML("beforeend", elements);
+            
+            const modalEl = document.querySelector(`#${modalId}`);
+            const flowBiteModal = new Modal2(modalEl);
+
+            const modal = {
+                id: modalId,
+                modalEl,
+                flowBiteModal,
+                current: {
+                    type: "sourceCode",
+                    language: "DUMMY"
+                },
+                filepond: {},
+                sourceCodeBtnEl: modalEl.querySelector(".testCaseSourceCodeBtn"),
+                fileBtnEl: modalEl.querySelector(".testCaseFileBtn"),
+                languageSelectEl: modalEl.querySelector(".testCaseLanguageSelect"),
+                saveBtnEl: modalEl.querySelector(".testCaseSaveBtn"),
+                titleEl: modalEl.querySelector(".testCaseTitle"),
+                inputFileEl: modalEl.querySelector(".testCaseInputFile"),
+                outputFileEl: modalEl.querySelector(".testCaseOutputFile"),
+                tabs: {},
+                targetElements: []
+            };
+
+            let tabContentEl;
+            {% for language in availableLanguages %}
+            tabContentEl = modalEl.querySelector(`.testCaseTabContent[language={{ language.name }}]`);
+            modal.tabs["{{ language.name }}"] = {
+                tabContentEl,
+                sourceCodeTabEl: tabContentEl.querySelector(".testCaseSourceCodeTab"),
+                fileTabEl: tabContentEl.querySelector(".testCaseFileTab"),
+                languageEl: tabContentEl.querySelector(".testCaseLanguage"),
+                sourceCodeExecutionCommandEl: tabContentEl.querySelector(".testCaseSourceCodeExecutionCommand"),
+                sourceCodeCompareCommandEl: tabContentEl.querySelector(".testCaseSourceCodeCompareCommand"),
+                fileExecutionCommandEl: tabContentEl.querySelector(".testCaseFileExecutionCommand"),
+                fileCompareCommandEl: tabContentEl.querySelector(".testCaseFileCompareCommand")
+            };
+            {% endfor %}
+
+            modal.filepond.inputFile = FilePond.create(modal.inputFileEl, {
+                storeAsFile: true
+            });
+            modal.filepond.outputFile = FilePond.create(modal.outputFileEl, {
+                storeAsFile: true
+            });
+            
+            this.modals[modalId] = modal;
+            this.nextId += 1;
+
+            return modalId;
+        }
+
+        addTargetEl(modalId, targetEl) {
+            const listener = function () {
+                testCaseCreateModal.show(modalId);
+            };
+            targetEl.addEventListener("click", listener);
+            this.modals[modalId].targetElements.push({
+                targetEl,
+                listener
+            });
+        }
+
+        show(modalId) {
+            this.modals[modalId].flowBiteModal.show();
+        }
+
+        hide(modalId) {
+            this.modals[modalId].flowBiteModal.hide();
+        }
+
+        changeTab(modalId, type) {
+            const modal = this.modals[modalId];
+            if (modal.current.language === "DUMMY") {
+                return;
+            }
+
+            const activeClasses = "text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500".split(" ");
+            const inactiveClasses = "dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300".split(" ");
+
+            const oldTabContentEl = modal.tabs[modal.current.language][`${modal.current.type}TabEl`]
+            const oldBtnEl = modal[`${modal.current.type}BtnEl`];
+            oldTabContentEl.classList.add("hidden");
+            oldBtnEl.classList.remove(...activeClasses);
+            oldBtnEl.classList.add(...inactiveClasses);
+
+            const newTabContentEl = modal.tabs[modal.current.language][`${type}TabEl`];
+            const newBtnEl = modal[`${type}BtnEl`];
+            newTabContentEl.classList.remove("hidden");
+            newBtnEl.classList.remove(...inactiveClasses);
+            newBtnEl.classList.add(...activeClasses);
+
+            modal.current.type = type;
+        }
+
+        changeLanguage(modalId, language) {
+            const modal = this.modals[modalId];
+
+            if (modal.current.language !== "DUMMY") {
+                const oldInnerTabContentEl = modal.tabs[modal.current.language][`${modal.current.type}TabEl`];
+                const oldOuterTabContentEl = modal.tabs[modal.current.language].tabContentEl;
+                oldInnerTabContentEl.classList.add("hidden");
+                oldOuterTabContentEl.classList.add("hidden");
+            }
+
+            if (language !== "DUMMY") {
+                const newInnerTabContentEl = modal.tabs[language][`${modal.current.type}TabEl`];
+                const newOuterTabContentEl = modal.tabs[language].tabContentEl;
+                newInnerTabContentEl.classList.remove("hidden");
+                newOuterTabContentEl.classList.remove("hidden");
+            }
+
+            modal.current.language = language;
+        }
+
+        addAvailableLanguage(modalId, language) {
+            const modal = this.modals[modalId];
+
+            const optionEl = modal.languageSelectEl.querySelector(`option[value=${language}]`);
+            optionEl.removeAttribute("hidden");
+
+            if (modal.current.language === "DUMMY") {
+                modal.languageSelectEl.value = language;
+                this.changeLanguage(modalId, language);
+            }
+        }
+
+        removeAvailableLanguage(modalId, language) {
+            const modal = this.modals[modalId];
+
+            const optionEl = modal.languageSelectEl.querySelector(`option[value=${language}]`);
+            optionEl.setAttribute("hidden", "");
+
+            if (modal.current.language === language) {
+                modal.languageSelectEl.value = "DUMMY";
+                this.changeLanguage(modalId, "DUMMY");
+            }
+        }
+
+        destroy(modalId) {
+            const modal = this.modals[modalId];
+            for (let e of modal.targetElements) {
+                e.targetEl.removeEventListener("click", e.listener);
+            }
+            modal.modalEl.remove();
+            delete this.modals[modalId];
+        }
+    }
+
+    const testCaseCreateModal = new TestCaseCreateModal();
+    </script>
+    <script>
+    class ProblemCreateModal {
+        constructor() {
+            this.containerEl = document.querySelector("#problem-create-modal");
+
+            this.currentStepperNum = 1;
+            this.stepperEl = this.containerEl.querySelector(".stepper");
+            this.stepperNumElements = this.stepperEl.querySelectorAll(".stepperNum");
+
+            this.bodyContainerEl = this.containerEl.querySelector(".bodyContainer");
+            this.bodyElements = this.bodyContainerEl.querySelectorAll(".body");
+
+            this.bodyInputEl = this.bodyContainerEl.querySelector("textarea[name=body]");
+            this.bodyPreviewEl = this.bodyContainerEl.querySelector("#problem-create-modal-body-preivew");
+
+            window.addEventListener("load", () => {
+                this.bodyPreviewEl.innerHTML = texme.render(this.bodyInputEl.value);
+                window.MathJax.texReset();
+                window.MathJax.typesetPromise();
+
+                this.bodyInputEl.addEventListener("keyup", () => {
+                    this.bodyPreviewEl.innerHTML = texme.render(this.bodyInputEl.value);
+                    window.MathJax.texReset();
+                    window.MathJax.typesetPromise();
+                });
+            });
+
+            this.currentCompileRuleTabLanguage = "{{ availableLanguages[0].value }}";
+
+            this.compileRuleNextIndex = 0;
+
+            this.changePage(this.currentStepperNum);
+            this.changeCompileRuleTab(this.currentCompileRuleTabLanguage);
+
+            this.availableLanguages = [];
+
+            this.testCaseCreateModalId = testCaseCreateModal.createNewModal();
+            this.testCaseCreateModal = testCaseCreateModal.modals[this.testCaseCreateModalId];
+            testCaseCreateModal.addTargetEl(this.testCaseCreateModalId, this.bodyElements[2].querySelector(".testCaseCreateBtn"));
+            this.testCaseCreateModal.saveBtnEl.addEventListener("click", () => {
+                problemCreateModal.createNewTestCase(this.testCaseCreateModalId);
+                testCaseCreateModal.hide(this.testCaseCreateModalId);
+
+                this.testCaseCreateModal.titleEl.value = "";
+                this.testCaseCreateModal.filepond.inputFile.removeFile();
+                this.testCaseCreateModal.filepond.outputFile.removeFile();
+                for (const language in this.testCaseCreateModal.tabs) {
+                    const tab = this.testCaseCreateModal.tabs[language];
+                    tab.sourceCodeExecutionCommandEl.value = "";
+                    tab.sourceCodeCompareCommandEl.value = "";
+                    tab.fileExecutionCommandEl.value = "";
+                    tab.fileCompareCommandEl.value = "";
+                }
+            });
+
+            this.testCaseRows = {};
+            this.testCasesTableEl = this.bodyElements[2].querySelector(".testCasesTable");
+            this.testCaseRowNextIndex = 0;
+            this.testCaseRowTemplateElements = `
+<tr id="$testCaseRowId" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <td class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">$title</td>
+    <td class="px-6 py-4 text-center">
+        <button type="button"
+                onclick="problemCreateModal.duplicateTestCase('$testCaseRowId')"
+                class="testCaseDuplicateBtn text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
+            <svg class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75">
+                </path>
+            </svg>
+            <span class="sr-only">テストケースを複製する</span>
+        </button>
+    </td>
+    <td class="px-6 py-4 text-center">
+        <button type="button"
+                class="testCaseEditBtn text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
+            <svg class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+                </path>
+            </svg>
+            <span class="sr-only">テストケースを編集する</span>
+        </button>
+    </td>
+    <td class="px-6 py-4 text-center">
+        <button type="button"
+                onclick="problemCreateModal.deleteTestCase('$testCaseRowId')"
+                class="testCaseDeleteBtn ml-auto my-auto text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center mr-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800 dark:hover:bg-red-500">
+            <svg class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0">
+                </path>
+            </svg>
+            <span class="sr-only">テストケースを削除する</span>
+        </button>
+    </td>
+</tr>
+            `;
+        }
+
+        changePage(num) {
+            this.changeStepper(num);
+            this.changeBody(num);
+
+            this.currentStepperNum = num;
+        }
+
+        changeStepper(num) {
+            const selectedStepperNumTextColorClasses = "text-blue-600 dark:text-blue-500".split(" ");
+
+            const oldStepperNumEl = this.stepperNumElements[this.currentStepperNum - 1];
+            const oldStepperNumSelectedEl = oldStepperNumEl.querySelector(".stepperNumSelected");
+            const oldStepperIndexEl = oldStepperNumEl.querySelector(".stepperIndex");
+            oldStepperNumEl.classList.remove(...selectedStepperNumTextColorClasses);
+            oldStepperNumSelectedEl.classList.add("hidden");
+            oldStepperIndexEl.classList.remove("hidden");
+
+            const newStepperNumEl = this.stepperNumElements[num - 1];
+            const newStepperNumSelectedEl = newStepperNumEl.querySelector(".stepperNumSelected");
+            const newStepperIndexEl = newStepperNumEl.querySelector(".stepperIndex");
+            newStepperNumEl.classList.add(...selectedStepperNumTextColorClasses);
+            newStepperNumSelectedEl.classList.remove("hidden");
+            newStepperIndexEl.classList.add("hidden");
+        }
+
+        changeBody(num) {
+            const oldBodyEl = this.bodyElements[this.currentStepperNum - 1];
+            oldBodyEl.classList.remove("flex");
+            oldBodyEl.classList.add("hidden");
+
+            const newBodyEl = this.bodyElements[num - 1];
+            newBodyEl.classList.remove("hidden");
+            newBodyEl.classList.add("flex");
+        }
+
+        changeCompileRuleTab(language) {
+            const activeClasses = "text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500".split(" ");
+            const inactiveClasses = "dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300".split(" ");
+
+            const oldTabEl = this.bodyElements[1].querySelector(`.compileRuleTab[language=${ this.currentCompileRuleTabLanguage }]`);
+            const oldTabContentEl = this.bodyElements[1].querySelector(`.compileRuleTabContent[language=${ this.currentCompileRuleTabLanguage }]`);
+            oldTabEl.classList.remove(...activeClasses);
+            oldTabEl.classList.add(...inactiveClasses);
+            oldTabContentEl.classList.add("hidden");
+
+            const newTabEl = this.bodyElements[1].querySelector(`.compileRuleTab[language=${ language }]`);
+            const newTabContentEl = this.bodyElements[1].querySelector(`.compileRuleTabContent[language=${ language }]`);
+            newTabEl.classList.remove(...inactiveClasses);
+            newTabEl.classList.add(...activeClasses);
+            newTabContentEl.classList.remove("hidden");
+
+            this.currentCompileRuleTabLanguage = language;
+        }
+
+        toggleLanguage(language, checked) {
+            const compileRuleTabContentEl = this.bodyElements[1].querySelector(`.compileRuleTabContent[language=${ language }]`);
+            const languageInputEl = compileRuleTabContentEl.querySelector(`input.compileRuleLanguage`);
+            const sourceCodeCompileCommandInputEl = compileRuleTabContentEl.querySelector(`input.compileRuleSourceCodeCompileCommand`);
+            const fileCompileCommandInputEl = compileRuleTabContentEl.querySelector(`input.compileRuleFileCompileCommand`);
+
+            if (checked) {
+                languageInputEl.setAttribute("name", `compileRules[${ this.compileRuleNextIndex }][language]`);
+                sourceCodeCompileCommandInputEl.setAttribute("name", `compileRules[${ this.compileRuleNextIndex }][sourceCodeCompileCommand]`);
+                fileCompileCommandInputEl.setAttribute("name", `compileRules[${ this.compileRuleNextIndex }][fileCompileCommand]`);
+
+                this.compileRuleNextIndex += 1;
+
+                testCaseCreateModal.addAvailableLanguage(this.testCaseCreateModalId, language);
+                for (const testCaseRowId in this.testCaseRows) {
+                    this.addAvailableLanguageToTestCase(this.testCaseRows[testCaseRowId], language);
+                }
+                
+                this.availableLanguages.push(language);
+            } else {
+                languageInputEl.removeAttribute("name");
+                sourceCodeCompileCommandInputEl.removeAttribute("name");
+                fileCompileCommandInputEl.removeAttribute("name");
+
+                testCaseCreateModal.removeAvailableLanguage(this.testCaseCreateModalId, language);
+                for (const testCaseRowId in this.testCaseRows) {
+                    this.removeAvailableLanguageFromTestCase(this.testCaseRow[testCaseRowId], language);
+                }
+
+                this.availableLanguages = this.availableLanguages.filter(l => l !== language);
+            }
+        }
+
+        addAvailableLanguageToTestCase(testCaseRow, language) {
+            testCaseCreateModal.addAvailableLanguage(testCaseRow.editModalId, language);
+
+            const modal = testCaseCreateModal.modals[testCaseRow.editModalId];
+            const tab = modal.tabs[language];
+            tab.languageEl.setAttribute("name", `testCases[${ testCaseRow.index }][executionRules][${ language }][language]`);
+            tab.sourceCodeExecutionCommandEl.setAttribute("name", `testCases[${ testCaseRow.index }][executionRules][${ language }][sourceCodeExecutionCommand]`);
+            tab.sourceCodeCompareCommandEl.setAttribute("name", `testCases[${ testCaseRow.index }][executionRules][${ language }][sourceCodeCompareCommand]`);
+            tab.fileExecutionCommandEl.setAttribute("name", `testCases[${ testCaseRow.index }][executionRules][${ language }][fileExecutionCommand]`);
+            tab.fileCompareCommandEl.setAttribute("name", `testCases[${ testCaseRow.index }][executionRules][${ language }][fileCompareCommand]`);
+        }
+
+        removeAvailableLanguageFromTestCase(testCaseRow, language) {
+            testCaseCreateModal.removeAvailableLanguage(testCaseRow.editModalId, language);
+
+            const modal = testCaseCreateModal.modals[testCaseRow.editModalId];
+            const tab = modal.tabs[language];
+            tab.languageEl.removeAttribute("name");
+            tab.sourceCodeExecutionCommandEl.removeAttribute("name");
+            tab.sourceCodeCompareCommandEl.removeAttribute("name");
+            tab.fileExecutionCommandEl.removeAttribute("name");
+            tab.fileCompareCommandEl.removeAttribute("name");
+        }
+
+        createNewTestCase() {
+            const modal = this.testCaseCreateModal;
+
+            const testCaseRowId = `testcase-${ this.testCaseRowNextIndex }`; 
+            let elements = this.testCaseRowTemplateElements
+                .replaceAll("$testCaseRowId", testCaseRowId)
+                .replaceAll("$title", modal.titleEl.value);
+
+            this.testCasesTableEl.insertAdjacentHTML("beforeend", elements);
+            const testCaseRowEl = this.testCasesTableEl.querySelector(`tr#${ testCaseRowId }`);
+
+            const testCaseRow = {
+                id: testCaseRowId,
+                index: this.testCaseRowNextIndex,
+                testCaseRowEl,
+                editBtnEl: testCaseRowEl.querySelector(".testCaseEditBtn"),
+                duplicateBtnEl: testCaseRowEl.querySelector(".testCaseDuplicateBtn"),
+                deleteBtnEl: testCaseRowEl.querySelector(".testCaseDeleteBtn")
+            };
+
+            const editModalId = testCaseCreateModal.createNewModal(this.bodyElements[2]);
+            const editModal = testCaseCreateModal.modals[editModalId];
+            testCaseRow.editModalId = editModalId;
+            testCaseRow.editModal = editModal;
+
+            editModal.titleEl.value = modal.titleEl.value;
+            const inputFile = modal.filepond.inputFile.getFile();
+            const outputFile = modal.filepond.outputFile.getFile();
+            if (inputFile) {
+                editModal.filepond.inputFile.addFile(inputFile.file);
+            }
+            if (outputFile) {
+                editModal.filepond.outputFile.addFile(outputFile.file);
+            }
+            for (const language in modal.tabs) {
+                const tab = modal.tabs[language];
+                editModal.tabs[language].sourceCodeExecutionCommandEl.value = tab.sourceCodeExecutionCommandEl.value;
+                editModal.tabs[language].sourceCodeCompareCommandEl.value = tab.sourceCodeCompareCommandEl.value;
+                editModal.tabs[language].fileExecutionCommandEl.value = tab.fileExecutionCommandEl.value;
+                editModal.tabs[language].fileCompareCommandEl.value = tab.fileCompareCommandEl.value;
+            }
+            for (const language of this.availableLanguages) {
+                this.addAvailableLanguageToTestCase(testCaseRow, language);
+            }
+            editModal.titleEl.setAttribute("name", `testCases[${ testCaseRow.index }][title]`);
+            editModal.filepond.inputFile.setOptions({
+                name: `inputFiles[${ testCaseRow.index }]`
+            });
+            editModal.filepond.outputFile.setOptions({
+                name: `outputFiles[${ testCaseRow.index }]`
+            });
+            editModal.saveBtnEl.addEventListener("click", () => {
+                testCaseCreateModal.hide(editModalId);
+            });
+            testCaseRow.editBtnEl.addEventListener("click", () => {
+                testCaseCreateModal.show(editModalId);
+            });
+
+            this.testCaseRows[testCaseRowId] = testCaseRow;
+
+            this.testCaseRowNextIndex += 1;
+        }
+
+        duplicateTestCase(testCaseRowId) {
+            const modal = this.testCaseRows[testCaseRowId].editModal;
+
+            this.testCaseCreateModal.titleEl.value = modal.titleEl.value;
+            for (const language in modal.tabs) {
+                const tab = modal.tabs[language];
+                this.testCaseCreateModal.tabs[language].sourceCodeExecutionCommandEl.value = tab.sourceCodeExecutionCommandEl.value;
+                this.testCaseCreateModal.tabs[language].sourceCodeCompareCommandEl.value = tab.sourceCodeCompareCommandEl.value;
+                this.testCaseCreateModal.tabs[language].fileExecutionCommandEl.value = tab.fileExecutionCommandEl.value;
+                this.testCaseCreateModal.tabs[language].fileCompareCommandEl.value = tab.fileCompareCommandEl.value;
+            }
+
+            testCaseCreateModal.show(this.testCaseCreateModalId);
+        }
+
+        deleteTestCase(testCaseRowId) {
+            const testCaseRow = this.testCaseRows[testCaseRowId];
+            testCaseRow.testCaseRowEl.remove();
+            testCaseCreateModal.destroy(testCaseRow.editModalId);
+            delete this.testCaseRows[testCaseRowId];
+        }
+    }
+
+    const problemCreateModal = new ProblemCreateModal();
+    </script>
 {% endblock body %}

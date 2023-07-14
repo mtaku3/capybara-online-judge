@@ -143,7 +143,7 @@ class ProblemController
 
         $testCaseDTOs = [];
         $inputFiles = $req->files()->inputFiles;
-        $outputFiles = $req->files()->ouputFiles;
+        $outputFiles = $req->files()->outputFiles;
         foreach ($req->testCases as $idx => $testCase) {
             $testCaseTitle = $testCase["title"];
 
@@ -168,7 +168,7 @@ class ProblemController
             $uploadedInputFilePath = $inputFiles["tmp_name"][$idx];
             $uploadedOutputFilePath = $outputFiles["tmp_name"][$idx];
 
-            $testCasesDTOs[] = new \App\Application\CreateProblem\DTO\TestCaseDTO($testCaseTitle, $executionRuleDTOs, $uploadedInputFilePath, $uploadedOutputFilePath);
+            $testCaseDTOs[] = new \App\Application\CreateProblem\DTO\TestCaseDTO($testCaseTitle, $executionRuleDTOs, $uploadedInputFilePath, $uploadedOutputFilePath);
         }
 
         $createProblemResponse = $this->CreateProblemUseCase->handle(new CreateProblemRequest($title, $body, $timeConstraint, $memoryConstraint, $compileRuleDTOs, $testCaseDTOs));

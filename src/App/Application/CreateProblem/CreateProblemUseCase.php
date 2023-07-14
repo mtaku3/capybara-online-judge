@@ -75,8 +75,8 @@ class CreateProblemUseCase
             rename($uploadedOutputFilePath, $uploadedOutputFilePath . '.tar');
             $uploadedOutputFilePath .= '.tar';
 
-            $this->FileRepository->moveInputFile($testCaseDTO->UploadedInputFilePath, $testCase);
-            $this->FileRepository->moveOutputFile($testCaseDTO->UploadedOutputFilePath, $testCase);
+            $this->FileRepository->moveInputFile($uploadedInputFilePath, $testCase);
+            $this->FileRepository->moveOutputFile($uploadedOutputFilePath, $testCase);
         }
 
         $this->ProblemRepository->save($problem);
