@@ -13,6 +13,10 @@
   src: url("/assets/Silkscreen/Silkscreen-Bold.ttf");
 }
 
+.CodeMirror {
+  @apply absolute inset-0 h-full;
+}
+
 /* MIT License
 
 Copyright (c) 2023 mtaku3

@@ -42,7 +42,8 @@ while (1) {
                     "HostConfig" => [
                         "Memory" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
                         "MemorySwap" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
-                        "NetworkMode" => "none"
+                        "NetworkMode" => "none",
+                        "Runtime" => "runsc"
                     ]
                 ]
             ]);
@@ -111,6 +112,10 @@ while (1) {
 
             if ($body["ExitCode"] === 0) {
                 foreach ($problem->getTestCases() as $testCase) {
+                    if ($testCase->getIsDisabled()) {
+                        continue;
+                    }
+
                     $executionRule = current(array_filter($testCase->getExecutionRules(), fn ($e) => $e->getLanguage() === $submission->getLanguage()));
 
                     if ($executionRule === false) {
@@ -148,7 +153,7 @@ while (1) {
                     $res = $client->post("containers/" . $containerId . "/exec", [
                         RequestOptions::JSON => [
                             "AttachStdout" => true,
-                            "Cmd" => ["sh", "-c", "/usr/bin/time -f %e,%M,%x -o /tmp/stats " . ($submission->getSubmissionType() === SubmissionType::SourceCode ? $executionRule->getSourceCodeExecutionCommand() : $executionRule->getFileExecutionCommand())],
+                            "Cmd" => ["sh", "-c", "/usr/bin/time -q -f %e,%M,%x -o /tmp/stats " . ($submission->getSubmissionType() === SubmissionType::SourceCode ? $executionRule->getSourceCodeExecutionCommand() : $executionRule->getFileExecutionCommand())],
                             "WorkingDir" => "/workspace"
                         ]
                     ]);
@@ -236,19 +241,21 @@ while (1) {
             $submission->completeJudge();
             $submissionRepository->save($submission);
         } finally {
-            $res = $client->post("containers/" . $containerId . "/stop");
+            if (isset($containerId)) {
+                $res = $client->post("containers/" . $containerId . "/stop");
 
-            if ($res->getStatusCode() !== 204) {
-                throw new Exception("Failed to stop container:" . (string)$res->getBody());
-            }
+                if ($res->getStatusCode() !== 204) {
+                    throw new Exception("Failed to stop container:" . (string)$res->getBody());
+                }
 
-            $res = $client->delete("containers/" . $containerId);
+                $res = $client->delete("containers/" . $containerId);
 
-            if ($res->getStatusCode() !== 204) {
-                throw new Exception("Failed to remove container:" . (string)$res->getBody());
+                if ($res->getStatusCode() !== 204) {
+                    throw new Exception("Failed to remove container:" . (string)$res->getBody());
+                }
             }
         }
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         echo $e;
     }
 }

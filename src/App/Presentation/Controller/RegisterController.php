@@ -11,6 +11,7 @@ use App\Application\CreateUser\CreateUserUseCase;
 use App\Presentation\Router\AbstractResponse;
 use App\Presentation\Router\Request;
 use Exception;
+use Throwable;
 use Twig\Environment;
 
 class RegisterController
@@ -43,7 +44,7 @@ class RegisterController
 
     public function get(Request $req, AbstractResponse $res)
     {
-        $res->body($this->Twig->render("auth/register.twig"))->send();
+        $res->body($this->Twig->render("Auth/Register.twig"))->send();
     }
 
     public function handleForm(Request $req, AbstractResponse $res)
@@ -52,8 +53,8 @@ class RegisterController
             $createUserResponse = $this->CreateUserUseCase->handle(
                 new CreateUserRequest($req->username, $req->password, false)
             );
-        } catch (Exception $e) {
-            $res->body($this->Twig->render("auth/register.twig", [
+        } catch (Throwable $e) {
+            $res->body($this->Twig->render("Auth/Register.twig", [
                 "error" => "ユーザー名が既に使用されているか、パスワードが無効です"
             ]))->send();
             return;
@@ -68,7 +69,7 @@ class RegisterController
             $res->cookie("x-refresh-token", (string)$authorizeResponse->Session->getRefreshToken(), $authorizeResponse->Session->getExpiresAt()->getTimestamp(), secure: $_ENV["ISDEV"] ? false : true, httponly: true, samesite: "strict");
 
             $res->redirect("/");
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $res->code(500)->send();
         }
     }

@@ -23,6 +23,7 @@ use App\Presentation\Router\Response;
 use App\Presentation\Router\Exceptions\LockedResponseException;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
 use App\Presentation\Router\Request;
+use App\Utils\UploadErrorUtils;
 use Exception;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -96,10 +97,9 @@ class ProblemController
         try {
             $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest(new ProblemId($req->problemId)));
             $problem = $getProblemByIdResponse->Problem;
-            $submittableLanguages = array_filter($problem->getCompileRules(), fn ($e) => $e->getLanguage());
+            $submittableLanguages = array_map(fn ($e) => $e->getLanguage(), $problem->getCompileRules());
             $res->body(
                 $this->Twig->render("Problem.twig", [
-                    "problemId" => new ProblemId($req->problemId),
                     "problemTitle" => $problem->getTitle(),
                     "problemTimeConstraint" => $problem->getTimeConstraint(),
                     "problemMemoryConstraint" => $problem->getMemoryConstraint(),
@@ -159,10 +159,10 @@ class ProblemController
             }
 
             if ($inputFiles["error"][$idx] !== UPLOAD_ERR_OK) {
-                throw new Exception("Something went wrong while uploading a file");
+                throw new Exception("Something went wrong while uploading a file: " . UploadErrorUtils::getMessage($inputFiles["error"][$idx]));
             }
             if ($outputFiles["error"][$idx] !== UPLOAD_ERR_OK) {
-                throw new Exception("Something went wrong while uploading a file");
+                throw new Exception("Something went wrong while uploading a file: " . UploadErrorUtils::getMessage($outputFiles["error"][$idx]));
             }
 
             $uploadedInputFilePath = $inputFiles["tmp_name"][$idx];
@@ -249,7 +249,7 @@ class ProblemController
             fclose($tmpf);
         } else {
             if ($req->files()->sourceFile["error"] !== UPLOAD_ERR_OK) {
-                throw new Exception("Something went wrong while uploading a files");
+                throw new Exception("Something went wrong while uploading a files: " . UploadErrorUtils::getMessage($req->files()->sourceFile["error"]));
             }
 
             $this->SubmitUseCase->handle(new SubmitRequest($user->getId(), $problem->getId(), $language, $submissionType, $req->files()->sourceFile["tmp_name"]));

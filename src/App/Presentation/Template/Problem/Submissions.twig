@@ -1,4 +1,130 @@
 {% extends "Template.twig" %}
 {% block body %}
-    {% include "Component/NavBar.twig" %}
+    {% embed "Component/ProblemContainer.twig" with { "activeTab": "submissions" } %}
+    {% from "Component/Pagination.twig" import Pagination %}
+    {% block contents %}
+        <div class="w-full shadow-md sm:rounded-lg">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-center">提出日時</th>
+                            {% if user.getIsAdmin %}<th scope="col" class="px-6 py-3 text-center">ユーザ</th>{% endif %}
+                            <th scope="col" class="px-6 py-3 text-center">言語</th>
+                            <th scope="col" class="px-6 py-3 text-end">コード長</th>
+                            <th scope="col" class="px-6 py-3 text-center">結果</th>
+                            <th scope="col" class="px-6 py-3 text-end">実行時間</th>
+                            <th scope="col" class="px-6 py-3 text-end">メモリ</th>
+                            <th scope="col" class="px-6 py-3 text-center">
+                                <span class="sr-only">詳細</span>
+                            </th>
+                            {% if user.getIsAdmin %}
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only"></span>
+                                </th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for submission in submissions %}
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <td scope="row"
+                                    class="px-6 py-3 text-gray-900 dark:text-white text-center">
+                                    {{ submission.getSubmittedAt|date("Y-m-d g:i:s") }}
+                                </td>
+                                {% if user.getIsAdmin %}
+                                    <td class="px-6 py-3 text-center">
+                                        <a href="/user/{{ submission.getUserId }}/submissions"
+                                           class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ (users|filter(e => e.getId.equals(submission.getUserId) )|first).getUsername }}</a>
+                                    </td>
+                                {% endif %}
+                                <td class="px-6 py-3 text-center">{{ submission.getLanguage.value }}</td>
+                                <td class="px-6 py-3 text-end">{{ submission.getCodeLength|format_bytes }}</td>
+                                <td class="px-6 py-3 text-center">
+                                    {% if submission.getJudgeResult.value == "WJ" %}
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">{{ submission.getJudgeResult.value }}</span>
+                                    {% elseif submission.getJudgeResult.value == "AC" %}
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">{{ submission.getJudgeResult.value }}</span>
+                                    {% else %}
+                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">{{ submission.getJudgeResult.value }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-3 text-end">
+                                    {{ submission.getExecutionTime is not null ? submission.getExecutionTime|format_miliseconds : "" }}
+                                </td>
+                                <td class="px-6 py-3 text-end">
+                                    {{ submission.getConsumedMemory is not null ? submission.getConsumedMemory|format_kilobytes : "" }}
+                                </td>
+                                <td class="px-6 py-3 text-center">
+                                    <a href="/submission/{{ submission.getId }}"
+                                       class="font-medium text-blue-600 dark:text-blue-500 hover:underline">詳細</a>
+                                </td>
+                                {% if user.getIsAdmin %}
+                                    <td class="px-6 py-3">
+                                        <button onclick="submissionId = '{{ submission.getId }}'"
+                                                data-modal-target="popup-modal"
+                                                data-modal-toggle="popup-modal"
+                                                type="button"
+                                                class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800 dark:hover:bg-red-500">
+                                            <svg class="w-4 h-4"
+                                                 aria-hidden="true"
+                                                 xmlns="http://www.w3.org/2000/svg"
+                                                 fill="currentColor"
+                                                 viewBox="0 0 18 20">
+                                                <path d="M17 4h-4V2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2H1a1 1 0 0 0 0 2h1v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1a1 1 0 1 0 0-2ZM7 2h4v2H7V2Zm1 14a1 1 0 1 1-2 0V8a1 1 0 0 1 2 0v8Zm4 0a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v8Z" />
+                                            </svg>
+                                            <span class="sr-only">Icon description</span>
+                                        </button>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {{ Pagination(page, totalNumberOfSubmissions, limitPerPage, totalNumberOfPages) }}
+            </div>
+        </div>
+        <div id="popup-modal"
+             tabindex="-1"
+             class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-md max-h-full">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <button type="button"
+                            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="popup-modal">
+                        <svg class="w-3 h-3"
+                             aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                    <div class="p-6 text-center">
+                        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                             aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">この操作は元に戻せません。本当に実行しますか?</h3>
+                        <button onclick="location.href = '/submission/' + submissionId + '/delete'"
+                                data-modal-hide="popup-modal"
+                                type="button"
+                                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                            削除
+                        </button>
+                        <button data-modal-hide="popup-modal"
+                                type="button"
+                                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                            キャンセル
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock contents %}
+{% endembed %}
 {% endblock body %}
