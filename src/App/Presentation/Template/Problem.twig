@@ -6,7 +6,7 @@
     {{ libraries.codemirror() }}
     {{ libraries.filepond() }}
     <script>
-        window.onload = function() {
+        window.addEventListener("load", () => {
             var inputEl = document.querySelector("#input");
             var renderEl = document.querySelector("#render");
             var renderEl2 = document.querySelector("#render2");
@@ -27,16 +27,28 @@
                 });
             }
 
+            const CodeMirrorLightTheme = "default";
+            const CodeMirrorDarkTheme = "colorforth";
+
             var editor = CodeMirror.fromTextArea(document.querySelector("#codemirror-code-editor"), {
                 mode: "text/x-csrc",
                 lineNumbers: true,
                 lineWrapping: true,
                 extraKeys: {
                     "Ctrl-Space": "autocomplete"
-                }
+                },
+                theme: window.isDark() ? CodeMirrorDarkTheme : CodeMirrorLightTheme
             });
             editor.setSize("auto", "auto");
-        }
+
+            window.themeToggleBtn.addEventListener("click", () => {
+                if (window.isDark()) {
+                    editor.setOption("theme", CodeMirrorDarkTheme);
+                } else {
+                    editor.setOption("theme", CodeMirrorLightTheme);
+                }
+            });
+        });
     </script>
 {% endblock head %}
 {% block body %}
