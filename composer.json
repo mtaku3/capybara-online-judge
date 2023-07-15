@@ -3,7 +3,8 @@
   "license": "MIT LICENSE",
   "autoload": {
     "psr-4": {
-      "App\\": "src/App/"
+      "App\\": "src/App/",
+      "Judger\\": "src/Judger/"
     }
   },
   "autoload-dev": {
@@ -27,7 +28,8 @@
     "php-di/php-di": "^7.0",
     "ramsey/uuid": "^4.7",
     "cycle/orm": "^2.3",
-    "spiral/pagination": "^3.7"
+    "spiral/pagination": "^3.7",
+    "monolog/monolog": "^3.4"
   },
   "config": {
     "allow-plugins": {
