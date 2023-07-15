@@ -255,6 +255,6 @@ class ProblemController
             $this->SubmitUseCase->handle(new SubmitRequest($user->getId(), $problem->getId(), $language, $submissionType, $req->files()->sourceFile["tmp_name"]));
         }
 
-        $res->redirect("/problem/" . $problem->getId());
+        $res->redirect("/problem/" . $problem->getId() . "/submissions");
     }
 }
