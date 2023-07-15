@@ -158,16 +158,19 @@ class Submission
     }
 
     /**
+     * @param bool $hasInternalErrorOccured
      * @return void
      * @throws AlreadyJudgedException
      */
-    public function completeJudge(): void
+    public function completeJudge(bool $hasInternalErrorOccured = false): void
     {
         if ($this->JudgeResult !== SubmissionJudgeResult::WJ) {
             throw new AlreadyJudgedException();
         }
 
-        if (empty($this->TestResults)) {
+        if ($hasInternalErrorOccured) {
+            $this->JudgeResult = SubmissionJudgeResult::IE;
+        } elseif (empty($this->TestResults)) {
             $this->JudgeResult = SubmissionJudgeResult::CE;
         } else {
             $maxJudgeResult = $this->TestResults[0]->getJudgeResult();

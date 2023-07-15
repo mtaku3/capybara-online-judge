@@ -71,7 +71,7 @@ CREATE TABLE
     );
 
 CREATE TYPE
-    SubmissionJudgeResult AS ENUM('AC', 'WA', 'RE', 'TLE', 'MLE', 'CE', 'WJ');
+    SubmissionJudgeResult AS ENUM('AC', 'WA', 'RE', 'TLE', 'MLE', 'CE', 'IE', 'WJ');
 
 CREATE TYPE
     SubmissionType AS ENUM('SourceCode', 'File');

@@ -12,6 +12,7 @@ enum SubmissionJudgeResult: string
     case TLE = "TLE";
     case MLE = "MLE";
     case CE = "CE";
+    case IE = "IE";
     case WJ = "WJ";
 
     /**
