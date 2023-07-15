@@ -47,7 +47,7 @@ SOFTWARE. */
 }
 
 .markdown {
-  @apply text-gray-900 leading-normal break-words;
+  @apply text-gray-900 leading-normal break-words dark:text-white;
 }
 
 .markdown > * + * {
@@ -99,15 +99,15 @@ SOFTWARE. */
 }
 
 .markdown blockquote {
-  @apply text-base border-l-4 border-gray-300 pl-4 pr-4 text-gray-600;
+  @apply text-base border-l-4 border-gray-300 pl-4 pr-4 text-gray-600 dark:border-gray-900 dark:text-gray-400;
 }
 
 .markdown code {
-  @apply font-mono text-sm inline bg-gray-200 rounded px-1 py-05;
+  @apply font-mono text-sm inline bg-gray-200 rounded px-1 py-05 dark:bg-gray-900 dark:text-white;
 }
 
 .markdown pre {
-  @apply bg-gray-100 rounded p-4;
+  @apply bg-gray-100 rounded p-4 dark:bg-gray-900 dark:text-white;
 }
 
 .markdown pre code {

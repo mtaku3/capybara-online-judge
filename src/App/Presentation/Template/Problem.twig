@@ -136,7 +136,7 @@
                 <p class="text-black dark:text-white">
                     時間制限：<span class="font-light">{{ problemTimeConstraint|format_miliseconds }}</span> メモリ制限：<span class="font-light">{{ problemMemoryConstraint|format_kilobytes }}</span>
                 </p>
-                <div id="render" class="markdown text-black dark:text-white"></div>
+                <div id="render" class="markdown"></div>
                 <textarea id="input" hidden>{{ problemBody|raw }}</textarea>
             </div>
             <div class="flex-none basis-1/2 flex max-h-[800px]">
