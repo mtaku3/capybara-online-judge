@@ -6,6 +6,58 @@
     {{ libraries.codemirror() }}
     {{ libraries.filepond() }}
     <script>
+    window.addEventListener("load", () => {
+        let lastInput = "";
+        let inputDirty = true;
+
+        let delayTime = 1;
+        let checkChangeTimeout = null;
+
+        function handleInput() {
+            inputDirty = true;
+        }
+
+        const previewEl = document.querySelector("#render2");
+        const inputEl = document.querySelector("#input");
+        inputEl.addEventListener('change', handleInput, false);
+        inputEl.addEventListener('keyup', handleInput, false);
+        inputEl.addEventListener('keypress', handleInput, false);
+        inputEl.addEventListener('keydown', handleInput, false);
+
+        function checkForChanges() {
+            if (inputDirty && window.Worker) {
+                inputDirty = false;
+
+                const markdown = inputEl.value;
+                if (lastInput !== markdown) {
+                    lastInput = markdown;
+                    const startTime = new Date();
+                    const parsed = texme.render(markdown);
+                    setParsed(parsed);
+                    window.MathJax.typesetPromise();
+                    const endTime = new Date();
+
+                    delayTime = endTime - startTime;
+                    if (delayTime < 50) {
+                        delayTime = 50;
+                    } else if (delayTime > 500) {
+                        delayTime = 1000;
+                    }
+                }
+            }
+            checkChangeTimeout = window.setTimeout(checkForChanges, delayTime);
+        }
+
+        function setParsed(parsed) {
+            try {
+                previewEl.innerHTML = parsed;
+            } catch (ex) {}
+        }
+
+        checkForChanges();
+    });
+    </script>
+    <script>
         window.addEventListener("load", () => {
             var inputEl = document.querySelector("#input");
             var renderEl = document.querySelector("#render");
