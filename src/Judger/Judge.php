@@ -74,26 +74,31 @@ while (1) {
             if ($compileRule === false) {
                 throw new Exception("No compileRule found for the language {$submission->getLanguage()->name} in the problem {$problem->getId()}. The language might have been disabled after the submission.");
             }
-
-            /** Compile the program */
-            // 1. Create a exec instance to compile
+            
             $commandToCompile = $submission->getSubmissionType() === SubmissionType::SourceCode ? $compileRule->getSourceCodeCompileCommand() : $compileRule->getFileCompileCommand();
-            $res = $client->createExecInstance($containerId, [
-                "AttachStdout" => true,
-                "Cmd" => explode(" ", $commandToCompile),
-                "WorkingDir" => "/workspace"
-            ]);
-            $execId = $res["Id"];
+            $needToCompile = $commandToCompile !== "";
+            $compileSucceeded = false;
+            if ($needToCompile) {
+                /** Compile the program */
+                // 1. Create a exec instance to compile
+                $res = $client->createExecInstance($containerId, [
+                    "AttachStdout" => true,
+                    "Cmd" => explode(" ", $commandToCompile),
+                    "WorkingDir" => "/workspace"
+                ]);
+                $execId = $res["Id"];
 
-            // 2. Start the exec instance
-            $logger->info("Compiling the program");
-            $client->startExecInstance($execId);
+                // 2. Start the exec instance
+                $logger->info("Compiling the program");
+                $client->startExecInstance($execId);
 
-            // 3. Retrieve the result
-            $res = $client->inspectExecInstance($execId);
+                // 3. Retrieve the result
+                $res = $client->inspectExecInstance($execId);
+                $compileSucceeded = $res["ExitCode"] === 0;
+            }
 
-            if ($res["ExitCode"] === 0) {
-                // Compiling succeeded
+            if (!$needToCompile || $compileSucceeded) {
+                // No need to compile or compiling succeeded
 
                 $enabledTestCases = array_filter($problem->getTestCases(), fn ($e) => !$e->getIsDisabled());
                 // Run the testCases
