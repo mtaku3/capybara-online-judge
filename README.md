@@ -41,7 +41,7 @@ JWT_SECRET=secret
 4. プログラム実行用のベースラインをビルドする
 
 ```bash
-$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v .:/workspace -w /workspace php:8-bullseye php tools/BuildImage.php
+$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v .:/workspace -w /workspace mcr.microsoft.com/devcontainers/php:8-bullseye /bin/sh -c "composer install && php tools/BuildImage.php"
 ```
 
 5. Docker でコンテナを起動する
