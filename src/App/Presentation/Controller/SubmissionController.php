@@ -159,9 +159,14 @@ class SubmissionController
         }
 
         try {
+            $problemId = new ProblemId($req->problemId);
+
+            $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($problemId));
+            $problem = $getProblemByIdResponse->Problem;
+
             $users = [];
             if ($user->getIsAdmin()) {
-                $getSubmissionsByProblemIdResponse = $this->GetSubmissionsByProblemIdUseCase->handle(new GetSubmissionsByProblemIdRequest(new ProblemId($req->problemId), intval($req->param("page", 1)), self::LimitPerPage));
+                $getSubmissionsByProblemIdResponse = $this->GetSubmissionsByProblemIdUseCase->handle(new GetSubmissionsByProblemIdRequest($problemId, intval($req->param("page", 1)), self::LimitPerPage));
                 $submissions = $getSubmissionsByProblemIdResponse->Submissions;
                 $count = $getSubmissionsByProblemIdResponse->Count;
 
@@ -169,7 +174,7 @@ class SubmissionController
                     $users[] = $this->GetUserByIdUseCase->handle(new GetUserByIdRequest($submission->getUserId()))->User;
                 }
             } else {
-                $getSubmissionsByProblemIdAndUserIdResponse = $this->GetSubmissionsByProblemIdAndUserIdUseCase->handle(new GetSubmissionsByProblemIdAndUserIdRequest(new ProblemId($req->problemId), $user->getId(), intval($req->param("page", 1)), self::LimitPerPage));
+                $getSubmissionsByProblemIdAndUserIdResponse = $this->GetSubmissionsByProblemIdAndUserIdUseCase->handle(new GetSubmissionsByProblemIdAndUserIdRequest($problemId, $user->getId(), intval($req->param("page", 1)), self::LimitPerPage));
                 $submissions = $getSubmissionsByProblemIdAndUserIdResponse->Submissions;
                 $count = $getSubmissionsByProblemIdAndUserIdResponse->Count;
             }
@@ -184,7 +189,8 @@ class SubmissionController
                 "totalNumberOfSubmissions" => $count,
                 "totalNumberOfPages" => intval(ceil($count / self::LimitPerPage)),
                 "limitPerPage" => self::LimitPerPage,
-                "users" => $users
+                "users" => $users,
+                "problem" => $problem
             ])
         );
     }

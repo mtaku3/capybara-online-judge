@@ -1,6 +1,9 @@
 {% import "Component/Libraries.twig" as libraries %}
 {% from "Component/NavBar.twig" import NavBar %}
 {% extends "Template.twig" %}
+{% block title %}
+    {{ problemTitle }}
+{% endblock title %}
 {% block head %}
     {{ libraries.texme() }}
     {{ libraries.codemirror() }}

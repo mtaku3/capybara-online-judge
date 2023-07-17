@@ -1,6 +1,9 @@
 {% import "Component/Libraries.twig" as libraries %}
 {% set availableLanguages = [ "C", "CPP" ] %}
 {% extends "Template.twig" %}
+{% block title %}
+    {{ problem.getTitle }} - テストケース
+{% endblock title %}
 {% block head %}
     {{ libraries.filepond() }}
 {% endblock head %}

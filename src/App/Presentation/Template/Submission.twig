@@ -1,5 +1,8 @@
 {% from "Component/NavBar.twig" import NavBar %}
 {% extends "Template.twig" %}
+{% block title %}
+    提出 {{ submission.getId }}
+{% endblock title %}
 {% block body %}
     <div class="flex flex-col min-h-full !h-auto w-full gap-y-4 bg-white dark:bg-gray-900">
         {{ NavBar(user, false) }}

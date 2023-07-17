@@ -2,6 +2,9 @@
 {% import "Component/Libraries.twig" as libraries %}
 {% from "Component/Pagination.twig" import Pagination %}
 {% extends "Template.twig" %}
+{% block title %}
+    CAPYBARA ONLINE JUDGE
+{% endblock title %}
 {% block head %}
     {{ libraries.texme() }}
     {{ libraries.filepond() }}

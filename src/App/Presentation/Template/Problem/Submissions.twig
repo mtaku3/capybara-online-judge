@@ -1,4 +1,7 @@
 {% extends "Template.twig" %}
+{% block title %}
+    {{ problem.getTitle }} - 提出一覧
+{% endblock title %}
 {% block body %}
     {% embed "Component/ProblemContainer.twig" with { "activeTab": "submissions" } %}
     {% from "Component/Pagination.twig" import Pagination %}
