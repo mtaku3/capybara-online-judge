@@ -74,7 +74,7 @@ while (1) {
             if ($compileRule === false) {
                 throw new Exception("No compileRule found for the language {$submission->getLanguage()->name} in the problem {$problem->getId()}. The language might have been disabled after the submission.");
             }
-            
+
             $commandToCompile = $submission->getSubmissionType() === SubmissionType::SourceCode ? $compileRule->getSourceCodeCompileCommand() : $compileRule->getFileCompileCommand();
             $needToCompile = $commandToCompile !== "";
             $compileSucceeded = false;
@@ -208,7 +208,7 @@ while (1) {
                 $client->stopContainer($containerId);
 
                 // Remove the container
-                // $client->removeContainer($containerId);
+                $client->removeContainer($containerId);
             }
         }
 
