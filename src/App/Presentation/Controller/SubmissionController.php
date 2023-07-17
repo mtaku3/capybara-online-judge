@@ -21,6 +21,7 @@ use App\Application\GetUserById\GetUserByIdUseCase;
 use App\Domain\Problem\ValueObject\ProblemId;
 use App\Domain\Submission\ValueObject\SubmissionId;
 use App\Domain\User\ValueObject\UserId;
+use App\Infrastructure\Repository\Problem\Exception\ProblemNotFoundException;
 use App\Infrastructure\Repository\Submission\Exception\SubmissionNotFoundException;
 use App\Presentation\Router\Exceptions\HttpException;
 use App\Presentation\Router\Exceptions\LockedResponseException;
@@ -157,19 +158,23 @@ class SubmissionController
             throw HttpException::createFromCode(401);
         }
 
-        $users = [];
-        if ($user->getIsAdmin()) {
-            $getSubmissionsByProblemIdResponse = $this->GetSubmissionsByProblemIdUseCase->handle(new GetSubmissionsByProblemIdRequest(new ProblemId($req->problemId), intval($req->param("page", 1)), self::LimitPerPage));
-            $submissions = $getSubmissionsByProblemIdResponse->Submissions;
-            $count = $getSubmissionsByProblemIdResponse->Count;
+        try {
+            $users = [];
+            if ($user->getIsAdmin()) {
+                $getSubmissionsByProblemIdResponse = $this->GetSubmissionsByProblemIdUseCase->handle(new GetSubmissionsByProblemIdRequest(new ProblemId($req->problemId), intval($req->param("page", 1)), self::LimitPerPage));
+                $submissions = $getSubmissionsByProblemIdResponse->Submissions;
+                $count = $getSubmissionsByProblemIdResponse->Count;
 
-            foreach ($submissions as $submission) {
-                $users[] = $this->GetUserByIdUseCase->handle(new GetUserByIdRequest($submission->getUserId()))->User;
+                foreach ($submissions as $submission) {
+                    $users[] = $this->GetUserByIdUseCase->handle(new GetUserByIdRequest($submission->getUserId()))->User;
+                }
+            } else {
+                $getSubmissionsByProblemIdAndUserIdResponse = $this->GetSubmissionsByProblemIdAndUserIdUseCase->handle(new GetSubmissionsByProblemIdAndUserIdRequest(new ProblemId($req->problemId), $user->getId(), intval($req->param("page", 1)), self::LimitPerPage));
+                $submissions = $getSubmissionsByProblemIdAndUserIdResponse->Submissions;
+                $count = $getSubmissionsByProblemIdAndUserIdResponse->Count;
             }
-        } else {
-            $getSubmissionsByProblemIdAndUserIdResponse = $this->GetSubmissionsByProblemIdAndUserIdUseCase->handle(new GetSubmissionsByProblemIdAndUserIdRequest(new ProblemId($req->problemId), $user->getId(), intval($req->param("page", 1)), self::LimitPerPage));
-            $submissions = $getSubmissionsByProblemIdAndUserIdResponse->Submissions;
-            $count = $getSubmissionsByProblemIdAndUserIdResponse->Count;
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
         }
 
         $res->body(
@@ -219,8 +224,13 @@ class SubmissionController
             }
             return $c;
         }, []) as $problemId) {
-            $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($problemId));
-            $problems[] = $getProblemByIdResponse->Problem;
+            try {
+                $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest($problemId));
+                $problems[] = $getProblemByIdResponse->Problem;
+            } catch (ProblemNotFoundException) {
+                // The problem might be deleted during the rendering
+                // ignored
+            }
         }
 
         $res->body(

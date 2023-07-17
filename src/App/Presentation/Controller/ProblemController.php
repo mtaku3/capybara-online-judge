@@ -24,6 +24,7 @@ use App\Presentation\Router\Exceptions\LockedResponseException;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
 use App\Presentation\Router\Request;
 use App\Utils\UploadErrorUtils;
+use DomainException;
 use Exception;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -127,52 +128,56 @@ class ProblemController
             throw HttpException::createFromCode(401);
         }
 
-        $title = $req->title;
-        $body = $req->body;
-        $timeConstraint = intval($req->timeConstraint);
-        $memoryConstraint = intval($req->memoryConstraint);
+        try {
+            $title = $req->title;
+            $body = $req->body;
+            $timeConstraint = intval($req->timeConstraint);
+            $memoryConstraint = intval($req->memoryConstraint);
 
-        $compileRuleDTOs = [];
-        foreach ($req->compileRules as $compileRule) {
-            $language = Language::from($compileRule["language"]);
-            $sourceCodeCompileCommand = $compileRule["sourceCodeCompileCommand"];
-            $fileCompileCommand = $compileRule["fileCompileCommand"];
+            $compileRuleDTOs = [];
+            foreach ($req->compileRules as $compileRule) {
+                $language = Language::from($compileRule["language"]);
+                $sourceCodeCompileCommand = $compileRule["sourceCodeCompileCommand"];
+                $fileCompileCommand = $compileRule["fileCompileCommand"];
 
-            $compileRuleDTOs[] = new \App\Application\CreateProblem\DTO\CompileRuleDTO($language, $sourceCodeCompileCommand, $fileCompileCommand);
+                $compileRuleDTOs[] = new \App\Application\CreateProblem\DTO\CompileRuleDTO($language, $sourceCodeCompileCommand, $fileCompileCommand);
+            }
+
+            $testCaseDTOs = [];
+            $inputFiles = $req->files()->inputFiles;
+            $outputFiles = $req->files()->outputFiles;
+            foreach ($req->testCases as $idx => $testCase) {
+                $testCaseTitle = $testCase["title"];
+
+                $executionRuleDTOs = [];
+                foreach ($testCase["executionRules"] as $executionRule) {
+                    $language = Language::from($executionRule["language"]);
+                    $sourceCodeExecutionCommand = $executionRule["sourceCodeExecutionCommand"];
+                    $sourceCodeCompareCommand = $executionRule["sourceCodeCompareCommand"];
+                    $fileExecutionCommand = $executionRule["fileExecutionCommand"];
+                    $fileCompareCommand = $executionRule["fileCompareCommand"];
+
+                    $executionRuleDTOs[] = new \App\Application\CreateProblem\DTO\ExecutionRuleDTO($language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
+                }
+
+                if ($inputFiles["error"][$idx] !== UPLOAD_ERR_OK) {
+                    throw new Exception("Something went wrong while uploading a file: " . UploadErrorUtils::getMessage($inputFiles["error"][$idx]));
+                }
+                if ($outputFiles["error"][$idx] !== UPLOAD_ERR_OK) {
+                    throw new Exception("Something went wrong while uploading a file: " . UploadErrorUtils::getMessage($outputFiles["error"][$idx]));
+                }
+
+                $uploadedInputFilePath = $inputFiles["tmp_name"][$idx];
+                $uploadedOutputFilePath = $outputFiles["tmp_name"][$idx];
+
+                $testCaseDTOs[] = new \App\Application\CreateProblem\DTO\TestCaseDTO($testCaseTitle, $executionRuleDTOs, $uploadedInputFilePath, $uploadedOutputFilePath);
+            }
+
+            $createProblemResponse = $this->CreateProblemUseCase->handle(new CreateProblemRequest($title, $body, $timeConstraint, $memoryConstraint, $compileRuleDTOs, $testCaseDTOs));
+            $problem = $createProblemResponse->Problem;
+        } catch (DomainException) {
+            throw HttpException::createFromCode(400);
         }
-
-        $testCaseDTOs = [];
-        $inputFiles = $req->files()->inputFiles;
-        $outputFiles = $req->files()->outputFiles;
-        foreach ($req->testCases as $idx => $testCase) {
-            $testCaseTitle = $testCase["title"];
-
-            $executionRuleDTOs = [];
-            foreach ($testCase["executionRules"] as $executionRule) {
-                $language = Language::from($executionRule["language"]);
-                $sourceCodeExecutionCommand = $executionRule["sourceCodeExecutionCommand"];
-                $sourceCodeCompareCommand = $executionRule["sourceCodeCompareCommand"];
-                $fileExecutionCommand = $executionRule["fileExecutionCommand"];
-                $fileCompareCommand = $executionRule["fileCompareCommand"];
-
-                $executionRuleDTOs[] = new \App\Application\CreateProblem\DTO\ExecutionRuleDTO($language, $sourceCodeExecutionCommand, $sourceCodeCompareCommand, $fileExecutionCommand, $fileCompareCommand);
-            }
-
-            if ($inputFiles["error"][$idx] !== UPLOAD_ERR_OK) {
-                throw new Exception("Something went wrong while uploading a file: " . UploadErrorUtils::getMessage($inputFiles["error"][$idx]));
-            }
-            if ($outputFiles["error"][$idx] !== UPLOAD_ERR_OK) {
-                throw new Exception("Something went wrong while uploading a file: " . UploadErrorUtils::getMessage($outputFiles["error"][$idx]));
-            }
-
-            $uploadedInputFilePath = $inputFiles["tmp_name"][$idx];
-            $uploadedOutputFilePath = $outputFiles["tmp_name"][$idx];
-
-            $testCaseDTOs[] = new \App\Application\CreateProblem\DTO\TestCaseDTO($testCaseTitle, $executionRuleDTOs, $uploadedInputFilePath, $uploadedOutputFilePath);
-        }
-
-        $createProblemResponse = $this->CreateProblemUseCase->handle(new CreateProblemRequest($title, $body, $timeConstraint, $memoryConstraint, $compileRuleDTOs, $testCaseDTOs));
-        $problem = $createProblemResponse->Problem;
 
         $res->redirect("/problem/" . $problem->getId());
     }
@@ -191,11 +196,15 @@ class ProblemController
             throw HttpException::createFromCode(401);
         }
 
-        $title = $req->title;
-        $body = $req->body;
+        try {
+            $title = $req->title;
+            $body = $req->body;
 
-        $updateProblemTitleAndBodyResponse = $this->UpdateProblemTitleAndBodyUseCase->handle(new UpdateProblemTitleAndBodyRequest(new ProblemId($req->problemId), $title, $body));
-        $problem = $updateProblemTitleAndBodyResponse->Problem;
+            $updateProblemTitleAndBodyResponse = $this->UpdateProblemTitleAndBodyUseCase->handle(new UpdateProblemTitleAndBodyRequest(new ProblemId($req->problemId), $title, $body));
+            $problem = $updateProblemTitleAndBodyResponse->Problem;
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
+        }
 
         $res->redirect("/problem/" . $problem->getId());
     }
@@ -214,7 +223,11 @@ class ProblemController
             throw HttpException::createFromCode(401);
         }
 
-        $this->DeleteProblemUseCase->handle(new DeleteProblemRequest(new ProblemId($req->problemId)));
+        try {
+            $this->DeleteProblemUseCase->handle(new DeleteProblemRequest(new ProblemId($req->problemId)));
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
+        }
 
         $res->redirect("/");
     }
@@ -234,25 +247,33 @@ class ProblemController
             throw HttpException::createFromCode(401);
         }
 
-        $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest(new ProblemId($req->problemId)));
-        $problem = $getProblemByIdResponse->Problem;
+        try {
+            $getProblemByIdResponse = $this->GetProblemByIdUseCase->handle(new GetProblemByIdRequest(new ProblemId($req->problemId)));
+            $problem = $getProblemByIdResponse->Problem;
+        } catch (ProblemNotFoundException) {
+            throw HttpException::createFromCode(404);
+        }
 
-        $language = Language::from($req->language);
-        $submissionType = SubmissionType::from($req->submissionType);
+        try {
+            $language = Language::from($req->language);
+            $submissionType = SubmissionType::from($req->submissionType);
 
-        if ($submissionType === SubmissionType::SourceCode) {
-            $tmpf = tmpfile();
-            fwrite($tmpf, $req->sourceCode);
+            if ($submissionType === SubmissionType::SourceCode) {
+                $tmpf = tmpfile();
+                fwrite($tmpf, $req->sourceCode);
 
-            $this->SubmitUseCase->handle(new SubmitRequest($user->getId(), $problem->getId(), $language, $submissionType, stream_get_meta_data($tmpf)["uri"]));
+                $this->SubmitUseCase->handle(new SubmitRequest($user->getId(), $problem->getId(), $language, $submissionType, stream_get_meta_data($tmpf)["uri"]));
 
-            fclose($tmpf);
-        } else {
-            if ($req->files()->sourceFile["error"] !== UPLOAD_ERR_OK) {
-                throw new Exception("Something went wrong while uploading a files: " . UploadErrorUtils::getMessage($req->files()->sourceFile["error"]));
+                fclose($tmpf);
+            } else {
+                if ($req->files()->sourceFile["error"] !== UPLOAD_ERR_OK) {
+                    throw new Exception("Something went wrong while uploading a files: " . UploadErrorUtils::getMessage($req->files()->sourceFile["error"]));
+                }
+
+                $this->SubmitUseCase->handle(new SubmitRequest($user->getId(), $problem->getId(), $language, $submissionType, $req->files()->sourceFile["tmp_name"]));
             }
-
-            $this->SubmitUseCase->handle(new SubmitRequest($user->getId(), $problem->getId(), $language, $submissionType, $req->files()->sourceFile["tmp_name"]));
+        } catch (DomainException) {
+            throw HttpException::createFromCode(400);
         }
 
         $res->redirect("/problem/" . $problem->getId() . "/submissions");

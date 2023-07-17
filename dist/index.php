@@ -22,6 +22,16 @@ $container = $GLOBALS["container"];
 /** @var \Twig\Environment */
 $twig = $container->get("Twig");
 
+$router->onError(function (Router $router, string $msg, int $type, Exception|Throwable $err) use ($twig) {
+    $code = 500;
+
+    $router->response()->body($twig->render("Error.twig", [
+        "code" => $code,
+        "httpMessage" => HttpStatus::getMessageFromCode($code),
+        "message" => $message ?? ""
+    ]));
+});
+
 $router->onHttpError(function (int $code, Router $router) use ($twig) {
     switch ($code) {
         case 401:

@@ -34,6 +34,7 @@ use App\Presentation\Router\Exceptions\LockedResponseException;
 use App\Presentation\Router\Response;
 use App\Presentation\Router\Exceptions\ResponseAlreadySentException;
 use App\Presentation\Router\Request;
+use DomainException;
 use InvalidArgumentException;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -203,6 +204,8 @@ class TestCaseController
             $res->redirect("/problem/" . $problemId . "/testcases");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
+        } catch (DomainException) {
+            throw HttpException::createFromCode(400);
         }
     }
 
@@ -241,6 +244,8 @@ class TestCaseController
             $res->redirect("/problem/" . $problemId . "/testcases");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
+        } catch (DomainException) {
+            throw HttpException::createFromCode(400);
         }
     }
 
@@ -281,6 +286,8 @@ class TestCaseController
             $res->redirect("/problem/" . $problem->getId() . "/testcases");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
+        } catch (DomainException) {
+            throw HttpException::createFromCode(400);
         }
     }
 
@@ -307,6 +314,8 @@ class TestCaseController
             $res->redirect("/problem/" . $problemId . "/testcases");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
+        } catch (DomainException) {
+            throw HttpException::createFromCode(400);
         }
     }
 
@@ -333,6 +342,8 @@ class TestCaseController
             $res->redirect("/problem/" . $problemId . "/testcases");
         } catch (ProblemNotFoundException) {
             throw HttpException::createFromCode(404);
+        } catch (DomainException) {
+            throw HttpException::createFromCode(400);
         }
     }
 

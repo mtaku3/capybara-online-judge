@@ -9,6 +9,7 @@ use App\Application\Authorize\AuthorizeUseCase;
 use App\Application\CreateUser\CreateUserRequest;
 use App\Application\CreateUser\CreateUserUseCase;
 use App\Presentation\Router\AbstractResponse;
+use App\Presentation\Router\Exceptions\HttpException;
 use App\Presentation\Router\Request;
 use Exception;
 use Throwable;
@@ -59,18 +60,15 @@ class RegisterController
             ]))->send();
             return;
         }
-        try {
-            $authorizeResponse = $this->AuthorizeUseCase->handle(
-                new AuthorizeRequest($createUserResponse->User->getUsername(), $req->password)
-            );
 
-            $res->cookie("x-user-id", (string)$authorizeResponse->Session->getUserId(), $authorizeResponse->Session->getExpiresAt()->getTimestamp(), secure: $_ENV["ISDEV"] ? false : true, httponly: true, samesite: "strict");
-            $res->cookie("x-access-token", (string)$authorizeResponse->AccessToken, $authorizeResponse->AccessToken->getExpiresAt()->getTimestamp(), secure: $_ENV["ISDEV"] ? false : true, httponly: true, samesite: "strict");
-            $res->cookie("x-refresh-token", (string)$authorizeResponse->Session->getRefreshToken(), $authorizeResponse->Session->getExpiresAt()->getTimestamp(), secure: $_ENV["ISDEV"] ? false : true, httponly: true, samesite: "strict");
+        $authorizeResponse = $this->AuthorizeUseCase->handle(
+            new AuthorizeRequest($createUserResponse->User->getUsername(), $req->password)
+        );
 
-            $res->redirect("/");
-        } catch (Throwable $e) {
-            $res->code(500)->send();
-        }
+        $res->cookie("x-user-id", (string)$authorizeResponse->Session->getUserId(), $authorizeResponse->Session->getExpiresAt()->getTimestamp(), secure: $_ENV["ISDEV"] ? false : true, httponly: true, samesite: "strict");
+        $res->cookie("x-access-token", (string)$authorizeResponse->AccessToken, $authorizeResponse->AccessToken->getExpiresAt()->getTimestamp(), secure: $_ENV["ISDEV"] ? false : true, httponly: true, samesite: "strict");
+        $res->cookie("x-refresh-token", (string)$authorizeResponse->Session->getRefreshToken(), $authorizeResponse->Session->getExpiresAt()->getTimestamp(), secure: $_ENV["ISDEV"] ? false : true, httponly: true, samesite: "strict");
+
+        $res->redirect("/");
     }
 }
