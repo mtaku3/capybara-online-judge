@@ -7,10 +7,16 @@ use App\Domain\Problem\ValueObject\ProblemId;
 use App\Domain\Problem\ValueObject\TestCaseId;
 use App\Domain\Submission\ValueObject\SubmissionId;
 use App\Domain\User\ValueObject\UserId;
+use App\Presentation\Router\DataCollection\RouteCollection;
+use App\Presentation\Router\Exceptions\HttpException;
 use App\Presentation\Router\HttpStatus;
 use App\Presentation\Router\Response;
 use App\Presentation\Router\Request;
 use App\Presentation\Router\Router;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -22,7 +28,16 @@ $container = $GLOBALS["container"];
 /** @var \Twig\Environment */
 $twig = $container->get("Twig");
 
-$router->onError(function (Router $router, string $msg, string $type, Exception|Throwable $err) use ($twig) {
+$logger = new Logger("App");
+$handler = new StreamHandler("php://stdout", Level::Debug);
+$formatter = new LineFormatter();
+$formatter->includeStacktraces();
+$handler->setFormatter($formatter);
+$logger->pushHandler($handler);
+
+$router->onError(function (Router $router, string $msg, string $type, Exception|Throwable $err) use ($twig, $logger) {
+    $logger->error($err);
+
     $code = 500;
 
     $router->response()->body($twig->render("Error.twig", [
@@ -32,7 +47,9 @@ $router->onError(function (Router $router, string $msg, string $type, Exception|
     ]));
 });
 
-$router->onHttpError(function (int $code, Router $router) use ($twig) {
+$router->onHttpError(function (int $code, Router $router, RouteCollection $matched, array $methods_matched, HttpException $http_exception) use ($twig, $logger) {
+    $logger->error($http_exception);
+
     switch ($code) {
         case 401:
             $message = "権限が不足しています";
