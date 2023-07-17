@@ -64,23 +64,10 @@
         window.addEventListener("load", () => {
             var inputEl = document.querySelector("#input");
             var renderEl = document.querySelector("#render");
-            var renderEl2 = document.querySelector("#render2");
             var Bodyoutput = texme.render(inputEl.value);
             renderEl.innerHTML = Bodyoutput;
-            if (renderEl2) {
-                renderEl2.innerHTML = Bodyoutput;
-            }
             window.MathJax.texReset();
             window.MathJax.typesetPromise();
-
-            if (renderEl2) {
-                inputEl.addEventListener("keyup", (e) => {
-                    var Bodyoutput = texme.render(inputEl.value);
-                    renderEl2.innerHTML = Bodyoutput;
-                    window.MathJax.texReset();
-                    window.MathJax.typesetPromise();
-                });
-            }
 
             const CodeMirrorLightTheme = "default";
             const CodeMirrorDarkTheme = "colorforth";
