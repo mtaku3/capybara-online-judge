@@ -22,7 +22,7 @@ $container = $GLOBALS["container"];
 /** @var \Twig\Environment */
 $twig = $container->get("Twig");
 
-$router->onError(function (Router $router, string $msg, int $type, Exception|Throwable $err) use ($twig) {
+$router->onError(function (Router $router, string $msg, string $type, Exception|Throwable $err) use ($twig) {
     $code = 500;
 
     $router->response()->body($twig->render("Error.twig", [
