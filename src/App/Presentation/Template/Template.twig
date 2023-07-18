@@ -26,10 +26,14 @@
             }
         </script>
         <script>
-            window.addEventListener("keydown", (e) => {
-                if (e.keyCode === 13) {
-                    e.preventDefault();
-                    return false;
+            window.addEventListener("load", () => {
+                for (const inputEl of document.querySelectorAll("input")) {
+                    inputEl.addEventListener("keydown", (e) => {
+                        if (e.keyCode === 13) {
+                            e.preventDefault();
+                            return false;
+                        }
+                    });
                 }
             });
         </script>
