@@ -52,18 +52,21 @@ use Psr\Container\ContainerInterface;
 use Twig\TwigFunction;
 
 /** Load .env */
-$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
-$dotenv->load();
-$dotenv->required("POSTGRES_HOST")->notEmpty();
-$dotenv->required("POSTGRES_PORT")->isInteger();
-$dotenv->required("POSTGRES_USER")->notEmpty();
-$dotenv->required("POSTGRES_PASSWORD")->notEmpty();
-$dotenv->required("POSTGRES_DB")->notEmpty();
-$dotenv->required("REDIS_HOST")->notEmpty();
-$dotenv->required("REDIS_PORT")->isInteger();
-$dotenv->required("JWT_SECRET")->notEmpty();
-
 $_ENV["ISDEV"] = !isset($_ENV["ENV"]) || $_ENV["ENV"] !== "production";
+
+if ($_ENV["ISDEV"]) {
+    $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
+    $dotenv->load();
+    $dotenv->required("POSTGRES_HOST")->notEmpty();
+    $dotenv->required("POSTGRES_PORT")->isInteger();
+    $dotenv->required("POSTGRES_USER")->notEmpty();
+    $dotenv->required("POSTGRES_PASSWORD")->notEmpty();
+    $dotenv->required("POSTGRES_DB")->notEmpty();
+    $dotenv->required("REDIS_HOST")->notEmpty();
+    $dotenv->required("REDIS_PORT")->isInteger();
+    $dotenv->required("JWT_SECRET")->notEmpty();
+}
+
 
 /** Setup Dependency Injection */
 $containerBuilder = new ContainerBuilder();
