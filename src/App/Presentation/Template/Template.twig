@@ -25,6 +25,14 @@
                 document.documentElement.classList.remove('dark')
             }
         </script>
+        <script>
+            window.addEventListener("keydown", (e) => {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        </script>
         <script src="/jquery.min.js"></script>
     </head>
     <body class="h-full">
