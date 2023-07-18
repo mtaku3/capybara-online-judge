@@ -31,7 +31,8 @@ class Client
             "http_errors" => false,
             RequestOptions::HEADERS => [
                 "Content-Type" => "application/json"
-            ]
+            ],
+            "timeout" => 0
         ]);
     }
 
