@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Application\AddProblemLanguages\AddProblemLanguagesUseCase;
 use App\Application\Authorize\AuthorizeUseCase;
+use App\Application\ChangeUserPassword\ChangeUserPasswordUseCase;
 use App\Application\CreateProblem\CreateProblemUseCase;
 use App\Application\CreateTestCase\CreateTestCaseUseCase;
 use App\Application\CreateUser\CreateUserUseCase;
@@ -35,6 +36,7 @@ use App\Infrastructure\Repository\Problem\ProblemRepository;
 use App\Infrastructure\Repository\Session\SessionRepository;
 use App\Infrastructure\Repository\Submission\SubmissionRepository;
 use App\Infrastructure\Repository\User\UserRepository;
+use App\Presentation\Controller\ChangeUserPasswordController;
 use App\Presentation\Controller\LoginController;
 use App\Presentation\Controller\ProblemController;
 use App\Presentation\Controller\ProblemListController;
@@ -155,6 +157,9 @@ $containerBuilder->addDefinitions([
 
         return $twig;
     },
+    "ChangeUserPasswordController" => function (ContainerInterface $c) {
+        return new ChangeUserPasswordController($c->get("Twig"), $c->get("ChangeUserPasswordUseCase"));
+    },
     "LoginController" => function (ContainerInterface $c) {
         return new LoginController($c->get("Twig"), $c->get("AuthorizeUseCase"), $c->get("PurgeSessionsUseCase"));
     },
@@ -206,6 +211,9 @@ $containerBuilder->addDefinitions([
     },
     "AuthorizeUseCase" => function (ContainerInterface $c) {
         return new AuthorizeUseCase($c->get("UserRepository"), $c->get("SessionRepository"));
+    },
+    "ChangeUserPasswordUseCase" => function (ContainerInterface $c) {
+        return new ChangeUserPasswordUseCase($c->get("UserRepository"), $c->get("SessionRepository"));
     },
     "CreateProblemUseCase" => function (ContainerInterface $c) {
         return new CreateProblemUseCase($c->get("ProblemRepository"), $c->get("FileRepository"));

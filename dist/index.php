@@ -122,6 +122,14 @@ $router->get("/auth/logout", function (Request $req, Response $res) use ($contai
     $container->get("LoginController")->handleLogout($req, $res);
 });
 
+$router->get("/auth/changePassword", function (Request $req, Response $res) use ($container) {
+    $container->get("ChangeUserPasswordController")->get($req, $res);
+});
+
+$router->post("/auth/changePassword", function (Request $req, Response $res) use ($container) {
+    $container->get("ChangeUserPasswordController")->handleForm($req, $res);
+});
+
 $router->post("/problem", function (Request $req, Response $res) use ($container) {
     $container->get("ProblemController")->handleCreate($req, $res);
 });
