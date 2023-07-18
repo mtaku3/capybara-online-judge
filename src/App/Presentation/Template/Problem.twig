@@ -5,7 +5,7 @@
     {{ problemTitle }}
 {% endblock title %}
 {% block head %}
-    {{ libraries.texme() }}
+    {{ libraries.marked() }}
     {{ libraries.codemirror() }}
     {{ libraries.filepond() }}
     {% if user.getIsAdmin %}
@@ -36,9 +36,8 @@
                     if (lastInput !== markdown) {
                         lastInput = markdown;
                         const startTime = new Date();
-                        const parsed = texme.render(markdown);
+                        const parsed = marked.parse(markdown);
                         setParsed(parsed);
-                        window.MathJax.typesetPromise();
                         const endTime = new Date();
 
                         delayTime = endTime - startTime;
@@ -66,10 +65,8 @@
     window.addEventListener("load", () => {
         var inputEl = document.querySelector("#input");
         var renderEl = document.querySelector("#render");
-        var Bodyoutput = texme.render(inputEl.value);
+        var Bodyoutput = marked.parse(inputEl.value);
         renderEl.innerHTML = Bodyoutput;
-        window.MathJax.texReset();
-        window.MathJax.typesetPromise();
 
         const CodeMirrorLightTheme = "default";
         const CodeMirrorDarkTheme = "colorforth";

@@ -16,13 +16,6 @@
     <script src="/tarball.min.js"></script>
     <script>FilePond.registerPlugin(FilePondPluginTarball(true, true));</script>
 {% endmacro filepond %}
-{% macro texme() %}
-    <script>
-    window.texme = {
-        markdownURL: "/marked/marked.min.js",
-        MathJaxURL: "/mathjax/es5/tex-mml-chtml.js",
-        renderOnLoad: false
-    }
-    </script>
-    <script src="/texme/texme.min.js"></script>
-{% endmacro texme %}
+{% macro marked() %}
+    <script src="/marked/marked.min.js"></script>
+{% endmacro marked %}
