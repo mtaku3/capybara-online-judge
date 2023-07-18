@@ -943,9 +943,11 @@
 
                 window.addEventListener("load", () => {
                     this.bodyPreviewEl.innerHTML = marked.parse(this.bodyInputEl.value);
+                    renderMathInElement(this.bodyPreviewEl, katexOptions);
 
                     this.bodyInputEl.addEventListener("keyup", () => {
                         this.bodyPreviewEl.innerHTML = marked.parse(this.bodyInputEl.value);
+                        renderMathInElement(this.bodyPreviewEl, katexOptions);
                     });
                 });
 
