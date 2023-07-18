@@ -7,4 +7,5 @@ tests/
 node_modules/
 tools/
 vendor/
+.cache/
 .env

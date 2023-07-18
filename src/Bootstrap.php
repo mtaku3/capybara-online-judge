@@ -134,7 +134,7 @@ $containerBuilder->addDefinitions([
         ];
 
         if (!$_ENV["ISDEV"]) {
-            $options["cache"] = __DIR__ . "/../.cache";
+            $options["cache"] = __DIR__ . "/.cache";
         }
 
         $twig = new \Twig\Environment($loader, $options);

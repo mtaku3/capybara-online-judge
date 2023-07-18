@@ -86,6 +86,7 @@ COPY ./docker/apache/php/php.production.ini /usr/local/etc/php/php.ini
 
 WORKDIR /workspace
 COPY ./ /workspace/
+RUN chown -R www-data /workspace
 
 RUN apt-get update && apt-get install -y git
 RUN composer install \
