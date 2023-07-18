@@ -12,8 +12,14 @@
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">新規登録</h1>
                     <form class="space-y-4 md:space-y-6" method="post">
                         <div>
-                            <label for="username"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ユーザー名</label>
+                            <div class="flex w-full mb-2 items-center">
+                                <label for="username"
+                                    class="block ext-sm font-medium text-gray-900 dark:text-white">ユーザー名</label>
+                                <div class="ml-auto text-gray-600 dark:text-gray-300 text-xs">
+                                    <p>半角英数</p>
+                                    <p>4文字以上20文字以下</p>
+                                </div>
+                            </div>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <svg fill="none"
@@ -36,8 +42,14 @@
                             </div>
                         </div>
                         <div>
-                            <label for="password"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">パスワード</label>
+                            <div class="flex w-full mb-2 items-center">
+                                <label for="password"
+                                    class="block text-sm font-medium text-gray-900 dark:text-white">パスワード</label>
+                                <div class="ml-auto text-gray-600 dark:text-gray-300 text-xs">
+                                    <p>半角英数記号 (!@#$%^&*)</p>
+                                    <p>8文字以上30文字以下</p>
+                                </div>
+                            </div>
                             <input type="password"
                                    name="password"
                                    id="password"

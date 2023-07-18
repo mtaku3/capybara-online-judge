@@ -1,5 +1,6 @@
 {% from "Component/NavBar.twig" import NavBar %}
 {% from "Component/Pagination.twig" import Pagination %}
+{% from "Component/JudgeResultTooltip.twig" import JudgeResultTooltip %}
 {% extends "Template.twig" %}
 {% block title %}
     {{ requestedUser.getUsername }} - 提出一覧
@@ -10,7 +11,7 @@
         <div class="flex flex-col flex-grow w-4/5 gap-y-2 mb-6 p-5 mx-auto bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <h5 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ requestedUser.getUsername }}さんの提出一覧</h5>
             <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700">
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="w-full shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -18,7 +19,12 @@
                             <th scope="col" class="px-6 py-3 text-center">問題</th>
                             <th scope="col" class="px-6 py-3 text-center">言語</th>
                             <th scope="col" class="px-6 py-3 text-end">コード長</th>
-                            <th scope="col" class="px-6 py-3 text-center">結果</th>
+                            <th scope="col" class="px-6 py-3">
+                                <div class="flex items-center justify-center gap-x-1">
+                                    <span>結果</span>
+                                    {{ JudgeResultTooltip() }}
+                                </div>
+                            </th>
                             <th scope="col" class="px-6 py-3 text-end">実行時間</th>
                             <th scope="col" class="px-6 py-3 text-end">メモリ</th>
                             <th scope="col" class="px-6 py-3 text-center"></th>
