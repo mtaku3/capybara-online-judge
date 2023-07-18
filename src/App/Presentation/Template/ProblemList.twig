@@ -6,7 +6,7 @@
     CAPYBARA ONLINE JUDGE
 {% endblock title %}
 {% block head %}
-    {{ libraries.texme() }}
+    {{ libraries.marked() }}
     {{ libraries.filepond() }}
 {% endblock head %}
 {% block body %}
@@ -942,14 +942,12 @@
                 this.bodyPreviewEl = this.bodyContainerEl.querySelector("#problem-create-modal-body-preivew");
 
                 window.addEventListener("load", () => {
-                    this.bodyPreviewEl.innerHTML = texme.render(this.bodyInputEl.value);
-                    window.MathJax.texReset();
-                    window.MathJax.typesetPromise();
+                    this.bodyPreviewEl.innerHTML = marked.parse(this.bodyInputEl.value);
+                    renderMathInElement(this.bodyPreviewEl, katexOptions);
 
                     this.bodyInputEl.addEventListener("keyup", () => {
-                        this.bodyPreviewEl.innerHTML = texme.render(this.bodyInputEl.value);
-                        window.MathJax.texReset();
-                        window.MathJax.typesetPromise();
+                        this.bodyPreviewEl.innerHTML = marked.parse(this.bodyInputEl.value);
+                        renderMathInElement(this.bodyPreviewEl, katexOptions);
                     });
                 });
 

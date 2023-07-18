@@ -16,13 +16,32 @@
     <script src="/tarball.min.js"></script>
     <script>FilePond.registerPlugin(FilePondPluginTarball(true, true));</script>
 {% endmacro filepond %}
-{% macro texme() %}
+{% macro marked() %}
+    <link rel=stylesheet href="/katex/katex.min.css">
+    <script src="/katex/katex.min.js"></script>
+    <script src="/katex/contrib/auto-render.min.js"></script>
+    <script src="/marked/marked.min.js"></script>
     <script>
-    window.texme = {
-        markdownURL: "/marked/marked.min.js",
-        MathJaxURL: "/mathjax/es5/tex-mml-chtml.js",
-        renderOnLoad: false
+    const katexOptions = {
+        delimiters: [
+            {
+                left: "$$",
+                right: "$$",
+                display: true
+            },
+            {
+                left: "$",
+                right: "$",
+                display: false
+            }
+        ],
+        ignoredTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "option"
+        ]
     }
     </script>
-    <script src="/texme/texme.min.js"></script>
-{% endmacro texme %}
+{% endmacro marked %}

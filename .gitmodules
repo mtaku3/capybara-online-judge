@@ -1,6 +1,3 @@
-[submodule "dist/texme"]
-	path = dist/texme
-	url = https://github.com/susam/texme.git
 [submodule "dist/marked"]
 	path = dist/marked
 	url = https://github.com/markedjs/marked.git
