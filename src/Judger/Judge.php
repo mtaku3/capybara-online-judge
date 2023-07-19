@@ -57,7 +57,9 @@ while (1) {
                 "Image" => strtolower("COJ-" . $submission->getLanguage()->name),
                 "Tty" => true,
                 "HostConfig" => [
-                    "Binds" => "{$volumeName}:/workspace",
+                    "Binds" => [
+                        "{$volumeName}:/workspace"
+                    ],
                     "Memory" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
                     "MemorySwap" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
                     "NetworkMode" => "none",
