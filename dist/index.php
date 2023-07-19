@@ -45,6 +45,7 @@ $router->onError(function (Router $router, string $msg, string $type, Exception|
         "httpMessage" => HttpStatus::getMessageFromCode($code),
         "message" => $message ?? ""
     ]));
+    $router->response()->code($code);
 });
 
 $router->onHttpError(function (int $code, Router $router, RouteCollection $matched, array $methods_matched, HttpException $http_exception) use ($twig, $logger) {
@@ -67,6 +68,7 @@ $router->onHttpError(function (int $code, Router $router, RouteCollection $match
         "httpMessage" => HttpStatus::getMessageFromCode($code),
         "message" => $message ?? ""
     ]));
+    $router->response()->code($code);
 });
 
 $router->respond(function (Request $req, Response $res) use ($container, $twig) {
