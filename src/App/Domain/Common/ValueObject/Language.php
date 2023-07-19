@@ -8,9 +8,9 @@ use ValueError;
 
 enum Language: string
 {
-    case C = "C";
-    case CPP = "C++";
-    case Python = "Python";
+    case C = "C (GCC 13.1.0)";
+    case CPP = "C++ (GCC 13.1.0)";
+    case Python = "Python (3.10.12)";
 
     /**
      * @param Language $target
