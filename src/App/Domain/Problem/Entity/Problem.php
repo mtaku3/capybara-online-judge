@@ -9,6 +9,7 @@ use App\Domain\Common\Exception\EntityNotFoundException;
 use App\Domain\Common\Exception\InvalidDTOException;
 use App\Domain\Problem\Exception\AtLeastOneCompileRuleRequiredException;
 use App\Domain\Problem\Exception\AtLeastOneEnabledTestCaseRequiredException;
+use App\Domain\Problem\Exception\DuplicateTitleOfTestCasesException;
 use App\Domain\Problem\Exception\InvalidMemoryConstraintException;
 use App\Domain\Problem\Exception\InvalidTimeConstraintException;
 use App\Domain\Problem\Factory\CompileRuleFactoryDTO;
@@ -134,6 +135,10 @@ class Problem
         foreach ($testCaseDTOs as $testCaseDTO) {
             if (count($availableLanguages) !== count($testCaseDTO->ExecutionRuleDTOs)) {
                 throw new InvalidDTOException();
+            }
+
+            if (1 < count(array_filter($testCaseDTOs, fn ($e) => $e->Title === $testCaseDTO->Title))) {
+                throw new DuplicateTitleOfTestCasesException();
             }
 
             $requiredLanguages = $availableLanguages;
@@ -377,6 +382,10 @@ class Problem
                 $executionRuleDTO->FileExecutionCommand,
                 $executionRuleDTO->FileCompareCommand
             );
+        }
+
+        if (1 <= count(array_filter($this->TestCases, fn ($e) => $e->getTitle() === $title))) {
+            throw new DuplicateTitleOfTestCasesException();
         }
 
         $this->TestCases; // required to retrieve the array before appending : CycleORM Proxy limitation
