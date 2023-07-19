@@ -206,6 +206,15 @@ while (1) {
 
             // Complete the judge
             $submission->completeJudge();
+
+            try {
+                // Save the submission to the database
+                $submissionRepository->save($submission);
+            } catch (Throwable $e) {
+                $logger->error("An error occurred while saving a submission to the database.", [
+                    "exception" => $e
+                ]);
+            }
         } catch (Throwable $e) {
             $logger->error("An error occurred while judging.", [
                 "exception" => $e
@@ -221,10 +230,12 @@ while (1) {
                 // Remove the container
                 $client->removeContainer($containerId);
             }
-        }
 
-        // Save the submission to the database
-        $submissionRepository->save($submission);
+            if (isset($volumeName)) {
+                // Remove the volume
+                $client->removeVolume($volumeName);
+            }
+        }
 
         $orm->getHeap()->clean();
     } catch (Throwable $e) {
