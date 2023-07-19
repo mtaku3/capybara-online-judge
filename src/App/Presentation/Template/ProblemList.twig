@@ -1243,7 +1243,7 @@
                     deleteBtnEl: testCaseRowEl.querySelector(".testCaseDeleteBtn")
                 };
 
-                const editModalId = testCaseCreateModal.createNewModal(this.bodyElements[2]);
+                const editModalId = testCaseCreateModal.createNewModal(document.body);
                 const editModal = testCaseCreateModal.modals[editModalId];
                 testCaseRow.editModalId = editModalId;
                 testCaseRow.editModal = editModal;
