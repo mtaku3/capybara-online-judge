@@ -197,19 +197,19 @@
                                         {{ (problem.getTestCases|filter(e => e.getId.equals(testResult.getTestCaseId) )|first).getTitle }}
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        {% if submission.getJudgeResult.value == "TLE" %}
+                                        {% if testResult.getJudgeResult.value == "TLE" %}
                                             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">TLE</span>
-                                        {% elseif submission.getJudgeResult.value == "CE" %}
+                                        {% elseif testResult.getJudgeResult.value == "CE" %}
                                             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">CE</span>
-                                        {% elseif submission.getJudgeResult.value == "RE" %}
+                                        {% elseif testResult.getJudgeResult.value == "RE" %}
                                             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">RE</span>
-                                        {% elseif submission.getJudgeResult.value == "WA" %}
+                                        {% elseif testResult.getJudgeResult.value == "WA" %}
                                             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">WA</span>
-                                        {% elseif submission.getJudgeResult.value == "MLE" %}
+                                        {% elseif testResult.getJudgeResult.value == "MLE" %}
                                             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">MLE</span>
-                                        {% elseif submission.getJudgeResult.value == "WJ" %}
+                                        {% elseif testResult.getJudgeResult.value == "WJ" %}
                                             <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">WJ</span>
-                                        {% elseif submission.getJudgeResult.value == "AC" %}
+                                        {% elseif testResult.getJudgeResult.value == "AC" %}
                                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">AC</span>
                                         {% endif %}
                                     </td>
