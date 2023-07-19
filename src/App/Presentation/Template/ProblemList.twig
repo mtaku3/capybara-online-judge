@@ -600,7 +600,8 @@
                     var backdropEl = document.createElement('div');
                     backdropEl.setAttribute('modal2-backdrop', '');
                     (_a = backdropEl.classList).add.apply(_a, this._options.backdropClasses.split(' '));
-                    document.querySelector('body').append(backdropEl);
+                    this._targetEl.after(backdropEl);
+                    {# document.querySelector('body').append(backdropEl); #}
                     this._backdropEl = backdropEl;
                 }
             };
@@ -756,13 +757,13 @@
                     <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <ul class="testCaseTab flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
                             <li class="mr-2 flex">
-                                <button class="testCaseSourceCodeBtn flex-grow inline-block px-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
+                                <button type="button" class="testCaseSourceCodeBtn flex-grow inline-block px-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
                                         onclick="testCaseCreateModal.changeTab('$modalId', 'sourceCode')">
                                     ソースコードで提出時
                                 </button>
                             </li>
                             <li class="mr-2 flex">
-                                <button class="testCaseFileBtn flex-grow inline-block px-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                <button type="button" class="testCaseFileBtn flex-grow inline-block px-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
                                         onclick="testCaseCreateModal.changeTab('$modalId', 'file')">
                                     ファイルで提出時
                                 </button>
@@ -815,7 +816,7 @@
                     </div>
                 </div>
                 <div class="flex justify-end items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button class="testCaseSaveBtn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <button type="button" class="testCaseSaveBtn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         保存
                     </button>
                 </div>
