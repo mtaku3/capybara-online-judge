@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Problem\Exception;
 
-use Exception;
+use DomainException;
 
-class AtLeastOneEnabledTestCaseRequiredException extends Exception
+class AtLeastOneEnabledTestCaseRequiredException extends DomainException
 {
 }
