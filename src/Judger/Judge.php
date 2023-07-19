@@ -50,7 +50,7 @@ while (1) {
                     "Memory" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
                     "MemorySwap" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
                     "NetworkMode" => "none",
-                    "Runtime" => "runsc"
+                    "Runtime" => "runc"
                 ]
             ]);
             $containerId = $res["Id"];
