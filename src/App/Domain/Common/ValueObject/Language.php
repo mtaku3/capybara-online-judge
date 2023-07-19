@@ -8,8 +8,8 @@ use ValueError;
 
 enum Language: string
 {
-    case C = "C (Glang)";
-    case CPP = "C++ (Glang)";
+    case C = "C";
+    case CPP = "C++";
 
     /**
      * @param Language $target
