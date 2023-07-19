@@ -51,7 +51,7 @@ class SubmissionJudgeResultTypecast implements CastableInterface, UncastableInte
                 continue;
             }
 
-            $values[$column] = SubmissionJudgeResult::tryFrom($values[$column]);
+            $values[$column] = SubmissionJudgeResult::tryFromName($values[$column]);
         }
 
         return $values;

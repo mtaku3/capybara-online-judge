@@ -136,7 +136,7 @@ class ProblemController
 
             $compileRuleDTOs = [];
             foreach ($req->compileRules as $compileRule) {
-                $language = Language::from($compileRule["language"]);
+                $language = Language::fromName($compileRule["language"]);
                 $sourceCodeCompileCommand = $compileRule["sourceCodeCompileCommand"];
                 $fileCompileCommand = $compileRule["fileCompileCommand"];
 
@@ -151,7 +151,7 @@ class ProblemController
 
                 $executionRuleDTOs = [];
                 foreach ($testCase["executionRules"] as $executionRule) {
-                    $language = Language::from($executionRule["language"]);
+                    $language = Language::fromName($executionRule["language"]);
                     $sourceCodeExecutionCommand = $executionRule["sourceCodeExecutionCommand"];
                     $sourceCodeCompareCommand = $executionRule["sourceCodeCompareCommand"];
                     $fileExecutionCommand = $executionRule["fileExecutionCommand"];
@@ -255,8 +255,8 @@ class ProblemController
         }
 
         try {
-            $language = Language::from($req->language);
-            $submissionType = SubmissionType::from($req->submissionType);
+            $language = Language::fromName($req->language);
+            $submissionType = SubmissionType::fromName($req->submissionType);
 
             if ($submissionType === SubmissionType::SourceCode) {
                 $tmpf = tmpfile();

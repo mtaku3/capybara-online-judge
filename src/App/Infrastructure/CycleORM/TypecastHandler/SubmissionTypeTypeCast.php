@@ -51,7 +51,7 @@ class SubmissionTypeTypeCast implements CastableInterface, UncastableInterface
                 continue;
             }
 
-            $values[$column] = SubmissionType::tryFrom($values[$column]);
+            $values[$column] = SubmissionType::tryFromName($values[$column]);
         }
 
         return $values;

@@ -176,7 +176,7 @@ class TestCaseController
                     $updateCompileRuleRequest = new UpdateCompileRuleRequest($problemId, $compileRuleId, $sourceCodeCompileCommand, $fileCompileCommand);
                     $this->UpdateCompileRuleUseCase->handle($updateCompileRuleRequest);
                 } else {
-                    $language = Language::from($compileRule["language"]);
+                    $language = Language::fromName($compileRule["language"]);
                     $compileRuleDTOs[] = new \App\Application\AddProblemLanguages\DTO\CompileRuleDTO($language, $sourceCodeCompileCommand, $fileCompileCommand);
                 }
             }
@@ -184,7 +184,7 @@ class TestCaseController
             $executionRuleDTOs = [];
             foreach ($req->executionRules as $executionRule) {
                 $testCaseId = new TestCaseId($executionRule["testCaseId"]);
-                $language = Language::from($executionRule["language"]);
+                $language = Language::fromName($executionRule["language"]);
                 $sourceCodeExecutionCommand = $executionRule["sourceCodeExecutionCommand"];
                 $sourceCodeCompareCommand = $executionRule["sourceCodeCompareCommand"];
                 $fileExecutionCommand = $executionRule["fileExecutionCommand"];
@@ -197,7 +197,7 @@ class TestCaseController
             }
 
             if (!empty($req->languagesToRemove)) {
-                $languagesToRemove = array_map(fn ($e) => Language::from($e), $req->languagesToRemove);
+                $languagesToRemove = array_map(fn ($e) => Language::fromName($e), $req->languagesToRemove);
                 $this->RemoveProblemLanguagesUseCase->handle(new RemoveProblemLanguagesRequest($problemId, $languagesToRemove));
             }
 
@@ -271,7 +271,7 @@ class TestCaseController
 
             $executionRuleDTOs = [];
             foreach ($req->executionRules as $executionRule) {
-                $language = Language::from($executionRule["language"]);
+                $language = Language::fromName($executionRule["language"]);
                 $sourceCodeExecutionCommand = $executionRule["sourceCodeExecutionCommand"];
                 $sourceCodeCompareCommand = $executionRule["sourceCodeCompareCommand"];
                 $fileExecutionCommand = $executionRule["fileExecutionCommand"];

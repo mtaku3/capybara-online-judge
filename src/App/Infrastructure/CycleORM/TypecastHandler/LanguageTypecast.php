@@ -51,7 +51,7 @@ class LanguageTypecast implements CastableInterface, UncastableInterface
                 continue;
             }
 
-            $values[$column] = Language::tryFrom($values[$column]);
+            $values[$column] = Language::tryFromName($values[$column]);
         }
 
         return $values;

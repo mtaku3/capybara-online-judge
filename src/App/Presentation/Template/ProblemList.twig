@@ -782,9 +782,9 @@
                         <div>
                             {% for language in availableLanguages %}
                             <div class="testCaseTabContent hidden p-4 rounded-lg bg-white dark:bg-gray-800"
-                                language="{{ language.value }}">
+                                language="{{ language.name }}">
                                 <input type="text"
-                                    value="{{ language.value }}"
+                                    value="{{ language.name }}"
                                     class="testCaseLanguage hidden">
                                 <div class="testCaseSourceCodeTab hidden">
                                     <div class="mb-4">
@@ -1027,7 +1027,7 @@
                     }
                 });
 
-                this.currentCompileRuleTabLanguage = "{{ availableLanguages[0].value }}";
+                this.currentCompileRuleTabLanguage = "{{ availableLanguages[0].name }}";
 
                 this.compileRuleNextIndex = 0;
 

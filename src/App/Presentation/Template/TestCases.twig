@@ -390,7 +390,7 @@
                                                      class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
                                                     <input type="text"
                                                            name="executionRules[{{ loop.index0 }}][language]"
-                                                           value="{{ compileRule.getLanguage.value }}"
+                                                           value="{{ compileRule.getLanguage.name }}"
                                                            class="hidden">
                                                     <div class="mb-4">
                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
@@ -606,7 +606,7 @@
                                                                          class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
                                                                         <input type="text"
                                                                                name="executionRules[{{ loop.index0 }}][language]"
-                                                                               value="{{ executionRule.getLanguage.value }}"
+                                                                               value="{{ executionRule.getLanguage.name }}"
                                                                                class="hidden">
                                                                         <div class="mb-4">
                                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>

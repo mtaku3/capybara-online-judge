@@ -51,7 +51,7 @@ class TestResultJudgeResultTypecast implements CastableInterface, UncastableInte
                 continue;
             }
 
-            $values[$column] = TestResultJudgeResult::tryFrom($values[$column]);
+            $values[$column] = TestResultJudgeResult::tryFromName($values[$column]);
         }
 
         return $values;
