@@ -5,8 +5,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/judger/Dockerfile
-      args:
-        - ENV=${ENV:-development}
+      target: "development"
     depends_on:
       - postgres
       - redis
@@ -18,8 +17,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/apache/Dockerfile
-      args:
-        - ENV=${ENV:-development}
+      target: "development"
     depends_on:
       - postgres
       - redis
