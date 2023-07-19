@@ -39,14 +39,25 @@ while (1) {
         $submission = $submissionRepository->findById($submissionId);
         $problem = $problemRepository->findById($submission->getProblemId());
 
+        $volumeName = null;
         $containerId = null;
 
         try {
+            // Create a volume
+            /**
+             * Generally, this is not required.
+             * But due to runsc's issue, mounting a volume is crucial
+             * https://gvisor.dev/docs/user_guide/faq/#fs-cache
+             */
+            $res = $client->createVolume();
+            $volumeName = $res["Name"];
+
             // Create a container to judge
             $res = $client->createContainer([
                 "Image" => strtolower("COJ-" . $submission->getLanguage()->name),
                 "Tty" => true,
                 "HostConfig" => [
+                    "Binds" => "{$volumeName}:/workspace",
                     "Memory" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
                     "MemorySwap" => (int)(Problem::MaxMemoryConstraint * 1.5) * 1024,
                     "NetworkMode" => "none",

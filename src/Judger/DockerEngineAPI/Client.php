@@ -187,4 +187,37 @@ class Client
 
         return $body;
     }
+
+    /**
+     * @return array
+     * @throws GuzzleException
+     * @throws DockerEngineAPIException
+     */
+    public function createVolume(): array
+    {
+        $res = $this->Client->post("volumes/create");
+
+        $body = json_decode((string)$res->getBody(), true);
+        if ($res->getStatusCode() !== 201) {
+            throw new DockerEngineAPIException($body["message"], $res->getStatusCode());
+        }
+
+        return $body;
+    }
+
+    /**
+     * @param string $name
+     * @return void
+     * @throws GuzzleException
+     * @throws DockerEngineAPIException
+     */
+    public function removeVolume(string $name): void
+    {
+        $res = $this->Client->delete("volumes/{$name}");
+
+        $body = json_decode((string)$res->getBody(), true);
+        if ($res->getStatusCode() !== 204) {
+            throw new DockerEngineAPIException($body["message"], $res->getStatusCode());
+        }
+    }
 }
