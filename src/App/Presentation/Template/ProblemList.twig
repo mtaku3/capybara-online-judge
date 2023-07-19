@@ -393,6 +393,8 @@
                                 保存
                             </button>
                         </div>
+                        <div class="modal-container relative z-[70]">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -1054,6 +1056,7 @@
 
                 this.testCaseRows = {};
                 this.testCasesTableEl = this.bodyElements[2].querySelector(".testCasesTable");
+                this.testCasesModalContainerEl = this.bodyElements[2].querySelector(".modal-container");
                 this.testCaseRowNextIndex = 0;
                 this.testCaseRowTemplateElements = `
     <tr id="$testCaseRowId" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -1243,7 +1246,7 @@
                     deleteBtnEl: testCaseRowEl.querySelector(".testCaseDeleteBtn")
                 };
 
-                const editModalId = testCaseCreateModal.createNewModal(document.body);
+                const editModalId = testCaseCreateModal.createNewModal(this.testCasesModalContainerEl);
                 const editModal = testCaseCreateModal.modals[editModalId];
                 testCaseRow.editModalId = editModalId;
                 testCaseRow.editModal = editModal;
