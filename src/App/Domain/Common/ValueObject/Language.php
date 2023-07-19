@@ -10,6 +10,7 @@ enum Language: string
 {
     case C = "C";
     case CPP = "C++";
+    case Python = "Python";
 
     /**
      * @param Language $target

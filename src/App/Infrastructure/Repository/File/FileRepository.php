@@ -83,6 +83,9 @@ class FileRepository implements IFileRepository
             case Language::CPP:
                 return "main.cpp";
                 break;
+            case Language::Python:
+                return "main.py";
+                break;
         }
     }
 

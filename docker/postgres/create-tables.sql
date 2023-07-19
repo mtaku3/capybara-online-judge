@@ -32,7 +32,7 @@ CREATE TABLE
     );
 
 CREATE TYPE
-    Language AS ENUM('C', 'CPP');
+    Language AS ENUM('C', 'CPP', 'Python');
 
 CREATE TABLE
     "CompileRules" (
