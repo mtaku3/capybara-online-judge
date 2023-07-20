@@ -1,5 +1,4 @@
 {% import "Component/Libraries.twig" as libraries %}
-{% set availableLanguages = [ "C", "CPP" ] %}
 {% extends "Template.twig" %}
 {% block title %}
     {{ problem.getTitle }} - テストケース
@@ -91,33 +90,33 @@
                                             {% for language in availableLanguages %}
                                                 <li role="presentation"
                                                     class="{{ loop.last ? "flex items-center w-full px-4 py-2 rounded-b-lg" : "flex items-center w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600" }}">
-                                                    <input {{ (problem.getCompileRules has some e => e.getLanguage.name == "#{language}") ? "checked" : "" }} type="checkbox" value="" language="{{ language }}" onchange="languageEditModal.toggleLanguage(event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <input {{ (problem.getCompileRules has some e => e.getLanguage == language) ? "checked" : "" }} type="checkbox" value="" language="{{ language.name }}" onchange="languageEditModal.toggleLanguage(event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                     <button type="button"
-                                                            data-tabs-target="#language-edit-modal-compilerule-tab-contents-{{ language }}"
+                                                            data-tabs-target="#language-edit-modal-compilerule-tab-contents-{{ language.name }}"
                                                             role="tab"
-                                                            aria-controls="language-edit-modal-compilerule-tab-contents-{{ language }}"
+                                                            aria-controls="language-edit-modal-compilerule-tab-contents-{{ language.name }}"
                                                             aria-selected="false"
-                                                            class="mx-auto text-sm font-medium">{{ language }}</button>
+                                                            class="mx-auto text-sm font-medium">{{ language.value }}</button>
                                                 </li>
                                             {% endfor %}
                                         </ul>
                                         <div id="language-edit-modal-compilerule-tab-contents"
                                              class="p-4 flex items-center text-left w-full">
                                             {% for language in availableLanguages %}
-                                                {% with { compileRule: problem.getCompileRules|filter(c => c.getLanguage.name == language)|first } %}
-                                                    <div id="language-edit-modal-compilerule-tab-contents-{{ language }}" language="{{ language }}" {{ compileRule ? "compileRuleId=#{ compileRule.getId }" : "" }} role="tabpanel" aria-labelledby="{{ language }}-tab" class="hidden w-full">
-                                                        <input type="text" class="hidden" id="language-edit-modal-compilerule-tab-contents-compileruleid-{{ language }}" {{ compileRule ? "name=compileRules[#{ loop.index0 }][compileRuleId]" : "" }} value="{{ compileRule ? compileRule.getId : "" }}">
+                                                {% with { compileRule: problem.getCompileRules|filter(c => c.getLanguage == language)|first } %}
+                                                    <div id="language-edit-modal-compilerule-tab-contents-{{ language.name }}" language="{{ language.name }}" {{ compileRule ? "compileRuleId=#{ compileRule.getId }" : "" }} role="tabpanel" aria-labelledby="{{ language.name }}-tab" class="hidden w-full">
+                                                        <input type="text" class="hidden" id="language-edit-modal-compilerule-tab-contents-compileruleid-{{ language.name }}" {{ compileRule ? "name=compileRules[#{ loop.index0 }][compileRuleId]" : "" }} value="{{ compileRule ? compileRule.getId : "" }}">
                                                         <input type="text"
                                                                class="hidden"
-                                                               id="language-edit-modal-compilerule-tab-contents-language-{{ language }}"
-                                                               value="{{ language }}">
+                                                               id="language-edit-modal-compilerule-tab-contents-language-{{ language.name }}"
+                                                               value="{{ language.name }}">
                                                         <div class="mb-4">
                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ソースコードで提出時のコンパイルコマンド</label>
-                                                            <input type="text" id="language-edit-modal-compilerule-tab-contents-sourcecodecompilecommand-{{ language }}" {{ compileRule ? "name=compileRules[#{ loop.index0 }][sourceCodeCompileCommand]" : "" }} value="{{ compileRule ? compileRule.getSourceCodeCompileCommand : "" }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                            <input type="text" id="language-edit-modal-compilerule-tab-contents-sourcecodecompilecommand-{{ language.name }}" {{ compileRule ? "name=compileRules[#{ loop.index0 }][sourceCodeCompileCommand]" : "" }} value="{{ compileRule ? compileRule.getSourceCodeCompileCommand : "" }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                         </div>
                                                         <div>
                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ファイルで提出時のコンパイルコマンド</label>
-                                                            <input type="text" id="language-edit-modal-compilerule-tab-contents-filecompilecommand-{{ language }}" {{ compileRule ? "name=compileRules[#{ loop.index0 }][fileCompileCommand]" : "" }} value="{{ compileRule ? compileRule.getFileCompileCommand : "" }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                            <input type="text" id="language-edit-modal-compilerule-tab-contents-filecompilecommand-{{ language.name }}" {{ compileRule ? "name=compileRules[#{ loop.index0 }][fileCompileCommand]" : "" }} value="{{ compileRule ? compileRule.getFileCompileCommand : "" }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                         </div>
                                                     </div>
                                                 {% endwith %}
@@ -171,11 +170,12 @@
                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-auto mr-2 my-2 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                     <option class="hidden"
                                                             id="language-edit-modal-executionrule-tab-contents-option-DUMMY"
-                                                            language="DUMMY">DUMMY</option>
+                                                            language="DUMMY" selected>DUMMY</option>
                                                     {% for language in availableLanguages %}
-                                                        <option id="language-edit-modal-executionrule-tab-contents-option-{{ language }}"
+                                                        <option id="language-edit-modal-executionrule-tab-contents-option-{{ language.name }}"
                                                                 class="hidden"
-                                                                language="{{ language }}">{{ language }}</option>
+                                                                language="{{ language.name }}"
+                                                                value="{{ language.name }}">{{ language.value }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </ul>
@@ -208,20 +208,20 @@
                                                     <div id="language-edit-modal-sourcecode-tab-contents-DUMMY"
                                                          language="DUMMY"></div>
                                                     {% for language in availableLanguages %}
-                                                        <div id="language-edit-modal-sourcecode-tab-contents-{{ language }}"
-                                                             language="{{ language }}">
+                                                        <div id="language-edit-modal-sourcecode-tab-contents-{{ language.name }}"
+                                                             language="{{ language.name }}">
                                                             {% for testCase in problem.getTestCases %}
-                                                                <div id="language-edit-modal-sourcecode-tab-contents-{{ language }}-{{ testCase.getId }}"
+                                                                <div id="language-edit-modal-sourcecode-tab-contents-{{ language.name }}-{{ testCase.getId }}"
                                                                      testCaseId="{{ testCase.getId }}"
-                                                                     language="{{ language }}"
+                                                                     language="{{ language.name }}"
                                                                      class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
                                                                     <input id="language-edit-modal-sourcecode-tab-contents-testcaseid-{{ testCase.getId }}"
                                                                            type="text"
                                                                            value="{{ testCase.getId }}"
                                                                            class="hidden">
-                                                                    <input id="language-edit-modal-sourcecode-tab-contents-language-{{ language }}"
+                                                                    <input id="language-edit-modal-sourcecode-tab-contents-language-{{ language.name }}"
                                                                            type="text"
-                                                                           value="{{ language }}"
+                                                                           value="{{ language.name }}"
                                                                            class="hidden">
                                                                     <div class="mb-4">
                                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
@@ -246,12 +246,12 @@
                                                      aria-labelledby="file-tab">
                                                     <div id="language-edit-modal-file-tab-contents-DUMMY" language="DUMMY"></div>
                                                     {% for language in availableLanguages %}
-                                                        <div id="language-edit-modal-file-tab-contents-{{ language }}"
-                                                             language="{{ language }}">
+                                                        <div id="language-edit-modal-file-tab-contents-{{ language.name }}"
+                                                             language="{{ language.name }}">
                                                             {% for testCase in problem.getTestCases %}
-                                                                <div id="language-edit-modal-file-tab-contents-{{ language }}-{{ testCase.getId }}"
+                                                                <div id="language-edit-modal-file-tab-contents-{{ language.name }}-{{ testCase.getId }}"
                                                                      testCaseId="{{ testCase.getId }}"
-                                                                     language="{{ language }}"
+                                                                     language="{{ language.name }}"
                                                                      class="hidden p-4 rounded-lg bg-white dark:bg-gray-800">
                                                                     <div class="mb-4">
                                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">実行コマンド</label>
@@ -1051,7 +1051,7 @@
             constructor() {
                 this.languages = [{{ problem.getCompileRules|map(c => "'#{c.getLanguage.name}'")|join(", ")|raw }}];
                 this.languagesToAdd = [];
-                this.availableLanguages = [{{ availableLanguages|map(x => "'#{x}'")|join(", ")|raw }}];
+                this.availableLanguages = [{{ availableLanguages|map(x => "'#{x.name}'")|join(", ")|raw }}];
                 this.languagesToRemoveEl = document.querySelector("#language-edit-modal-languages-to-remove");
 
                 this.stepperEl = document.querySelector("#language-edit-modal-stepper");
@@ -1106,6 +1106,7 @@
             }
 
             changeSelectLanguage(el) {
+                console.log(el);
                 let language = el.selectedOptions[0].getAttribute("language");
                 this.executionRuleTabs.language.sourcecode.show(language);
                 this.executionRuleTabs.language.file.show(language);

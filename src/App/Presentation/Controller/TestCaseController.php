@@ -138,7 +138,8 @@ class TestCaseController
             $res->body(
                 $this->Twig->render("TestCases.twig", [
                     "problem" => $getProblemByIdResponse->Problem,
-                    "testCases" => $getProblemByIdResponse->Problem->getTestCases()
+                    "testCases" => $getProblemByIdResponse->Problem->getTestCases(),
+                    "availableLanguages" => Language::cases()
                 ])
             );
         } catch (ProblemNotFoundException) {
