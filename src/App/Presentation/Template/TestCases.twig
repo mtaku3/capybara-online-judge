@@ -1106,7 +1106,6 @@
             }
 
             changeSelectLanguage(el) {
-                console.log(el);
                 let language = el.selectedOptions[0].getAttribute("language");
                 this.executionRuleTabs.language.sourcecode.show(language);
                 this.executionRuleTabs.language.file.show(language);
