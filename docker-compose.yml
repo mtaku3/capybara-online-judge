@@ -7,8 +7,10 @@ services:
       dockerfile: ./docker/judger/Dockerfile
       target: "development"
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - coj-data:/data
@@ -19,8 +21,10 @@ services:
       dockerfile: ./docker/apache/Dockerfile
       target: "development"
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - coj-data:/data
 
@@ -33,9 +37,19 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./docker/postgres/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-bullseye
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres-data:
