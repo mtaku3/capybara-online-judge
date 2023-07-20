@@ -69,6 +69,24 @@
         </script>
     {% endif %}
     <script>
+    function findModeByLanguageName(name) {
+        const mode = CodeMirror.findModeByName(name);
+        if (mode) {
+            if ("mime" in mode) {
+                return mode.mime;
+            } else if ("mimes" in mode) {
+                return mode.mimes[0];
+            }
+        }
+        return "";
+    }
+
+    let editor = null;
+    function changeCodeMirrorMode(name) {
+        const mode = findModeByLanguageName(name);
+        editor.setOption("mode", mode);
+    }
+
     window.addEventListener("load", () => {
         var inputEl = document.querySelector("#input");
         var renderEl = document.querySelector("#render");
@@ -79,8 +97,8 @@
         const CodeMirrorLightTheme = "default";
         const CodeMirrorDarkTheme = "colorforth";
 
-        var editor = CodeMirror.fromTextArea(document.querySelector("#codemirror-code-editor"), {
-            mode: "text/x-csrc",
+        editor = CodeMirror.fromTextArea(document.querySelector("#codemirror-code-editor"), {
+            mode: findModeByLanguageName("{{ (problemSubmittableLanguages|sort((a, b) => b.comparesTo(a))|first).name }}"),
             lineNumbers: true,
             lineWrapping: true,
             extraKeys: {
@@ -220,6 +238,7 @@
                             </li>
                             <select id="language"
                                     name="language"
+                                    onchange="changeCodeMirrorMode(this.value)"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-auto mr-2 my-2 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 {% for language in problemSubmittableLanguages|sort((a, b) => b.comparesTo(a)) %}
                                     <option {{ loop.first ? 'selected' : '' }} value="{{ language.name }}">{{ language.value }}
