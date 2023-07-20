@@ -51,7 +51,12 @@ $ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 > コマンド末尾の引数に `--scale judger=<Number of judger you want to run>` を加えるとプログラム実行システムのレプリカを増やせます
 
-6. ユーザーの新規登録を行い、管理者権限を付与する
+6. SSL証明書をコピーする
+
+`apache-cert`ボリュームに`ssl.crt`, `ssl.crt`, `ca.crt`を保存してください。
+保存後、`apache`を起動すれば正常に動作します。
+
+7. ユーザーの新規登録を行い、管理者権限を付与する
 
 ```bash
 $ docker exec <Postgres container name or id> psql -U <Your postgres's username> <Your postgres's database name> -c 'UPDATE "Users" SET "IsAdmin" = true WHERE "Username" = \'<Your username>\';'
