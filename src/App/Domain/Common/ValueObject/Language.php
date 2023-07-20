@@ -11,6 +11,7 @@ enum Language: string
     case C = "C (GCC 13.1.0)";
     case CPP = "C++ (GCC 13.1.0)";
     case Python = "Python (3.10.12)";
+    case PHP = "PHP (8.2.8)";
 
     /**
      * @param Language $target
