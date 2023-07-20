@@ -63,14 +63,36 @@ enum Language: string
 }
 ```
 
-2. `docker/postgres/create-tables.sql` の Language タイプを変更する
+2. `src/App/Infrastructure/Repository/File/FileRepository.php` にデフォルトのファイル名を追記する
+
+```php
+private static function RetrievePreferedFileNameFromLanguage(Language $language): string
+{
+    switch ($language) {
+        case Language::C:
+            return "main.c";
+            break;
+        case Language::CPP:
+            return "main.cpp";
+            break;
+        case Language::Python:
+            return "main.py";
+            break;
+        case Language::PHP:
+            return "main.php";
+            break;
+    }
+}
+```
+
+3. `docker/postgres/create-tables.sql` の Language タイプを変更する
 
 ```sql
 CREATE TYPE
     Language AS ENUM('C', 'CPP', 'Python', 'PHP');
 ```
 
-3. `migrations/` フォルダにマイグレーション用の SQL を作成する
+4. `migrations/` フォルダにマイグレーション用の SQL を作成する
 
 ```sql
 -- Adding PHP to Languages
