@@ -89,6 +89,9 @@ class FileRepository implements IFileRepository
             case Language::PHP:
                 return "main.php";
                 break;
+            case Language::Java:
+                return "main.java";
+                break;
         }
     }
 
